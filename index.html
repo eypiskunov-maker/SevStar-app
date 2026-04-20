@@ -33,112 +33,57 @@
             min-height: 100vh;
         }
 
-        /* Панель управления для макета */
         .control-panel {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            background: var(--brand-black);
-            color: var(--brand-white);
-            padding: 10px;
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            z-index: 1000;
+            position: fixed; top: 0; left: 0; right: 0;
+            background: var(--brand-black); color: var(--brand-white);
+            padding: 10px; display: flex; justify-content: center; gap: 20px; z-index: 1000;
         }
 
         .control-panel select {
-            padding: 5px 10px;
-            border-radius: 5px;
-            border: none;
-            background: var(--brand-white);
-            color: var(--brand-black);
+            padding: 5px 10px; border-radius: 5px; border: none;
+            background: var(--brand-white); color: var(--brand-black);
         }
 
-        /* Контейнер телефона */
         .app-container {
-            width: 100%;
-            max-width: 400px;
-            min-height: 850px;
-            background-color: var(--bg-color);
-            margin-top: 60px;
-            position: relative;
-            box-shadow: 0 0 20px rgba(0,0,0,0.1);
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
+            width: 100%; max-width: 400px; min-height: 850px;
+            background-color: var(--bg-color); margin-top: 60px;
+            position: relative; box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            overflow: hidden; display: flex; flex-direction: column;
         }
 
         /* Стили Неоморфизма */
         .neumorphic {
             background: var(--bg-color);
-            box-shadow: 6px 6px 12px var(--shadow-dark), 
-                       -6px -6px 12px var(--shadow-light);
+            box-shadow: 6px 6px 12px var(--shadow-dark), -6px -6px 12px var(--shadow-light);
             border-radius: 20px;
         }
 
         .neumorphic-inset {
             background: var(--bg-color);
-            box-shadow: inset 4px 4px 8px var(--shadow-dark), 
-                       inset -4px -4px 8px var(--shadow-light);
+            box-shadow: inset 4px 4px 8px var(--shadow-dark), inset -4px -4px 8px var(--shadow-light);
             border-radius: 20px;
         }
 
         /* Хедер */
-        .header {
-            padding: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .logo-img {
-            height: 35px;
-            object-fit: contain;
-        }
+        .header { padding: 20px; display: flex; justify-content: space-between; align-items: center; }
+        .logo-img { height: 35px; object-fit: contain; }
         .avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: #ccc;
-            box-shadow: 0 0 10px var(--status-green);
-            transition: box-shadow 0.3s ease;
+            width: 40px; height: 40px; border-radius: 50%; background: #ccc;
+            box-shadow: 0 0 10px var(--status-green); transition: box-shadow 0.3s ease;
         }
 
         /* Истории */
-        .stories-container {
-            display: flex;
-            overflow-x: auto;
-            padding: 10px 20px;
-            gap: 15px;
-            scrollbar-width: none;
-        }
+        .stories-container { display: flex; overflow-x: auto; padding: 10px 20px; gap: 15px; scrollbar-width: none; }
         .stories-container::-webkit-scrollbar { display: none; }
-        .story {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 8px;
-        }
+        .story { display: flex; flex-direction: column; align-items: center; gap: 8px; }
         .story-circle {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: var(--brand-purple);
-            font-size: 24px;
+            width: 60px; height: 60px; border-radius: 50%; display: flex;
+            justify-content: center; align-items: center; color: var(--brand-purple); font-size: 24px;
         }
         .story span { font-size: 11px; color: var(--brand-black); font-weight: 500;}
 
-        /* Главная карточка (Финансовый центр) */
-        .main-card {
-            margin: 20px;
-            padding: 25px;
-            transition: box-shadow 0.3s ease;
-            position: relative;
-        }
+        /* Главная карточка */
+        .main-card { margin: 20px; padding: 25px; transition: box-shadow 0.3s ease; position: relative; }
         .main-card.glow-green { box-shadow: 0 0 20px rgba(76, 175, 80, 0.3), 6px 6px 12px var(--shadow-dark), -6px -6px 12px var(--shadow-light); }
         .main-card.glow-red { box-shadow: 0 0 20px rgba(244, 67, 54, 0.3), 6px 6px 12px var(--shadow-dark), -6px -6px 12px var(--shadow-light); }
         
@@ -146,133 +91,85 @@
         .balance-amount { font-size: 36px; font-weight: bold; color: var(--brand-purple); margin: 0 0 5px 0;}
         .status-text { font-size: 14px; color: var(--status-green); font-weight: 500; display: flex; align-items: center; gap: 5px; transition: color 0.3s ease;}
         .status-text::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
-        
-        /* Новая надпись про 30 дней */
         .balance-subtext { font-size: 12px; color: var(--brand-black); opacity: 0.6; margin-top: 4px; padding-left: 13px; }
 
-        .card-buttons {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            margin-top: 20px;
-        }
-        .secondary-buttons {
-            display: flex;
-            gap: 15px;
-        }
-        .btn {
-            flex: 1;
-            padding: 15px 0;
-            border: none;
-            border-radius: 12px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-        .btn-primary {
-            background: var(--brand-purple);
-            color: var(--brand-white);
-            box-shadow: 4px 4px 10px rgba(100, 45, 144, 0.3);
-            width: 100%;
-        }
-        .btn-primary:active {
-            transform: scale(0.97);
-            box-shadow: inset 2px 2px 5px rgba(0,0,0,0.2);
-        }
-        .btn-secondary {
-            color: var(--brand-purple);
-            font-size: 13px;
-        }
-        .btn-secondary:active {
-            background: var(--bg-color);
-            box-shadow: inset 4px 4px 8px var(--shadow-dark), inset -4px -4px 8px var(--shadow-light);
-        }
+        .card-buttons { display: flex; flex-direction: column; gap: 15px; margin-top: 20px; }
+        .secondary-buttons { display: flex; gap: 15px; }
+        .btn { flex: 1; padding: 15px 0; border: none; border-radius: 12px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s ease; }
+        .btn-primary { background: var(--brand-purple); color: var(--brand-white); box-shadow: 4px 4px 10px rgba(100, 45, 144, 0.3); width: 100%; }
+        .btn-primary:active { transform: scale(0.97); box-shadow: inset 2px 2px 5px rgba(0,0,0,0.2); }
+        .btn-secondary { color: var(--brand-purple); font-size: 13px; }
+        .btn-secondary:active { background: var(--bg-color); box-shadow: inset 4px 4px 8px var(--shadow-dark), inset -4px -4px 8px var(--shadow-light); }
 
         /* Умный дом */
-        .section-title {
-            margin: 10px 20px;
-            font-size: 18px;
-            font-weight: bold;
-            color: var(--brand-black);
-        }
-        .smart-home-container {
-            display: flex;
-            overflow-x: auto;
-            padding: 10px 20px 20px 20px;
-            gap: 15px;
-            scrollbar-width: none;
-        }
+        .section-title { margin: 10px 20px; font-size: 18px; font-weight: bold; color: var(--brand-black); }
+        .smart-home-container { display: flex; overflow-x: auto; padding: 10px 20px 20px 20px; gap: 15px; scrollbar-width: none; }
         .smart-home-container::-webkit-scrollbar { display: none; }
-        
-        .sh-card {
-            min-width: 160px;
-            padding: 15px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-        .sh-camera {
-            height: 90px;
-            background: #333;
-            border-radius: 10px;
-            position: relative;
-            overflow: hidden;
-        }
+        .sh-card { min-width: 160px; padding: 15px; display: flex; flex-direction: column; gap: 10px; }
+        .sh-camera { height: 90px; background: #333; border-radius: 10px; position: relative; overflow: hidden; }
         .sh-camera::after { content: 'LIVE'; position: absolute; top: 5px; left: 5px; background: red; color: white; font-size: 8px; padding: 2px 4px; border-radius: 3px;}
-        
         .sh-title-wrapper { display: flex; flex-direction: column; gap: 2px; }
         .sh-title { font-size: 14px; font-weight: bold; color: var(--brand-black); }
-        /* Новый тонкий адрес */
         .sh-subtitle { font-size: 11px; font-weight: 300; color: var(--brand-black); opacity: 0.7; }
-        
-        .btn-open {
-            padding: 12px 0;
-            border: none;
-            color: var(--brand-purple);
-            font-weight: bold;
-            width: 100%;
-            cursor: pointer;
-        }
-        .btn-open:active {
-            box-shadow: inset 4px 4px 8px var(--shadow-dark), inset -4px -4px 8px var(--shadow-light);
-        }
+        .btn-open { padding: 12px 0; border: none; color: var(--brand-purple); font-weight: bold; width: 100%; cursor: pointer; }
+        .btn-open:active { box-shadow: inset 4px 4px 8px var(--shadow-dark), inset -4px -4px 8px var(--shadow-light); }
 
-        /* Контекстный Информер */
-        .informer {
-            margin: 0 20px 30px 20px;
-            padding: 20px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            transition: all 0.3s ease;
-        }
-        .informer.alert {
-            background: rgba(244, 67, 54, 0.1);
-            box-shadow: 0 0 15px rgba(244, 67, 54, 0.2), inset 2px 2px 5px rgba(255,255,255,0.5);
-            border: 1px solid rgba(244, 67, 54, 0.3);
-        }
+        /* Информер */
+        .informer { margin: 0 20px 30px 20px; padding: 20px; display: flex; align-items: center; gap: 15px; transition: all 0.3s ease; }
+        .informer.alert { background: rgba(244, 67, 54, 0.1); box-shadow: 0 0 15px rgba(244, 67, 54, 0.2), inset 2px 2px 5px rgba(255,255,255,0.5); border: 1px solid rgba(244, 67, 54, 0.3); }
         .informer-icon { font-size: 30px; }
         .informer-text h4 { margin: 0 0 5px 0; color: var(--brand-black); }
         .informer-text p { margin: 0; font-size: 12px; color: var(--brand-black); opacity: 0.7;}
         .informer.alert .informer-text h4 { color: var(--status-red); }
 
-        /* Toast уведомление */
         .toast {
-            position: absolute;
-            bottom: 100px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: var(--brand-purple);
-            color: white;
-            padding: 10px 20px;
-            border-radius: 20px;
-            font-size: 14px;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease;
-            z-index: 100;
+            position: absolute; bottom: 100px; left: 50%; transform: translateX(-50%); background: var(--brand-purple);
+            color: white; padding: 10px 20px; border-radius: 20px; font-size: 14px; opacity: 0; pointer-events: none;
+            transition: opacity 0.3s ease; z-index: 3000;
         }
+
+        /* --- НОВЫЙ БЛОК: ОКНО ОПЛАТЫ --- */
+        .payment-overlay {
+            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5); z-index: 2000;
+            opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
+        }
+        .payment-sheet {
+            position: absolute; bottom: 0; left: 0; right: 0;
+            background: var(--bg-color); border-radius: 30px 30px 0 0;
+            padding: 30px 20px 40px 20px; z-index: 2001;
+            transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1);
+            display: flex; flex-direction: column; gap: 20px;
+        }
+        .payment-header { display: flex; justify-content: space-between; align-items: center; }
+        .payment-header h3 { margin: 0; color: var(--brand-black); }
+        .close-btn { 
+            width: 30px; height: 30px; border-radius: 50%; border: none; 
+            color: var(--brand-black); font-weight: bold; cursor: pointer;
+        }
+        .amount-input-wrapper { text-align: center; margin: 10px 0; }
+        .amount-input {
+            width: 80%; background: transparent; border: none; outline: none;
+            font-size: 40px; font-weight: bold; color: var(--brand-purple); text-align: center;
+        }
+        .pay-method {
+            padding: 15px; border-radius: 15px; display: flex; justify-content: space-between; 
+            align-items: center; border: 2px solid transparent; cursor: pointer; transition: all 0.2s ease;
+        }
+        .pay-method.active { border-color: var(--brand-purple); }
+        .pay-method-name { font-weight: bold; color: var(--brand-black); font-size: 14px; }
+        .pay-method-icon { font-size: 20px; }
+        
+        .auto-pay-row { display: flex; justify-content: space-between; align-items: center; padding: 5px 10px; }
+        .auto-pay-label { font-size: 14px; font-weight: 600; color: var(--brand-black); }
+        
+        /* Тумблер (Switch) */
+        .switch { position: relative; display: inline-block; width: 50px; height: 28px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 34px; box-shadow: inset 2px 2px 5px rgba(0,0,0,0.2); }
+        .slider:before { position: absolute; content: ""; height: 20px; width: 20px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%; box-shadow: 2px 2px 5px rgba(0,0,0,0.2); }
+        input:checked + .slider { background-color: var(--status-green); }
+        input:checked + .slider:before { transform: translateX(22px); }
 
     </style>
 </head>
@@ -296,22 +193,10 @@
         </div>
 
         <div class="stories-container">
-            <div class="story">
-                <div class="story-circle neumorphic" onclick="hapticTap()">💡</div>
-                <span>Лайфхаки</span>
-            </div>
-            <div class="story">
-                <div class="story-circle neumorphic" onclick="hapticTap()">🎁</div>
-                <span>Акции</span>
-            </div>
-            <div class="story">
-                <div class="story-circle neumorphic" onclick="hapticTap()">📰</div>
-                <span>Новости</span>
-            </div>
-            <div class="story">
-                <div class="story-circle neumorphic" onclick="hapticTap()">📺</div>
-                <span>ТВ</span>
-            </div>
+            <div class="story"><div class="story-circle neumorphic" onclick="hapticTap()">💡</div><span>Лайфхаки</span></div>
+            <div class="story"><div class="story-circle neumorphic" onclick="hapticTap()">🎁</div><span>Акции</span></div>
+            <div class="story"><div class="story-circle neumorphic" onclick="hapticTap()">📰</div><span>Новости</span></div>
+            <div class="story"><div class="story-circle neumorphic" onclick="hapticTap()">📺</div><span>ТВ</span></div>
         </div>
 
         <div class="main-card neumorphic glow-green" id="balanceCard">
@@ -321,7 +206,7 @@
             <div class="balance-subtext" id="daysLeftText">Хватит на 30 дней</div>
             
             <div class="card-buttons">
-                <button class="btn btn-primary" onclick="hapticTap()">Пополнить</button>
+                <button class="btn btn-primary" onclick="openPaymentSheet()">Пополнить</button>
                 <div class="secondary-buttons">
                     <button class="btn btn-secondary neumorphic" id="diagBtn" onclick="runDiagnostics()">Диагностика</button>
                     <button class="btn btn-secondary neumorphic" onclick="hapticTap()">Чат</button>
@@ -329,7 +214,7 @@
             </div>
         </div>
 
-<h3 class="section-title">Умный дом</h3>
+        <h3 class="section-title">Умный дом</h3>
         <div class="smart-home-container">
             <div class="sh-card neumorphic">
                 <div class="sh-camera" style="background-image: url('intercom.png'); background-size: cover; background-position: center;"></div>
@@ -359,17 +244,122 @@
         </div>
 
         <div class="toast" id="toastMsg">Дверь открыта</div>
+
+        <div class="payment-overlay" id="paymentOverlay" onclick="closePaymentSheet()"></div>
+        <div class="payment-sheet" id="paymentSheet">
+            <div class="payment-header">
+                <h3>Пополнение счета</h3>
+                <button class="close-btn neumorphic" onclick="closePaymentSheet()">✕</button>
+            </div>
+            
+            <div class="amount-input-wrapper neumorphic-inset">
+                <input type="text" class="amount-input" value="500 ₽" readonly>
+            </div>
+
+            <div class="pay-method neumorphic active" id="methodSBP" onclick="selectMethod('SBP')">
+                <span class="pay-method-name">Система Быстрых Платежей</span>
+                <span class="pay-method-icon">🚀</span>
+            </div>
+            <div class="pay-method neumorphic" id="methodCard" onclick="selectMethod('Card')">
+                <span class="pay-method-name">Карта MIR •••• 4567</span>
+                <span class="pay-method-icon">💳</span>
+            </div>
+
+            <div class="auto-pay-row">
+                <span class="auto-pay-label">Автопополнение каждый месяц</span>
+                <label class="switch">
+                    <input type="checkbox" onchange="hapticTap(20)">
+                    <span class="slider"></span>
+                </label>
+            </div>
+
+            <button class="btn btn-primary" id="finalPayBtn" style="margin-top: 10px; padding: 20px 0; font-size: 16px;" onclick="processPayment()">Оплатить 500 ₽</button>
+        </div>
     </div>
 
     <script>
-        // Функция для симуляции тактильного отклика (работает на мобильных устройствах)
         function hapticTap(pattern = 50) {
-            if ("vibrate" in navigator) {
-                navigator.vibrate(pattern);
-            }
+            if ("vibrate" in navigator) { navigator.vibrate(pattern); }
         }
 
-        // Логика смены статуса абонента
+        /* --- Логика генерации звука без файлов (Web Audio API) --- */
+        function playSuccessSound() {
+            const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            const osc = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            
+            osc.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            
+            osc.type = 'sine';
+            // Двойной сигнал (A5 и C6)
+            osc.frequency.setValueAtTime(880, audioCtx.currentTime); 
+            osc.frequency.setValueAtTime(1046.50, audioCtx.currentTime + 0.15); 
+            
+            // Настройка громкости (плавное затухание)
+            gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
+            gainNode.gain.linearRampToValueAtTime(0.3, audioCtx.currentTime + 0.05);
+            gainNode.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.15);
+            gainNode.gain.linearRampToValueAtTime(0.3, audioCtx.currentTime + 0.2);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.6);
+            
+            osc.start(audioCtx.currentTime);
+            osc.stop(audioCtx.currentTime + 0.6);
+        }
+
+        /* --- Логика Окна Оплаты --- */
+        function openPaymentSheet() {
+            hapticTap();
+            document.getElementById('paymentOverlay').style.opacity = '1';
+            document.getElementById('paymentOverlay').style.pointerEvents = 'auto';
+            document.getElementById('paymentSheet').style.transform = 'translateY(0)';
+        }
+
+        function closePaymentSheet() {
+            hapticTap(20);
+            document.getElementById('paymentOverlay').style.opacity = '0';
+            document.getElementById('paymentOverlay').style.pointerEvents = 'none';
+            document.getElementById('paymentSheet').style.transform = 'translateY(100%)';
+        }
+
+        function selectMethod(method) {
+            hapticTap(30);
+            document.getElementById('methodSBP').classList.remove('active');
+            document.getElementById('methodCard').classList.remove('active');
+            document.getElementById('method' + method).classList.add('active');
+        }
+
+        function processPayment() {
+            hapticTap(40);
+            const btn = document.getElementById('finalPayBtn');
+            btn.textContent = 'Обработка...';
+            btn.style.opacity = '0.7';
+
+            setTimeout(() => {
+                hapticTap([30, 50, 30]);
+                playSuccessSound(); // Воспроизводим звук!
+                
+                btn.textContent = 'Успешно!';
+                btn.style.background = 'var(--status-green)';
+                btn.style.opacity = '1';
+
+                // Обновляем баланс на главном экране для эффекта
+                document.getElementById('balanceText').textContent = '1750 ₽';
+                document.getElementById('daysLeftText').textContent = 'Хватит на 55 дней';
+
+                setTimeout(() => {
+                    closePaymentSheet();
+                    // Возвращаем кнопку в исходное состояние
+                    setTimeout(() => {
+                        btn.textContent = 'Оплатить 500 ₽';
+                        btn.style.background = 'var(--brand-purple)';
+                    }, 500);
+                }, 1500);
+
+            }, 1500); // Имитация ожидания банка 1.5 секунды
+        }
+
+        // Существующая логика
         function updateStatus() {
             hapticTap(30);
             const status = document.getElementById('statusSelect').value;
@@ -391,65 +381,3 @@
                 balanceTxt.textContent = '-150 ₽';
                 statusTxt.textContent = 'Услуги приостановлены';
                 statusTxt.style.color = 'var(--status-red)';
-                avatar.style.boxShadow = '0 0 10px var(--status-red)';
-                daysLeft.style.display = 'none'; // Скрываем надпись "Хватит на..." если заблокирован
-            }
-        }
-
-        // Логика смены городского контекста
-        function updateContext() {
-            hapticTap([30, 50, 30]); // Двойная вибрация для смены контекста
-            const context = document.getElementById('contextSelect').value;
-            const block = document.getElementById('informerBlock');
-            const icon = document.getElementById('informerIcon');
-            const title = document.getElementById('informerTitle');
-            const desc = document.getElementById('informerDesc');
-
-            if (context === 'summer') {
-                block.className = 'informer neumorphic';
-                icon.textContent = '☀️';
-                title.textContent = 'Вода в бухте Омега +24°C';
-                desc.textContent = 'Погода в городе +28°C. Отличный день для пляжа!';
-            } else {
-                block.className = 'informer neumorphic alert';
-                icon.textContent = '⚠️';
-                title.textContent = 'Отключение электроэнергии';
-                desc.textContent = 'Район ПОР. Севстар.Карта Света - ведутся работы.';
-            }
-        }
-
-        // Логика открытия домофона (с глубоким haptic откликом)
-        function openDoor(btnElement) {
-            hapticTap([80]); // Более длинная вибрация "глубокий бамп"
-            
-            // Показываем тост
-            const toast = document.getElementById('toastMsg');
-            toast.style.opacity = '1';
-            
-            setTimeout(() => {
-                toast.style.opacity = '0';
-            }, 2000);
-        }
-
-        // Симуляция диагностики
-        function runDiagnostics() {
-            hapticTap(40);
-            const btn = document.getElementById('diagBtn');
-            const originalText = btn.textContent;
-            btn.textContent = 'Проверка...';
-            btn.style.color = 'var(--brand-yellow)'; // Меняем цвет на желтый при проверке
-            
-            setTimeout(() => {
-                hapticTap([30, 30]);
-                btn.textContent = 'Всё в норме!';
-                btn.style.color = 'var(--status-green)';
-                
-                setTimeout(() => {
-                    btn.textContent = originalText;
-                    btn.style.color = 'var(--brand-purple)';
-                }, 2000);
-            }, 1500);
-        }
-    </script>
-</body>
-</html>
