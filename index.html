@@ -183,10 +183,10 @@
         </div>
 
         <div class="stories-container">
-            <div class="story"><div class="story-circle neumorphic" onclick="hapticTap()">💡</div><span>Лайфхаки</span></div>
-            <div class="story"><div class="story-circle neumorphic" onclick="hapticTap()">🎁</div><span>Акции</span></div>
-            <div class="story"><div class="story-circle neumorphic" onclick="hapticTap()">📰</div><span>Новости</span></div>
-            <div class="story"><div class="story-circle neumorphic" onclick="hapticTap()">📺</div><span>ТВ</span></div>
+            <div class="story"><div class="story-circle neumorphic" onclick="tryHaptic(50)">💡</div><span>Лайфхаки</span></div>
+            <div class="story"><div class="story-circle neumorphic" onclick="tryHaptic(50)">🎁</div><span>Акции</span></div>
+            <div class="story"><div class="story-circle neumorphic" onclick="tryHaptic(50)">📰</div><span>Новости</span></div>
+            <div class="story"><div class="story-circle neumorphic" onclick="tryHaptic(50)">📺</div><span>ТВ</span></div>
         </div>
 
         <div class="main-card neumorphic glow-green" id="balanceCard">
@@ -198,8 +198,8 @@
             <div class="card-buttons">
                 <button class="btn btn-primary" onclick="openPaymentSheet()">Пополнить</button>
                 <div class="secondary-buttons">
-                    <button class="btn btn-secondary neumorphic" id="diagBtn" onclick="runDiagnostics(this)">Диагностика</button>
-                    <button class="btn btn-secondary neumorphic" onclick="hapticTap()">Чат</button>
+                    <button class="btn btn-secondary neumorphic" onclick="runDiagnostics(this)">Диагностика</button>
+                    <button class="btn btn-secondary neumorphic" onclick="tryHaptic(50)">Чат</button>
                 </div>
             </div>
         </div>
@@ -257,7 +257,7 @@
         <div class="auto-pay-row">
             <span class="auto-pay-label">Автопополнение каждый месяц</span>
             <label class="switch">
-                <input type="checkbox" onchange="hapticTap(20)">
+                <input type="checkbox" onchange="tryHaptic(20)">
                 <span class="slider"></span>
             </label>
         </div>
@@ -266,4 +266,80 @@
     </div>
 
     <script>
-        // Вибрация (только для
+        // 1. Безопасная вибрация
+        function tryHaptic(pattern) {
+            try {
+                if (navigator && navigator.vibrate) { navigator.vibrate(pattern); }
+            } catch (e) {}
+        }
+
+        // 2. Безопасный звук
+        let audioCtx = null;
+        function initAudio() {
+            try {
+                if (!audioCtx) {
+                    const AudioContext = window.AudioContext || window.webkitAudioContext;
+                    if (AudioContext) { audioCtx = new AudioContext(); }
+                }
+                if (audioCtx && audioCtx.state === 'suspended') { audioCtx.resume(); }
+            } catch (e) { console.log("Audio Init Error", e); }
+        }
+
+        function playSound(type) {
+            try {
+                if (!audioCtx) return;
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                
+                if (type === 'success') {
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(880, audioCtx.currentTime); 
+                    osc.frequency.setValueAtTime(1046.50, audioCtx.currentTime + 0.15); 
+                    gain.gain.setValueAtTime(0, audioCtx.currentTime);
+                    gain.gain.linearRampToValueAtTime(0.3, audioCtx.currentTime + 0.05);
+                    gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.15);
+                    gain.gain.linearRampToValueAtTime(0.3, audioCtx.currentTime + 0.2);
+                    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.6);
+                    osc.start(audioCtx.currentTime);
+                    osc.stop(audioCtx.currentTime + 0.6);
+                } else if (type === 'unlock') {
+                    osc.type = 'square'; 
+                    osc.frequency.setValueAtTime(1200, audioCtx.currentTime);
+                    osc.frequency.exponentialRampToValueAtTime(2000, audioCtx.currentTime + 0.1);
+                    gain.gain.setValueAtTime(0, audioCtx.currentTime);
+                    gain.gain.linearRampToValueAtTime(0.1, audioCtx.currentTime + 0.02);
+                    gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.15);
+                    osc.start(audioCtx.currentTime);
+                    osc.stop(audioCtx.currentTime + 0.15);
+                }
+            } catch (e) { console.log("Audio Play Error", e); }
+        }
+
+        // 3. Логика кнопок
+        function openDoor(btn, successMessage) {
+            tryHaptic([80]);
+            initAudio(); // Пробуждаем аудио при клике
+            const origText = btn.innerText;
+            btn.innerText = 'Обработка...';
+            btn.style.color = 'var(--brand-yellow)';
+            
+            setTimeout(() => {
+                playSound('unlock');
+                tryHaptic([30, 30]);
+                btn.innerText = successMessage;
+                btn.style.color = 'var(--status-green)';
+                
+                setTimeout(() => {
+                    btn.innerText = origText;
+                    btn.style.color = 'var(--brand-purple)';
+                }, 2000);
+            }, 1000);
+        }
+
+        function runDiagnostics(btn) {
+            tryHaptic(40);
+            const origText = btn.innerText;
+            btn.innerText = 'Проверка...';
+            btn
