@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Севстар - Главный экран</title>
+    <style>
+        /* Фирменная палитра Севстар */
+        :root {
+            --brand-purple: rgb(100, 45, 144);
+            --brand-yellow: rgb(236, 177, 68);
+            --brand-black: rgb(53, 51, 51);
+            --brand-white: rgb(255, 255, 255);
+            
+            /* Цвета Неоморфизма */
+            --bg-color: #f0f0f3;
+            --shadow-light: #ffffff;
+            --shadow-dark: #d1d9e6;
+            
+            /* Светофор */
+            --status-green: #4caf50;
+            --status-red: #f44336;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #e0e0e0; /* Темный фон для контраста с телефоном */
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+        }
+
+        /* Панель управления для макета */
+        .control-panel {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: var(--brand-black);
+            color: var(--brand-white);
+            padding: 10px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            z-index: 1000;
+        }
+
+        .control-panel select {
+            padding: 5px 10px;
+            border-radius: 5px;
+            border: none;
+            background: var(--brand-white);
+            color: var(--brand-black);
+        }
+
+        /* Контейнер телефона */
+        .app-container {
+            width: 100%;
+            max-width: 400px; /* Имитация ширины экрана смартфона */
+            min-height: 850px;
+            background-color: var(--bg-color);
+            margin-top: 60px; /* Отступ от панели управления */
+            position: relative;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Стили Неоморфизма */
+        .neumorphic {
+            background: var(--bg-color);
+            box-shadow: 6px 6px 12px var(--shadow-dark), 
+                       -6px -6px 12px var(--shadow-light);
+            border-radius: 20px;
+        }
+
+        .neumorphic-inset {
+            background: var(--bg-color);
+            box-shadow: inset 4px 4px 8px var(--shadow-dark), 
+                       inset -4px -4px 8px var(--shadow-light);
+            border-radius: 20px;
+        }
+
+        /* Хедер */
+        .header {
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo-img {
+            height: 35px;
+            object-fit: contain;
+        }
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #ccc;
+            box-shadow: 0 0 10px var(--status-green); /* Зеленое свечение по умолчанию */
+            transition: box-shadow 0.3s ease;
+        }
+
+        /* Истории */
+        .stories-container {
+            display: flex;
+            overflow-x: auto;
+            padding: 10px 20px;
+            gap: 15px;
+            scrollbar-width: none;
+        }
+        .stories-container::-webkit-scrollbar { display: none; }
+        .story {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+        .story-circle {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--brand-purple);
+            font-size: 24px;
+        }
+        .story span { font-size: 11px; color: var(--brand-black); font-weight: 500;}
+
+        /* Главная карточка (Финансовый центр) */
+        .main-card {
+            margin: 20px;
+            padding: 25px;
+            transition: box-shadow 0.3s ease;
+            position: relative;
+        }
+        .main-card.glow-green { box-shadow: 0 0 20px rgba(76, 175, 80, 0.3), 6px 6px 12px var(--shadow-dark), -6px -6px 12px var(--shadow-light); }
+        .main-card.glow-red { box-shadow: 0 0 20px rgba(244, 67, 54, 0.3), 6px 6px 12px var(--shadow-dark), -6px -6px 12px var(--shadow-light); }
+        
+        .balance-title { font-size: 14px; color: var(--brand-black); opacity: 0.7; margin: 0 0 5px 0;}
+        .balance-amount { font-size: 36px; font-weight: bold; color: var(--brand-purple); margin: 0 0 5px 0;}
+        .status-text { font-size: 14px; color: var(--status-green); font-weight: 500; display: flex; align-items: center; gap: 5px; transition: color 0.3s ease;}
+        .status-text::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
+
+        .card-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .btn {
+            flex: 1;
+            padding: 15px 0;
+            border: none;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .btn-primary {
+            background: var(--brand-purple);
+            color: var(--brand-white);
+            box-shadow: 4px 4px 10px rgba(100, 45, 144, 0.3);
+        }
+        .btn-primary:active {
+            transform: scale(0.97);
+            box-shadow: inset 2px 2px 5px rgba(0,0,0,0.2);
+        }
+        .btn-secondary {
+            color: var(--brand-purple);
+        }
+        .btn-secondary:active {
+            background: var(--bg-color);
+            box-shadow: inset 4px 4px 8px var(--shadow-dark), inset -4px -4px 8px var(--shadow-light);
+        }
+
+        /* Умный дом */
+        .section-title {
+            margin: 10px 20px;
+            font-size: 18px;
+            font-weight: bold;
+            color: var(--brand-black);
+        }
+        .smart-home-container {
+            display: flex;
+            overflow-x: auto;
+            padding: 10px 20px 20px 20px;
+            gap: 15px;
+            scrollbar-width: none;
+        }
+        .smart-home-container::-webkit-scrollbar { display: none; }
+        
+        .sh-card {
+            min-width: 160px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .sh-camera {
+            height: 90px;
+            background: #333;
+            border-radius: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+        .sh-camera::after { content: 'LIVE'; position: absolute; top: 5px; left: 5px; background: red; color: white; font-size: 8px; padding: 2px 4px; border-radius: 3px;}
+        .sh-title { font-size: 14px; font-weight: bold; color: var(--brand-black); }
+        .btn-open {
+            padding: 12px 0;
+            border: none;
+            color: var(--brand-purple);
+            font-weight: bold;
+            width: 100%;
+            cursor: pointer;
+        }
+        .btn-open:active {
+            box-shadow: inset 4px 4px 8px var(--shadow-dark), inset -4px -4px 8px var(--shadow-light);
+        }
+
+        /* Контекстный Информер */
+        .informer {
+            margin: 0 20px 30px 20px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            transition: all 0.3s ease;
+        }
+        .informer.alert {
+            background: rgba(244, 67, 54, 0.1);
+            box-shadow: 0 0 15px rgba(244, 67, 54, 0.2), inset 2px 2px 5px rgba(255,255,255,0.5);
+            border: 1px solid rgba(244, 67, 54, 0.3);
+        }
+        .informer-icon { font-size: 30px; }
+        .informer-text h4 { margin: 0 0 5px 0; color: var(--brand-black); }
+        .informer-text p { margin: 0; font-size: 12px; color: var(--brand-black); opacity: 0.7;}
+        .informer.alert .informer-text h4 { color: var(--status-red); }
+
+        /* Toast уведомление */
+        .toast {
+            position: absolute;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--brand-purple);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 14px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            z-index: 100;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="control-panel">
+        <select id="statusSelect" onchange="updateStatus()">
+            <option value="active">Договор: Активен</option>
+            <option value="blocked">Договор: Заблокирован</option>
+        </select>
+        <select id="contextSelect" onchange="updateContext()">
+            <option value="summer">Контекст: Лето (Штатно)</option>
+            <option value="alert">Контекст: Авария на линии</option>
+        </select>
+    </div>
+
+    <div class="app-container">
+        <div class="header">
+            <img src="logo.png" alt="СЕВСТАР" class="logo-img" onerror="this.outerHTML='<h2 style=\'color:var(--brand-black); margin:0;\'>СЕВСТАР</h2>'">
+            <div class="avatar" id="profileAvatar"></div>
+        </div>
+
+        <div class="stories-container">
+            <div class="story">
+                <div class="story-circle neumorphic" onclick="hapticTap()">💡</div>
+                <span>Лайфхаки</span>
+            </div>
+            <div class="story">
+                <div class="story-circle neumorphic" onclick="hapticTap()">🎁</div>
+                <span>Акции</span>
+            </div>
+            <div class="story">
+                <div class="story-circle neumorphic" onclick="hapticTap()">📰</div>
+                <span>Новости</span>
+            </div>
+            <div class="story">
+                <div class="story-circle neumorphic" onclick="hapticTap()">📺</div>
+                <span>ТВ</span>
+            </div>
+        </div>
+
+        <div class="main-card neumorphic glow-green" id="balanceCard">
+            <p class="balance-title">Мой счет</p>
+            <h2 class="balance-amount" id="balanceText">1250 ₽</h2>
+            <div class="status-text" id="statusText">Интернет активен</div>
+            
+            <div class="card-buttons">
+                <button class="btn btn-primary" onclick="hapticTap()">Пополнить</button>
+                <button class="btn btn-secondary neumorphic" id="diagBtn" onclick="runDiagnostics()">Диагностика сети</button>
+            </div>
+        </div>
+
+        <h3 class="section-title">Умный дом</h3>
+        <div class="smart-home-container">
+            <div class="sh-card neumorphic">
+                <div class="sh-camera"></div>
+                <div class="sh-title">Пр. Окт. Рев., 33</div>
+                <button class="btn-open neumorphic" onclick="openDoor(this)">Открыть</button>
+            </div>
+            <div class="sh-card neumorphic">
+                <div class="sh-camera" style="background: #444;"></div>
+                <div class="sh-title">Парковка</div>
+                <button class="btn-open neumorphic" onclick="openDoor(this)">Открыть шлагбаум</button>
+            </div>
+        </div>
+
+        <h3 class="section-title">Ваш Севастополь</h3>
+        <div class="informer neumorphic" id="informerBlock">
+            <div class="informer-icon" id="informerIcon">☀️</div>
+            <div class="informer-text">
+                <h4 id="informerTitle">Вода в бухте Омега +24°C</h4>
+                <p id="informerDesc">Погода в городе +28°C. Отличный день для пляжа!</p>
+            </div>
+        </div>
+
+        <div class="toast" id="toastMsg">Дверь открыта</div>
+    </div>
+
+    <script>
+        // Функция для симуляции тактильного отклика (работает на мобильных устройствах)
+        function hapticTap(pattern = 50) {
+            if ("vibrate" in navigator) {
+                navigator.vibrate(pattern);
+            }
+        }
+
+        // Логика смены статуса абонента
+        function updateStatus() {
+            hapticTap(30);
+            const status = document.getElementById('statusSelect').value;
+            const card = document.getElementById('balanceCard');
+            const balanceTxt = document.getElementById('balanceText');
+            const statusTxt = document.getElementById('statusText');
+            const avatar = document.getElementById('profileAvatar');
+
+            if (status === 'active') {
+                card.className = 'main-card neumorphic glow-green';
+                balanceTxt.textContent = '1250 ₽';
+                statusTxt.textContent = 'Интернет активен';
+                statusTxt.style.color = 'var(--status-green)';
+                avatar.style.boxShadow = '0 0 10px var(--status-green)';
+            } else {
+                card.className = 'main-card neumorphic glow-red';
+                balanceTxt.textContent = '-150 ₽';
+                statusTxt.textContent = 'Услуги приостановлены';
+                statusTxt.style.color = 'var(--status-red)';
+                avatar.style.boxShadow = '0 0 10px var(--status-red)';
+            }
+        }
+
+        // Логика смены городского контекста
+        function updateContext() {
+            hapticTap([30, 50, 30]); // Двойная вибрация для смены контекста
+            const context = document.getElementById('contextSelect').value;
+            const block = document.getElementById('informerBlock');
+            const icon = document.getElementById('informerIcon');
+            const title = document.getElementById('informerTitle');
+            const desc = document.getElementById('informerDesc');
+
+            if (context === 'summer') {
+                block.className = 'informer neumorphic';
+                icon.textContent = '☀️';
+                title.textContent = 'Вода в бухте Омега +24°C';
+                desc.textContent = 'Погода в городе +28°C. Отличный день для пляжа!';
+            } else {
+                block.className = 'informer neumorphic alert';
+                icon.textContent = '⚠️';
+                title.textContent = 'Отключение электроэнергии';
+                desc.textContent = 'Район ПОР. Севстар.Карта Света - ведутся работы.';
+            }
+        }
+
+        // Логика открытия домофона (с глубоким haptic откликом)
+        function openDoor(btnElement) {
+            hapticTap([80]); // Более длинная вибрация "глубокий бамп"
+            
+            // Показываем тост
+            const toast = document.getElementById('toastMsg');
+            toast.style.opacity = '1';
+            
+            setTimeout(() => {
+                toast.style.opacity = '0';
+            }, 2000);
+        }
+
+        // Симуляция диагностики
+        function runDiagnostics() {
+            hapticTap(40);
+            const btn = document.getElementById('diagBtn');
+            const originalText = btn.textContent;
+            btn.textContent = 'Проверка...';
+            btn.style.color = 'var(--brand-yellow)'; // Меняем цвет на желтый при проверке
+            
+            setTimeout(() => {
+                hapticTap([30, 30]);
+                btn.textContent = 'Всё в норме!';
+                btn.style.color = 'var(--status-green)';
+                
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                    btn.style.color = 'var(--brand-purple)';
+                }, 2000);
+            }, 1500);
+        }
+    </script>
+</body>
+</html>
