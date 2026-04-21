@@ -113,7 +113,8 @@
         @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
 
         /* --- ГЛАВНАЯ --- */
-        .stories-container { display: flex; overflow-x: auto; padding: 0 20px 10px 20px; gap: 15px; scrollbar-width: none; }
+        /* ИСПРАВЛЕНИЕ: Увеличен padding, чтобы тени не обрезались */
+        .stories-container { display: flex; overflow-x: auto; padding: 20px; margin-top: -10px; gap: 15px; scrollbar-width: none; }
         .stories-container::-webkit-scrollbar { display: none; }
         .story { display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer;}
         .story-circle { width: 60px; height: 60px; border-radius: 50%; display: flex; justify-content: center; align-items: center; color: var(--brand-purple); }
@@ -140,7 +141,8 @@
 
         /* Умный дом / Карточки */
         .section-title { margin: 10px 20px; font-size: 18px; font-weight: bold; color: var(--text-color); }
-        .horizontal-scroll { display: flex; overflow-x: auto; padding: 10px 20px 20px 20px; gap: 15px; scrollbar-width: none; }
+        /* ИСПРАВЛЕНИЕ: Увеличен padding */
+        .horizontal-scroll { display: flex; overflow-x: auto; padding: 20px; margin-top: -10px; gap: 15px; scrollbar-width: none; }
         .horizontal-scroll::-webkit-scrollbar { display: none; }
         
         .sh-card { min-width: 160px; padding: 15px; display: flex; flex-direction: column; gap: 10px; }
@@ -231,8 +233,7 @@
         .nav-icon { display: flex; align-items: center; margin-bottom: 2px;}
 
         /* --- СТИЛИ ДЛЯ ГОРОДА (Редизайн) --- */
-        /* Сегментированный контрол (Внутренние табы Города) */
-        .city-tabs-wrapper { padding: 0 20px; margin-bottom: 20px; }
+        .city-tabs-wrapper { padding: 10px 20px; margin-bottom: 10px; }
         .city-tabs {
             display: flex; background: var(--bg-color); border-radius: 14px;
             padding: 4px; box-shadow: inset 4px 4px 8px var(--shadow-dark), inset -4px -4px 8px var(--shadow-light);
@@ -243,7 +244,7 @@
         }
         .city-tab-btn.active {
             background: var(--bg-color); color: var(--brand-purple-light);
-            box-shadow: 4px 4px 8px var(--shadow-dark), -4px -4px 8px var(--shadow-light);
+            box-shadow: 2px 2px 6px var(--shadow-dark), -2px -2px 6px var(--shadow-light);
         }
         .city-section { display: none; animation: fadeIn 0.3s ease; }
         .city-section.active { display: block; }
@@ -257,20 +258,33 @@
         .buoy-stats { display: flex; gap: 8px; font-size: 11px; color: var(--text-color); font-weight: 500; }
         .buoy-stats div { display: flex; align-items: center; gap: 4px; opacity: 0.8; }
         
-        .map-filter-bar { display: flex; gap: 8px; overflow-x: auto; padding: 0 20px 15px 20px; scrollbar-width: none; }
+        /* ИСПРАВЛЕНИЕ: Увеличен padding для теней */
+        .map-filter-bar { display: flex; gap: 8px; overflow-x: auto; padding: 20px; margin-top: -10px; margin-bottom: -10px; scrollbar-width: none; }
         .map-filter-bar::-webkit-scrollbar { display: none; }
         .filter-chip { padding: 8px 14px; border-radius: 20px; font-size: 12px; font-weight: 600; white-space: nowrap; cursor: pointer; border: none; color: var(--text-color); background: var(--bg-color); transition: all 0.2s ease;}
         .filter-chip.active { color: var(--brand-purple-light); box-shadow: inset 3px 3px 6px var(--shadow-dark), inset -3px -3px 6px var(--shadow-light); }
         
-        .landmark-scroll { display: flex; gap: 12px; overflow-x: auto; padding: 0 20px 20px 20px; scrollbar-width: none;}
+        /* ИСПРАВЛЕНИЕ: Увеличен padding для теней */
+        .landmark-scroll { display: flex; gap: 12px; overflow-x: auto; padding: 20px; margin-top: -10px; scrollbar-width: none;}
         .landmark-scroll::-webkit-scrollbar { display: none; }
         .landmark-chip { display: flex; align-items: center; gap: 8px; padding: 10px 14px; border-radius: 16px; min-width: fit-content; cursor: pointer; transition: transform 0.2s ease; }
         .landmark-chip:active { transform: scale(0.96); }
         .lm-icon { width: 32px; height: 32px; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: var(--brand-purple-light); flex-shrink: 0; box-shadow: inset 2px 2px 4px var(--shadow-dark), inset -2px -2px 4px var(--shadow-light);}
         .lm-text { font-size: 12px; font-weight: 600; color: var(--text-color); }
 
+        /* ИСПРАВЛЕНИЕ: Острые углы Яндекс.Карт в Safari */
+        .map-wrapper {
+            margin: 0 20px 20px 20px;
+            border-radius: 20px;
+            overflow: hidden;
+            -webkit-mask-image: -webkit-radial-gradient(white, black);
+            -webkit-backface-visibility: hidden;
+            -moz-backface-visibility: hidden;
+            transform: translate3d(0, 0, 0);
+        }
+
         /* Заглушки для камер */
-        .camera-card { margin: 0 20px 15px 20px; padding: 0; border-radius: 16px; overflow: hidden; }
+        .camera-card { margin: 0 20px 20px 20px; padding: 0; border-radius: 16px; overflow: hidden; }
         .camera-preview { height: 160px; background: #333; position: relative; display: flex; align-items: center; justify-content: center; color: white;}
         .camera-preview::after { content: 'LIVE'; position: absolute; top: 10px; left: 10px; background: red; color: white; font-size: 10px; padding: 4px 6px; border-radius: 4px; font-weight: bold;}
         .camera-info { padding: 15px; }
@@ -433,7 +447,10 @@
                 <div id="beaches-horizontal-scroll" class="horizontal-scroll" style="margin-bottom: 5px;">
                     <div style="padding: 20px; font-size: 14px; color: var(--text-muted);">Загрузка данных...</div>
                 </div>
-                <div id="map-city" class="neumorphic-inset" style="height: 250px; margin: 0 20px 20px 20px; border-radius: 20px; overflow: hidden;"></div>
+                
+                <div class="map-wrapper neumorphic-inset" style="height: 250px;">
+                    <div id="map-city" style="width: 100%; height: 100%;"></div>
+                </div>
             </div>
 
             <div id="csec-tourism" class="city-section">
@@ -444,7 +461,11 @@
                     <button class="filter-chip neumorphic" onclick="filterMapMarkers('nature', this)">Природа</button>
                     <button class="filter-chip neumorphic" onclick="filterMapMarkers('church', this)">Храмы</button>
                 </div>
-                <div id="map-tourism" class="neumorphic-inset" style="height: 300px; margin: 0 20px 20px 20px; border-radius: 20px; overflow: hidden;"></div>
+                
+                <div class="map-wrapper neumorphic-inset" style="height: 300px;">
+                    <div id="map-tourism" style="width: 100%; height: 100%;"></div>
+                </div>
+
                 <div class="landmark-scroll" style="margin-bottom: 24px;">
                     <div class="landmark-chip neumorphic" onclick="focusLandmark(44.6181, 33.5266)">
                         <div class="lm-icon"><svg class="svg-icon" viewBox="0 0 24 24"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/><path d="M18 14h-8"/><path d="M15 18h-5"/><path d="M10 6h8v4h-8V6Z"/></svg></div>
@@ -633,7 +654,6 @@
             document.getElementById('nav-' + tabId).classList.add('active');
             
             if (tabId === 'city') {
-                // При входе в город активируем первый активный внутренний таб
                 const activeCityTab = document.querySelector('.city-tab-btn.active');
                 if(activeCityTab) activeCityTab.click();
             }
@@ -648,7 +668,6 @@
             document.getElementById('cbtn-' + secId).classList.add('active');
             document.getElementById('csec-' + secId).classList.add('active');
 
-            // Фикс Яндекс Карт для конкретных вкладок
             if (secId === 'weather' && window.cityMap) {
                 setTimeout(() => { window.cityMap.container.fitToViewport(); }, 50);
             }
@@ -722,7 +741,7 @@
                 btn.style.background = 'var(--status-green)';
                 btn.style.opacity = '1';
                 
-                const currentBal = 1250;
+                const currentBal = parseInt(document.getElementById('balanceText').textContent) || 1250;
                 document.getElementById('balanceText').textContent = (currentBal + parseInt(val)) + ' ₽';
 
                 setTimeout(() => {
@@ -857,7 +876,6 @@
             });
         }
 
-        // ТЕСТОВАЯ ПАНЕЛЬ СТАТУСОВ И ГЛОБАЛЬНЫЙ АЛЕРТ
         function updateSimStatus() {
             tryHaptic(30);
             const status = document.getElementById('statusSelect').value;
