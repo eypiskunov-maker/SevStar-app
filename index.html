@@ -23,7 +23,6 @@
             --shadow-dark: #d1d9e6;
             --overlay-bg: rgba(255, 255, 255, 0.7);
 
-            /* Градиенты для продающих элементов */
             --grad-premium: linear-gradient(135deg, #FF9A9E 0%, #FECFEF 99%, #FECFEF 100%);
             --grad-speed: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             --grad-gold: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
@@ -38,7 +37,6 @@
             --shadow-light: #2a2a2a;
             --shadow-dark: #121212;
             --overlay-bg: rgba(0, 0, 0, 0.7);
-
             --grad-speed: linear-gradient(135deg, #89f7fe 0%, #66a6ff 100%);
         }
 
@@ -94,10 +92,10 @@
         .logo-img { height: 35px; object-fit: contain; }
         
         .avatar {
-            width: 40px; height: 40px; border-radius: 50%; cursor: pointer;
-            box-shadow: 0 0 10px var(--status-green); transition: box-shadow 0.3s ease, transform 0.1s;
+            width: 44px; height: 44px; border-radius: 50%; cursor: pointer;
             display: flex; align-items: center; justify-content: center;
-            background: var(--bg-color); color: var(--text-color);
+            background: var(--bg-color); color: var(--brand-purple-light);
+            transition: transform 0.1s;
         }
         .avatar:active { transform: scale(0.9); }
 
@@ -122,7 +120,14 @@
         .stories-container { display: flex; overflow-x: auto; padding: 20px; margin-top: -10px; gap: 15px; scrollbar-width: none; }
         .stories-container::-webkit-scrollbar { display: none; }
         .story { display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer;}
-        .story-circle { width: 60px; height: 60px; border-radius: 50%; display: flex; justify-content: center; align-items: center; color: var(--brand-purple); }
+        
+        /* Измененный класс для сторис с картинками */
+        .story-circle { 
+            width: 64px; height: 64px; border-radius: 50%; display: flex; justify-content: center; align-items: center; 
+            background-color: var(--bg-color); background-size: cover; background-position: center; 
+            border: 2px solid transparent; transition: border-color 0.3s;
+        }
+        .story-circle.unread { border-color: var(--brand-purple-light); }
         .story span { font-size: 11px; color: var(--text-color); font-weight: 500;}
 
         /* Баланс */
@@ -157,23 +162,35 @@
         .btn-open { padding: 12px 0; border: none; color: var(--brand-purple-light); font-weight: bold; width: 100%; cursor: pointer; transition: all 0.2s; }
         .btn-open:active { transform: scale(0.95); box-shadow: inset 4px 4px 8px var(--shadow-dark), inset -4px -4px 8px var(--shadow-light); }
 
-        /* Информер (Главная) */
-        .informer { margin: 0 20px 30px 20px; padding: 20px; display: flex; align-items: center; gap: 15px; }
-        .informer-icon { display: flex; align-items: center; justify-content: center; color: var(--brand-yellow); }
-        .informer-text h4 { margin: 0 0 5px 0; color: var(--text-color); }
-        .informer-text p { margin: 0; font-size: 12px; color: var(--text-muted); }
-
-        /* --- ВЫЕЗЖАЮЩИЕ ОКНА --- */
-        .sheet-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: var(--overlay-bg); z-index: 2000; opacity: 0; transition: opacity 0.3s ease; backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); }
+        /* --- ВЫЕЗЖАЮЩИЕ ОКНА (Bottom Sheets) --- */
+        .sheet-overlay {
+            display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: var(--overlay-bg); z-index: 2000; opacity: 0; transition: opacity 0.3s ease;
+            backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px);
+        }
         .sheet-overlay.active { display: block; opacity: 1; }
-        .bottom-sheet { position: fixed; bottom: 0; left: 0; right: 0; margin: 0 auto; max-width: 400px; background: var(--bg-color); border-radius: 30px 30px 0 0; padding: 30px 20px 40px 20px; z-index: 2001; transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1); display: flex; flex-direction: column; gap: 20px; box-shadow: 0 -10px 30px rgba(0,0,0,0.3); }
+
+        .bottom-sheet {
+            position: fixed; bottom: 0; left: 0; right: 0; margin: 0 auto; max-width: 400px; 
+            background: var(--bg-color); border-radius: 30px 30px 0 0;
+            padding: 30px 20px 40px 20px; z-index: 2001;
+            transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1);
+            display: flex; flex-direction: column; gap: 20px; box-shadow: 0 -10px 30px rgba(0,0,0,0.3);
+        }
         .bottom-sheet.active { transform: translateY(0); }
+        
         .sheet-header { display: flex; justify-content: space-between; align-items: center; }
         .sheet-header h3 { margin: 0; color: var(--text-color); }
         .close-btn { width: 30px; height: 30px; border-radius: 50%; border: none; color: var(--text-color); font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center;}
         
+        /* Окно оплаты */
         .amount-input-wrapper { display: flex; justify-content: center; align-items: center; margin: 10px 0; padding: 15px; border-radius: 20px;}
-        .amount-input { width: 50%; background: transparent; border: none; outline: none; font-size: 40px; font-weight: bold; color: var(--brand-purple-light); text-align: right; transition: color 0.3s ease; -moz-appearance: textfield; }
+        .amount-input { 
+            width: 50%; background: transparent; border: none; outline: none; 
+            font-size: 40px; font-weight: bold; color: var(--brand-purple-light); 
+            text-align: right; transition: color 0.3s ease;
+            -moz-appearance: textfield;
+        }
         .amount-input::-webkit-outer-spin-button, .amount-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
         .amount-currency { font-size: 40px; font-weight: bold; color: var(--brand-purple-light); margin-left: 8px; transition: color 0.3s ease;}
         
@@ -186,12 +203,14 @@
         .pay-method.active { border-color: var(--brand-purple-light); }
         .pay-method-name { font-weight: bold; color: var(--text-color); font-size: 14px; display: flex; align-items: center; gap: 10px;}
         
+        /* Окно аккаунтов */
         .account-item { padding: 15px; border-radius: 15px; display: flex; align-items: center; gap: 15px; cursor: pointer; border: 2px solid transparent;}
         .account-item.active { border-color: var(--status-green); }
         .acc-icon { display: flex; align-items: center; color: var(--brand-purple-light); }
         .acc-details h4 { margin: 0 0 3px 0; color: var(--text-color); font-size: 15px;}
         .acc-details p { margin: 0; color: var(--text-muted); font-size: 12px;}
 
+        /* Тумблер */
         .row-toggle { display: flex; justify-content: space-between; align-items: center; padding: 5px 10px; }
         .toggle-label { font-size: 14px; font-weight: 600; color: var(--text-color); }
         .switch { position: relative; display: inline-block; width: 50px; height: 28px; }
@@ -224,7 +243,7 @@
         }
         .inner-tab-btn {
             flex: 1; padding: 10px 0; text-align: center; border-radius: 10px; font-size: 13px; font-weight: 600;
-            color: var(--text-muted); cursor: pointer; transition: all 0.3s ease;
+            color: var(--text-muted); cursor: pointer; transition: all 0.3s ease; white-space: nowrap;
         }
         .inner-tab-btn.active {
             background: var(--bg-color); color: var(--brand-purple-light);
@@ -233,7 +252,7 @@
         .inner-section { display: none; animation: fadeIn 0.3s ease; }
         .inner-section.active { display: block; }
 
-        /* Карточки пляжей */
+        /* --- ЭЛЕМЕНТЫ ГОРОДА (Из Мой Севастополь) --- */
         .buoy-card { min-width: 220px; padding: 15px; display: flex; flex-direction: column; cursor: pointer; transition: transform 0.2s; }
         .buoy-card:active { transform: scale(0.96); }
         .buoy-header { display: flex; justify-content: space-between; margin-bottom: 6px; align-items: flex-start; }
@@ -255,12 +274,42 @@
         .lm-text { font-size: 12px; font-weight: 600; color: var(--text-color); }
 
         .map-wrapper { margin: 0 20px 20px 20px; border-radius: 20px; overflow: hidden; -webkit-mask-image: -webkit-radial-gradient(white, black); transform: translate3d(0, 0, 0); }
+        
         .camera-card { margin: 0 20px 20px 20px; padding: 0; border-radius: 16px; overflow: hidden; }
         .camera-preview { height: 160px; background: #333; position: relative; display: flex; align-items: center; justify-content: center; color: white;}
         .camera-preview::after { content: 'LIVE'; position: absolute; top: 10px; left: 10px; background: red; color: white; font-size: 10px; padding: 4px 6px; border-radius: 4px; font-weight: bold;}
         .camera-info { padding: 15px; }
         .camera-info h4 { margin: 0 0 4px 0; color: var(--text-color); font-size: 15px;}
         .camera-info p { margin: 0; color: var(--text-muted); font-size: 12px;}
+
+        /* Туризм: Маршруты и Аудиогиды */
+        .route-card-full { background: var(--bg-color); border-radius: 20px; padding: 0; margin: 0 20px 20px 20px; overflow: hidden; cursor: pointer; transition: transform 0.2s ease; }
+        .route-card-full:active { transform: scale(0.98); }
+        .route-card-header { padding: 16px; }
+        .route-card-header h4 { font-size: 15px; margin:0 0 6px 0; line-height: 1.3; color: var(--text-color);}
+        .route-card-meta { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 8px; }
+        .route-card-meta span { display: flex; align-items: center; gap: 4px; font-size: 11px; color: var(--text-muted); }
+        .route-card-tags { display: flex; gap: 6px; padding: 0 16px 16px; flex-wrap: wrap; }
+        .route-tag { padding: 4px 10px; border-radius: 12px; font-size: 10px; font-weight: 600; }
+        .route-tag.auto { background: rgba(0, 122, 255, 0.1); color: #007AFF; }
+        .route-tag.walk { background: rgba(52, 199, 89, 0.1); color: #34C759; }
+        .route-tag.new { background: rgba(255, 59, 48, 0.1); color: #FF3B30; }
+
+        .audio-card { border-radius: 20px; padding: 16px; margin: 0 20px 15px 20px; display: flex; align-items: center; gap: 14px; cursor: pointer; transition: transform 0.2s ease; }
+        .audio-card:active { transform: scale(0.98); }
+        .audio-play-btn { width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: white;}
+        .audio-info { flex-grow: 1; min-width: 0; }
+        .audio-info h4 { font-size: 14px; margin: 0 0 4px 0; line-height: 1.3; color: var(--text-color);}
+        .audio-info p { font-size: 11px; color: var(--text-muted); margin: 0; display: flex; align-items: center; gap: 4px; }
+        .audio-waveform { display: flex; align-items: flex-end; gap: 2px; height: 24px; flex-shrink: 0; }
+        .audio-waveform span { width: 3px; background: var(--brand-purple-light); border-radius: 2px; opacity: 0.4; animation: waveform 1.2s ease infinite; }
+        .audio-waveform.playing span { opacity: 1; }
+        .audio-waveform span:nth-child(1) { height: 8px; animation-delay: 0s; }
+        .audio-waveform span:nth-child(2) { height: 16px; animation-delay: 0.1s; }
+        .audio-waveform span:nth-child(3) { height: 10px; animation-delay: 0.2s; }
+        .audio-waveform span:nth-child(4) { height: 20px; animation-delay: 0.3s; }
+        .audio-waveform span:nth-child(5) { height: 12px; animation-delay: 0.4s; }
+        @keyframes waveform { 0%, 100% { transform: scaleY(1); } 50% { transform: scaleY(0.4); } }
 
         /* --- СТИЛИ ДЛЯ РАЗДЕЛА ТАРИФОВ (ЭТАЛОН) --- */
         .tariff-card { margin: 0 20px 20px 20px; padding: 25px; position: relative; overflow: hidden; }
@@ -285,7 +334,6 @@
         .t-price { font-size: 24px; font-weight: 800; color: var(--text-color);}
         .t-price small { font-size: 12px; color: var(--text-muted); font-weight: normal;}
         
-        /* Кнопка "Ваш тариф" (Вдавленная) */
         .btn-current { pointer-events: none; color: var(--status-green); font-size: 13px; font-weight: bold; display: flex; align-items: center; gap: 5px; padding: 10px 15px; border-radius: 12px;}
 
         /* --- ПРОФИЛЬ --- */
@@ -302,9 +350,7 @@
 <body>
 
     <audio id="successSound" src="success.mp3" preload="auto"></audio>
-    <audio id="unlockSound" src="intercome.mp3" preload="auto"></audio>
-
-    <div class="control-panel">
+    <audio id="unlockSound" src="intercome.mp3" preload="auto"></audio> <div class="control-panel">
         <select id="statusSelect" onchange="updateSimStatus()">
             <option value="active">Договор: Активен</option>
             <option value="blocked">Договор: Блок</option>
@@ -339,26 +385,26 @@
         <div id="tab-main" class="tab-content active">
             <div class="stories-container">
                 <div class="story">
-                    <div class="story-circle neumorphic" onclick="tryHaptic(20)">
-                        <svg class="svg-icon" viewBox="0 0 24 24"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.9 1.2 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg>
+                    <div class="story-circle neumorphic unread" style="background-image: url('story1.png');" onclick="tryHaptic(20)">
+                        <svg class="svg-icon fallback-icon" viewBox="0 0 24 24" style="opacity: 0.3;"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.9 1.2 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg>
                     </div>
                     <span>Лайфхаки</span>
                 </div>
                 <div class="story">
-                    <div class="story-circle neumorphic" onclick="tryHaptic(20)">
-                        <svg class="svg-icon" viewBox="0 0 24 24"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>
+                    <div class="story-circle neumorphic unread" style="background-image: url('story2.png');" onclick="tryHaptic(20)">
+                        <svg class="svg-icon fallback-icon" viewBox="0 0 24 24" style="opacity: 0.3;"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>
                     </div>
                     <span>Акции</span>
                 </div>
                 <div class="story">
-                    <div class="story-circle neumorphic" onclick="tryHaptic(20)">
-                        <svg class="svg-icon" viewBox="0 0 24 24"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/><path d="M18 14h-8"/><path d="M15 18h-5"/><path d="M10 6h8v4h-8V6Z"/></svg>
+                    <div class="story-circle neumorphic" style="background-image: url('story3.png');" onclick="tryHaptic(20)">
+                        <svg class="svg-icon fallback-icon" viewBox="0 0 24 24" style="opacity: 0.3;"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/><path d="M18 14h-8"/><path d="M15 18h-5"/><path d="M10 6h8v4h-8V6Z"/></svg>
                     </div>
                     <span>Новости</span>
                 </div>
                 <div class="story">
-                    <div class="story-circle neumorphic" onclick="tryHaptic(20)">
-                        <svg class="svg-icon" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="15" rx="2" ry="2"/><polyline points="17 2 12 7 7 2"/></svg>
+                    <div class="story-circle neumorphic" style="background-image: url('story4.png');" onclick="tryHaptic(20)">
+                        <svg class="svg-icon fallback-icon" viewBox="0 0 24 24" style="opacity: 0.3;"><rect x="2" y="7" width="20" height="15" rx="2" ry="2"/><polyline points="17 2 12 7 7 2"/></svg>
                     </div>
                     <span>ТВ</span>
                 </div>
@@ -374,7 +420,7 @@
                     <button class="btn btn-primary" onclick="openSheet('paymentSheet')">Пополнить</button>
                     <div class="secondary-buttons">
                         <button class="btn btn-secondary neumorphic" onclick="runDiagnostics(this)">
-                            <svg class="svg-icon" style="width: 16px; height: 16px;" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                            <svg class="svg-icon" style="width: 16px; height: 16px;" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
                             Диагностика
                         </button>
                         <button class="btn btn-secondary neumorphic" onclick="tryHaptic(20)">
@@ -404,25 +450,16 @@
                     <button class="btn-open neumorphic" onclick="openDoor(this, 'Доступ разрешен')">Открыть шлагбаум</button>
                 </div>
             </div>
-
-            <h3 class="section-title">Ваш Севастополь</h3>
-            <div class="informer neumorphic">
-                <div class="informer-icon">
-                    <svg class="svg-icon" style="width: 32px; height: 32px;" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
-                </div>
-                <div class="informer-text">
-                    <h4>Вода в бухте Омега +24°C</h4>
-                    <p>Погода в городе +28°C. Отличный день для пляжа!</p>
-                </div>
-            </div>
         </div>
 
         <div id="tab-city" class="tab-content">
-            <div class="inner-tabs-wrapper">
-                <div class="inner-tabs">
-                    <div class="inner-tab-btn active" id="cbtn-cams" onclick="switchCityTab('cams')">Камеры</div>
-                    <div class="inner-tab-btn" id="cbtn-weather" onclick="switchCityTab('weather')">Погода</div>
-                    <div class="inner-tab-btn" id="cbtn-tourism" onclick="switchCityTab('tourism')">Туризм</div>
+            
+            <div class="city-tabs-wrapper">
+                <div class="city-tabs">
+                    <div class="inner-tab-btn active" id="cbtn-cams" onclick="switchInnerTab('cams', 'city')">Камеры</div>
+                    <div class="inner-tab-btn" id="cbtn-weather" onclick="switchInnerTab('weather', 'city')">Погода</div>
+                    <div class="inner-tab-btn" id="cbtn-tourism" onclick="switchInnerTab('tourism', 'city')">Туризм</div>
+                    <div class="inner-tab-btn" id="cbtn-light" onclick="switchInnerTab('light', 'city')">Свет</div>
                 </div>
             </div>
 
@@ -464,7 +501,7 @@
                 <div class="map-wrapper neumorphic-inset" style="height: 300px;">
                     <div id="map-tourism" style="width: 100%; height: 100%;"></div>
                 </div>
-                <div class="landmark-scroll" style="margin-bottom: 24px;">
+                <div class="landmark-scroll" style="margin-bottom: 10px;">
                     <div class="landmark-chip neumorphic" onclick="focusLandmark(44.6181, 33.5266)">
                         <div class="lm-icon"><svg class="svg-icon" viewBox="0 0 24 24"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/><path d="M18 14h-8"/><path d="M15 18h-5"/><path d="M10 6h8v4h-8V6Z"/></svg></div>
                         <span class="lm-text">Графская</span>
@@ -474,21 +511,72 @@
                         <span class="lm-text">Херсонес</span>
                     </div>
                 </div>
+
+                <h2 class="section-title">Туристические маршруты</h2>
+                <p style="font-size: 12px; color: var(--text-muted); margin: -5px 20px 15px 20px;">От партнеров sevastravel.ru</p>
+                
+                <div class="route-card-full neumorphic" onclick="window.open('https://sevastravel.ru', '_blank')">
+                    <div style="background: linear-gradient(135deg, #8B0000, #CD5C5C); padding: 14px 16px; color: white; display: flex; align-items: center; gap: 10px;">
+                        <svg class="svg-icon" viewBox="0 0 24 24"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>
+                        <div>
+                            <div style="font-size: 10px; opacity: 0.8; text-transform: uppercase;">Тематический маршрут</div>
+                            <div style="font-size: 14px; font-weight: 700;">К 80-летию Великой Победы</div>
+                        </div>
+                    </div>
+                    <div class="route-card-header">
+                        <h4>Авто-пешеходный маршрут «80 лет Победы»</h4>
+                        <div class="route-card-meta">
+                            <span><svg class="svg-icon" style="width:14px;height:14px" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> 4 дня / 3 ночи</span>
+                            <span><svg class="svg-icon" style="width:14px;height:14px" viewBox="0 0 24 24"><path d="M14 4l-4 4 4 4"/><path d="M10 12l4 4-4 4"/></svg> ~ 11 км пешком</span>
+                        </div>
+                    </div>
+                    <div class="route-card-tags">
+                        <span class="route-tag auto">Авто</span>
+                        <span class="route-tag walk">Пешеходный</span>
+                        <span class="route-tag new">Новинка</span>
+                    </div>
+                </div>
+
+                <h2 class="section-title">Аудиоэкскурсии</h2>
+                <div class="audio-card neumorphic" onclick="toggleAudio(this)">
+                    <div class="audio-play-btn" style="background: linear-gradient(135deg, #FF9500, #FF6B00);">
+                        <svg class="play-icon svg-icon" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                    </div>
+                    <div class="audio-info">
+                        <h4>Центр: от Нахимова до Графской</h4>
+                        <p>45 мин • 2.3 км • 8 остановок</p>
+                    </div>
+                    <div class="audio-waveform">
+                        <span></span><span></span><span></span><span></span><span></span>
+                    </div>
+                </div>
             </div>
+
+            <div id="csec-light" class="inner-section">
+                <h3 class="section-title" style="margin-top: 0;">Севстар.Карта Света</h3>
+                <p style="font-size: 13px; color: var(--text-muted); margin: 0 20px 15px 20px;">Актуальная информация об отключениях электроэнергии в Севастополе.</p>
+                <div class="map-wrapper neumorphic-inset" style="height: 250px; display: flex; align-items: center; justify-content: center; position: relative; background: #333;">
+                    <div style="text-align: center; z-index: 2;">
+                        <svg class="svg-icon" style="width: 48px; height: 48px; color: var(--brand-yellow); margin-bottom: 10px;" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                        <br>
+                        <button class="btn-primary neumorphic" style="width: auto; padding: 12px 24px; border-radius: 12px;" onclick="window.open('https://sevstar.net/karta-sveta/', '_blank')">Смотреть карту света</button>
+                    </div>
+                </div>
+            </div>
+
         </div>
 
         <div id="tab-tariffs" class="tab-content">
             
             <div class="inner-tabs-wrapper">
                 <div class="inner-tabs">
-                    <div class="inner-tab-btn active" id="tbtn-net" onclick="switchTariffTab('net')">Интернет</div>
-                    <div class="inner-tab-btn" id="tbtn-tv" onclick="switchTariffTab('tv')">ТВ</div>
-                    <div class="inner-tab-btn" id="tbtn-all" onclick="switchTariffTab('all')">Беру всё</div>
+                    <div class="inner-tab-btn active" id="tbtn-net" onclick="switchInnerTab('net', 'tariffs')">Интернет</div>
+                    <div class="inner-tab-btn" id="tbtn-tv" onclick="switchInnerTab('tv', 'tariffs')">ТВ</div>
+                    <div class="inner-tab-btn" id="tbtn-all" onclick="switchInnerTab('all', 'tariffs')">Беру всё</div>
                 </div>
             </div>
 
             <div id="tsec-net" class="inner-section active">
-                
                 <div class="tariff-card neumorphic">
                     <div class="t-badge current">ВАШ ТАРИФ</div>
                     <h3 class="t-title">Гипердрайв</h3>
@@ -499,14 +587,14 @@
                     </div>
                     
                     <div class="t-features">
-                        <div class="t-feature-item"><svg class="svg-icon" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Идеально для 4K и Игр</div>
-                        <div class="t-feature-item"><svg class="svg-icon" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Поддержка 24/7</div>
-                        <div class="t-feature-item"><svg class="svg-icon" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Гигабитный роутер в аренду</div>
+                        <div class="t-feature-item"><svg class="svg-icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> Идеально для 4K и Игр</div>
+                        <div class="t-feature-item"><svg class="svg-icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> Поддержка 24/7</div>
+                        <div class="t-feature-item"><svg class="svg-icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> Гигабитный роутер в аренду</div>
                     </div>
                     
                     <div class="t-footer">
                         <div class="t-price">950 ₽<small>/мес</small></div>
-                        <div class="btn-current neumorphic-inset"><svg class="svg-icon" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Активен</div>
+                        <div class="btn-current neumorphic-inset"><svg class="svg-icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> Активен</div>
                     </div>
                 </div>
 
@@ -519,8 +607,8 @@
                     </div>
                     
                     <div class="t-features">
-                        <div class="t-feature-item"><svg class="svg-icon" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Стабильный сигнал</div>
-                        <div class="t-feature-item"><svg class="svg-icon" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Хватит на 2-3 устройства</div>
+                        <div class="t-feature-item"><svg class="svg-icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> Стабильный сигнал</div>
+                        <div class="t-feature-item"><svg class="svg-icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> Хватит на 2-3 устройства</div>
                     </div>
                     
                     <div class="t-footer">
@@ -541,9 +629,9 @@
                     </div>
                     
                     <div class="t-features">
-                        <div class="t-feature-item"><svg class="svg-icon" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> 60 каналов в HD и 4K</div>
-                        <div class="t-feature-item"><svg class="svg-icon" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Архив передач за 7 дней</div>
-                        <div class="t-feature-item"><svg class="svg-icon" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Доступ на 5 устройствах</div>
+                        <div class="t-feature-item"><svg class="svg-icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> 60 каналов в HD и 4K</div>
+                        <div class="t-feature-item"><svg class="svg-icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> Архив передач за 7 дней</div>
+                        <div class="t-feature-item"><svg class="svg-icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> Доступ на 5 устройствах</div>
                     </div>
                     
                     <div class="t-footer">
@@ -564,9 +652,9 @@
                     </div>
                     
                     <div class="t-features">
-                        <div class="t-feature-item"><svg class="svg-icon" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Умный Домофон бесплатно</div>
-                        <div class="t-feature-item"><svg class="svg-icon" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Городские камеры Око</div>
-                        <div class="t-feature-item"><svg class="svg-icon" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Экономия 40%</div>
+                        <div class="t-feature-item"><svg class="svg-icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> Умный Домофон бесплатно</div>
+                        <div class="t-feature-item"><svg class="svg-icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> Городские камеры Око</div>
+                        <div class="t-feature-item"><svg class="svg-icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> Экономия 40%</div>
                     </div>
                     
                     <div class="t-footer">
@@ -739,19 +827,24 @@
             document.getElementById('nav-' + tabId).classList.add('active');
             
             if (tabId === 'city') {
-                const activeCityTab = document.querySelector('.city-tab-btn.active');
+                const activeCityTab = document.querySelector('#tab-city .inner-tab-btn.active');
                 if(activeCityTab) activeCityTab.click();
             }
         }
 
-        // ВНУТРЕННЯЯ НАВИГАЦИЯ (Вкладка Город)
-        function switchCityTab(secId) {
+        // ВНУТРЕННЯЯ НАВИГАЦИЯ (Универсальная для Города и Тарифов)
+        function switchInnerTab(secId, groupPrefix) {
             tryHaptic(20);
-            document.querySelectorAll('.city-tab-btn').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.city-section').forEach(el => el.classList.remove('active'));
+            const tabGroup = document.getElementById('tab-' + groupPrefix);
             
-            document.getElementById('cbtn-' + secId).classList.add('active');
-            document.getElementById('csec-' + secId).classList.add('active');
+            tabGroup.querySelectorAll('.inner-tab-btn').forEach(el => el.classList.remove('active'));
+            tabGroup.querySelectorAll('.inner-section').forEach(el => el.classList.remove('active'));
+            
+            let btnPrefix = groupPrefix === 'city' ? 'cbtn-' : 'tbtn-';
+            let secPrefix = groupPrefix === 'city' ? 'csec-' : 'tsec-';
+
+            document.getElementById(btnPrefix + secId).classList.add('active');
+            document.getElementById(secPrefix + secId).classList.add('active');
 
             if (secId === 'weather' && window.cityMap) {
                 setTimeout(() => { window.cityMap.container.fitToViewport(); }, 50);
@@ -759,16 +852,6 @@
             if (secId === 'tourism' && window.tourismMap) {
                 setTimeout(() => { window.tourismMap.container.fitToViewport(); }, 50);
             }
-        }
-
-        // ВНУТРЕННЯЯ НАВИГАЦИЯ (Вкладка Тарифы)
-        function switchTariffTab(secId) {
-            tryHaptic(20);
-            document.querySelectorAll('.inner-tab-btn').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.inner-section').forEach(el => el.classList.remove('active'));
-            
-            document.getElementById('tbtn-' + secId).classList.add('active');
-            document.getElementById('tsec-' + secId).classList.add('active');
         }
 
         // ТЕМА
@@ -882,7 +965,6 @@
             }, 800);
         }
 
-        // Анимация подключения тарифа
         function connectTariff(btn) {
             tryHaptic(40);
             const origText = btn.innerText;
@@ -892,7 +974,7 @@
             setTimeout(() => {
                 tryHaptic([30, 50, 30]);
                 playAudioFile('successSound'); 
-                btn.innerHTML = '<svg class="svg-icon" style="width:16px;height:16px;vertical-align:middle;margin-right:4px;" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Подключено';
+                btn.innerHTML = '<svg class="svg-icon" style="width:16px;height:16px;vertical-align:middle;margin-right:4px;" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> Подключено';
                 btn.style.background = 'var(--status-green)';
                 btn.style.opacity = '1';
 
@@ -901,6 +983,24 @@
                     btn.style.background = 'var(--brand-purple)';
                 }, 2500);
             }, 1500);
+        }
+
+        // Анимация аудио в туризме
+        function toggleAudio(card) {
+            var icon = card.querySelector('.play-icon');
+            var waveform = card.querySelector('.audio-waveform');
+            var wasPlaying = icon.innerHTML.includes('rect'); // check if pause icon
+            
+            // Сброс всех
+            document.querySelectorAll('.audio-card').forEach(function(c) {
+                c.querySelector('.play-icon').innerHTML = '<polygon points="5 3 19 12 5 21 5 3"/>';
+                c.querySelector('.audio-waveform').classList.remove('playing');
+            });
+            
+            if (!wasPlaying) {
+                icon.innerHTML = '<rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>';
+                waveform.classList.add('playing');
+            }
         }
 
         // --- ЯНДЕКС КАРТЫ И ГОРОД ---
