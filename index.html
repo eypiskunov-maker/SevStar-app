@@ -3,8 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Севстар - Главный экран</title>
+    <title>Севстар</title>
     
+    <link rel="manifest" href="manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Севстар">
+    <link rel="apple-touch-icon" href="logo-192.png">
+
     <script src="https://api-maps.yandex.ru/2.1/?apikey=fe5b4280-5dbf-4b6b-a2df-165ce36f06e4&lang=ru_RU" type="text/javascript"></script>
 
     <style>
@@ -88,14 +94,20 @@
             border-radius: 20px; transition: all 0.3s ease;
         }
 
-        .header { padding: 20px; display: flex; justify-content: space-between; align-items: center; z-index: 10;}
-        .logo-img { height: 35px; object-fit: contain; }
+        /* Хедер с мини-погодой */
+        .header { padding: 20px; display: flex; justify-content: space-between; align-items: center; z-index: 10; gap: 10px;}
+        .logo-wrapper { flex-shrink: 1; min-width: 0; }
+        .logo-img { height: 35px; max-width: 130px; object-fit: contain; }
+        
+        .header-right { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+        .weather-mini { display: flex; flex-direction: column; align-items: flex-end; cursor: pointer; }
+        .weather-mini:active { opacity: 0.7; }
         
         .avatar {
             width: 44px; height: 44px; border-radius: 50%; cursor: pointer;
             display: flex; align-items: center; justify-content: center;
             background: var(--bg-color); color: var(--brand-purple-light);
-            transition: transform 0.1s;
+            box-shadow: 0 0 10px var(--status-green); transition: box-shadow 0.3s ease, transform 0.1s;
         }
         .avatar:active { transform: scale(0.9); }
 
@@ -103,7 +115,7 @@
         .tab-content.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Глобальный Алерт (Авария) */
+        /* Глобальный Алерт */
         .global-alert {
             margin: 0 20px 20px 20px; padding: 15px 20px; border-radius: 16px;
             background: rgba(244, 67, 54, 0.1); border: 1px solid rgba(244, 67, 54, 0.3);
@@ -117,17 +129,17 @@
         @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
 
         /* --- ГЛАВНАЯ --- */
-        .stories-container { display: flex; overflow-x: auto; padding: 20px; margin-top: -10px; gap: 15px; scrollbar-width: none; }
+        .stories-container { display: flex; overflow-x: auto; padding: 15px 20px 20px 20px; margin-top: -15px; gap: 15px; scrollbar-width: none; }
         .stories-container::-webkit-scrollbar { display: none; }
         .story { display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer;}
-        
-        /* Измененный класс для сторис с картинками */
         .story-circle { 
             width: 64px; height: 64px; border-radius: 50%; display: flex; justify-content: center; align-items: center; 
             background-color: var(--bg-color); background-size: cover; background-position: center; 
             border: 2px solid transparent; transition: border-color 0.3s;
+            color: var(--brand-purple-light);
         }
         .story-circle.unread { border-color: var(--brand-purple-light); }
+        .fallback-icon { opacity: 0.6; }
         .story span { font-size: 11px; color: var(--text-color); font-weight: 500;}
 
         /* Баланс */
@@ -162,35 +174,17 @@
         .btn-open { padding: 12px 0; border: none; color: var(--brand-purple-light); font-weight: bold; width: 100%; cursor: pointer; transition: all 0.2s; }
         .btn-open:active { transform: scale(0.95); box-shadow: inset 4px 4px 8px var(--shadow-dark), inset -4px -4px 8px var(--shadow-light); }
 
-        /* --- ВЫЕЗЖАЮЩИЕ ОКНА (Bottom Sheets) --- */
-        .sheet-overlay {
-            display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-            background: var(--overlay-bg); z-index: 2000; opacity: 0; transition: opacity 0.3s ease;
-            backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px);
-        }
+        /* --- ВЫЕЗЖАЮЩИЕ ОКНА --- */
+        .sheet-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: var(--overlay-bg); z-index: 2000; opacity: 0; transition: opacity 0.3s ease; backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); }
         .sheet-overlay.active { display: block; opacity: 1; }
-
-        .bottom-sheet {
-            position: fixed; bottom: 0; left: 0; right: 0; margin: 0 auto; max-width: 400px; 
-            background: var(--bg-color); border-radius: 30px 30px 0 0;
-            padding: 30px 20px 40px 20px; z-index: 2001;
-            transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1);
-            display: flex; flex-direction: column; gap: 20px; box-shadow: 0 -10px 30px rgba(0,0,0,0.3);
-        }
+        .bottom-sheet { position: fixed; bottom: 0; left: 0; right: 0; margin: 0 auto; max-width: 400px; background: var(--bg-color); border-radius: 30px 30px 0 0; padding: 30px 20px 40px 20px; z-index: 2001; transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1); display: flex; flex-direction: column; gap: 20px; box-shadow: 0 -10px 30px rgba(0,0,0,0.3); }
         .bottom-sheet.active { transform: translateY(0); }
-        
         .sheet-header { display: flex; justify-content: space-between; align-items: center; }
         .sheet-header h3 { margin: 0; color: var(--text-color); }
         .close-btn { width: 30px; height: 30px; border-radius: 50%; border: none; color: var(--text-color); font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center;}
         
-        /* Окно оплаты */
         .amount-input-wrapper { display: flex; justify-content: center; align-items: center; margin: 10px 0; padding: 15px; border-radius: 20px;}
-        .amount-input { 
-            width: 50%; background: transparent; border: none; outline: none; 
-            font-size: 40px; font-weight: bold; color: var(--brand-purple-light); 
-            text-align: right; transition: color 0.3s ease;
-            -moz-appearance: textfield;
-        }
+        .amount-input { width: 50%; background: transparent; border: none; outline: none; font-size: 40px; font-weight: bold; color: var(--brand-purple-light); text-align: right; transition: color 0.3s ease; -moz-appearance: textfield; }
         .amount-input::-webkit-outer-spin-button, .amount-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
         .amount-currency { font-size: 40px; font-weight: bold; color: var(--brand-purple-light); margin-left: 8px; transition: color 0.3s ease;}
         
@@ -203,14 +197,12 @@
         .pay-method.active { border-color: var(--brand-purple-light); }
         .pay-method-name { font-weight: bold; color: var(--text-color); font-size: 14px; display: flex; align-items: center; gap: 10px;}
         
-        /* Окно аккаунтов */
         .account-item { padding: 15px; border-radius: 15px; display: flex; align-items: center; gap: 15px; cursor: pointer; border: 2px solid transparent;}
         .account-item.active { border-color: var(--status-green); }
         .acc-icon { display: flex; align-items: center; color: var(--brand-purple-light); }
         .acc-details h4 { margin: 0 0 3px 0; color: var(--text-color); font-size: 15px;}
         .acc-details p { margin: 0; color: var(--text-muted); font-size: 12px;}
 
-        /* Тумблер */
         .row-toggle { display: flex; justify-content: space-between; align-items: center; padding: 5px 10px; }
         .toggle-label { font-size: 14px; font-weight: 600; color: var(--text-color); }
         .switch { position: relative; display: inline-block; width: 50px; height: 28px; }
@@ -235,14 +227,15 @@
         .nav-item.active { color: var(--brand-purple-light); }
         .nav-icon { display: flex; align-items: center; margin-bottom: 2px;}
 
-        /* --- СТИЛИ ДЛЯ ГОРОДА И ТАРИФОВ (Внутренние табы) --- */
+        /* --- ВНУТРЕННИЕ ТАБЫ (Универсальные для Города и Тарифов) --- */
         .inner-tabs-wrapper { padding: 10px 20px; margin-bottom: 10px; }
         .inner-tabs {
-            display: flex; background: var(--bg-color); border-radius: 14px;
+            display: flex; gap: 4px; background: var(--bg-color); border-radius: 14px; overflow-x: auto; scrollbar-width: none;
             padding: 4px; box-shadow: inset 4px 4px 8px var(--shadow-dark), inset -4px -4px 8px var(--shadow-light);
         }
+        .inner-tabs::-webkit-scrollbar { display: none; }
         .inner-tab-btn {
-            flex: 1; padding: 10px 0; text-align: center; border-radius: 10px; font-size: 13px; font-weight: 600;
+            flex: 1 0 auto; padding: 10px 15px; text-align: center; border-radius: 10px; font-size: 13px; font-weight: 600;
             color: var(--text-muted); cursor: pointer; transition: all 0.3s ease; white-space: nowrap;
         }
         .inner-tab-btn.active {
@@ -252,7 +245,7 @@
         .inner-section { display: none; animation: fadeIn 0.3s ease; }
         .inner-section.active { display: block; }
 
-        /* --- ЭЛЕМЕНТЫ ГОРОДА (Из Мой Севастополь) --- */
+        /* --- ЭЛЕМЕНТЫ ГОРОДА --- */
         .buoy-card { min-width: 220px; padding: 15px; display: flex; flex-direction: column; cursor: pointer; transition: transform 0.2s; }
         .buoy-card:active { transform: scale(0.96); }
         .buoy-header { display: flex; justify-content: space-between; margin-bottom: 6px; align-items: flex-start; }
@@ -311,29 +304,23 @@
         .audio-waveform span:nth-child(5) { height: 12px; animation-delay: 0.4s; }
         @keyframes waveform { 0%, 100% { transform: scaleY(1); } 50% { transform: scaleY(0.4); } }
 
-        /* --- СТИЛИ ДЛЯ РАЗДЕЛА ТАРИФОВ (ЭТАЛОН) --- */
+        /* --- СТИЛИ ТАРИФОВ --- */
         .tariff-card { margin: 0 20px 20px 20px; padding: 25px; position: relative; overflow: hidden; }
-        
         .t-badge { position: absolute; top: 0; right: 0; padding: 8px 16px; border-radius: 0 20px 0 20px; font-size: 11px; font-weight: bold; color: #fff; box-shadow: -2px 2px 10px rgba(0,0,0,0.1); }
         .t-badge.gold { background: var(--grad-gold); color: #8a6327;}
         .t-badge.purple { background: var(--grad-speed); }
         .t-badge.current { background: var(--status-green); }
-
         .t-title { font-size: 18px; font-weight: 800; color: var(--text-color); margin: 0 0 5px 0;}
         .t-desc { font-size: 12px; color: var(--text-muted); margin: 0 0 15px 0;}
-        
         .t-speed-wrap { margin-bottom: 20px; }
         .t-speed { font-size: 42px; font-weight: 900; background: var(--grad-speed); -webkit-background-clip: text; -webkit-text-fill-color: transparent; line-height: 1; }
         .t-speed small { font-size: 16px; font-weight: 600; }
-        
         .t-features { margin-bottom: 25px; }
         .t-feature-item { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; font-size: 13px; color: var(--text-color); font-weight: 500;}
         .t-feature-item .svg-icon { color: var(--status-green); width: 18px; height: 18px; flex-shrink: 0;}
-        
         .t-footer { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(128,128,128,0.1); padding-top: 15px;}
         .t-price { font-size: 24px; font-weight: 800; color: var(--text-color);}
         .t-price small { font-size: 12px; color: var(--text-muted); font-weight: normal;}
-        
         .btn-current { pointer-events: none; color: var(--status-green); font-size: 13px; font-weight: bold; display: flex; align-items: center; gap: 5px; padding: 10px 15px; border-radius: 12px;}
 
         /* --- ПРОФИЛЬ --- */
@@ -350,7 +337,9 @@
 <body>
 
     <audio id="successSound" src="success.mp3" preload="auto"></audio>
-    <audio id="unlockSound" src="intercome.mp3" preload="auto"></audio> <div class="control-panel">
+    <audio id="unlockSound" src="intercome.mp3" preload="auto"></audio>
+
+    <div class="control-panel">
         <select id="statusSelect" onchange="updateSimStatus()">
             <option value="active">Договор: Активен</option>
             <option value="blocked">Договор: Блок</option>
@@ -363,12 +352,24 @@
 
     <div class="app-container">
         <div class="header">
-            <img id="mainLogo" src="logo.png" alt="СЕВСТАР" class="logo-img" onerror="this.style.display='none'; document.getElementById('altLogo').style.display='block';">
-            <img id="mainLogoDark" src="logo2.png" alt="СЕВСТАР" class="logo-img" style="display: none;" onerror="this.style.display='none';">
-            <h2 id="altLogo" style="display:none; color:var(--brand-purple-light); margin:0;">СЕВСТАР</h2>
+            <div class="logo-wrapper">
+                <img id="mainLogo" src="logo.png" alt="СЕВСТАР" class="logo-img" onerror="this.style.display='none'; document.getElementById('altLogo').style.display='block';">
+                <img id="mainLogoDark" src="logo2.png" alt="СЕВСТАР" class="logo-img" style="display: none;" onerror="this.style.display='none';">
+                <h2 id="altLogo" style="display:none; color:var(--brand-purple-light); margin:0;">СЕВСТАР</h2>
+            </div>
             
-            <div class="avatar neumorphic" id="mainAvatar" onclick="openSheet('accountSheet')">
-                <svg class="svg-icon" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            <div class="header-right">
+                <div class="weather-mini" onclick="switchTab('city'); setTimeout(()=>switchInnerTab('weather', 'city'), 50);">
+                    <span style="font-size: 11px; font-weight: 300; color: var(--text-muted);">Севастополь</span>
+                    <span style="font-size: 14px; font-weight: 600; color: var(--text-color); display: flex; align-items: center; gap: 4px;">
+                        <svg class="svg-icon" style="width: 14px; height: 14px; color: var(--brand-yellow);" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+                        +28°
+                    </span>
+                </div>
+                
+                <div class="avatar neumorphic" id="mainAvatar" onclick="openSheet('accountSheet')">
+                    <svg class="svg-icon" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                </div>
             </div>
         </div>
 
@@ -386,25 +387,25 @@
             <div class="stories-container">
                 <div class="story">
                     <div class="story-circle neumorphic unread" style="background-image: url('story1.png');" onclick="tryHaptic(20)">
-                        <svg class="svg-icon fallback-icon" viewBox="0 0 24 24" style="opacity: 0.3;"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.9 1.2 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg>
+                        <svg class="svg-icon fallback-icon" viewBox="0 0 24 24"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.9 1.2 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg>
                     </div>
                     <span>Лайфхаки</span>
                 </div>
                 <div class="story">
                     <div class="story-circle neumorphic unread" style="background-image: url('story2.png');" onclick="tryHaptic(20)">
-                        <svg class="svg-icon fallback-icon" viewBox="0 0 24 24" style="opacity: 0.3;"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>
+                        <svg class="svg-icon fallback-icon" viewBox="0 0 24 24"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>
                     </div>
                     <span>Акции</span>
                 </div>
                 <div class="story">
                     <div class="story-circle neumorphic" style="background-image: url('story3.png');" onclick="tryHaptic(20)">
-                        <svg class="svg-icon fallback-icon" viewBox="0 0 24 24" style="opacity: 0.3;"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/><path d="M18 14h-8"/><path d="M15 18h-5"/><path d="M10 6h8v4h-8V6Z"/></svg>
+                        <svg class="svg-icon fallback-icon" viewBox="0 0 24 24"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/><path d="M18 14h-8"/><path d="M15 18h-5"/><path d="M10 6h8v4h-8V6Z"/></svg>
                     </div>
                     <span>Новости</span>
                 </div>
                 <div class="story">
                     <div class="story-circle neumorphic" style="background-image: url('story4.png');" onclick="tryHaptic(20)">
-                        <svg class="svg-icon fallback-icon" viewBox="0 0 24 24" style="opacity: 0.3;"><rect x="2" y="7" width="20" height="15" rx="2" ry="2"/><polyline points="17 2 12 7 7 2"/></svg>
+                        <svg class="svg-icon fallback-icon" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="15" rx="2" ry="2"/><polyline points="17 2 12 7 7 2"/></svg>
                     </div>
                     <span>ТВ</span>
                 </div>
@@ -454,8 +455,8 @@
 
         <div id="tab-city" class="tab-content">
             
-            <div class="city-tabs-wrapper">
-                <div class="city-tabs">
+            <div class="inner-tabs-wrapper">
+                <div class="inner-tabs">
                     <div class="inner-tab-btn active" id="cbtn-cams" onclick="switchInnerTab('cams', 'city')">Камеры</div>
                     <div class="inner-tab-btn" id="cbtn-weather" onclick="switchInnerTab('weather', 'city')">Погода</div>
                     <div class="inner-tab-btn" id="cbtn-tourism" onclick="switchInnerTab('tourism', 'city')">Туризм</div>
@@ -567,7 +568,6 @@
         </div>
 
         <div id="tab-tariffs" class="tab-content">
-            
             <div class="inner-tabs-wrapper">
                 <div class="inner-tabs">
                     <div class="inner-tab-btn active" id="tbtn-net" onclick="switchInnerTab('net', 'tariffs')">Интернет</div>
@@ -663,7 +663,6 @@
                     </div>
                 </div>
             </div>
-
         </div>
 
         <div id="tab-profile" class="tab-content">
@@ -989,9 +988,8 @@
         function toggleAudio(card) {
             var icon = card.querySelector('.play-icon');
             var waveform = card.querySelector('.audio-waveform');
-            var wasPlaying = icon.innerHTML.includes('rect'); // check if pause icon
+            var wasPlaying = icon.innerHTML.includes('rect');
             
-            // Сброс всех
             document.querySelectorAll('.audio-card').forEach(function(c) {
                 c.querySelector('.play-icon').innerHTML = '<polygon points="5 3 19 12 5 21 5 3"/>';
                 c.querySelector('.audio-waveform').classList.remove('playing');
