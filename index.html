@@ -84,8 +84,11 @@
             border-radius: 20px; transition: all 0.3s ease;
         }
 
-        /* Хедер с мини-погодой */
-        .header { padding: 20px 20px 10px 20px; display: flex; justify-content: space-between; align-items: center; z-index: 10; gap: 10px;}
+        /* Хедер с мини-погодой и SAFE AREA */
+        .header { 
+            padding: env(safe-area-inset-top, 40px) 20px 10px 20px; /* Отступ от челки iPhone */
+            display: flex; justify-content: space-between; align-items: center; z-index: 10; gap: 10px;
+        }
         .logo-wrapper { flex-shrink: 1; min-width: 0; }
         .logo-img { height: 35px; max-width: 130px; object-fit: contain; }
         
@@ -154,6 +157,8 @@
         .btn-primary:active { transform: scale(0.97); }
         .btn-secondary { color: var(--text-color); font-size: 13px; }
         .btn-secondary:active { transform: scale(0.97); box-shadow: inset 4px 4px 8px var(--shadow-dark), inset -4px -4px 8px var(--shadow-light); }
+        .btn-danger { color: var(--status-red); font-size: 14px; }
+        .btn-danger:active { transform: scale(0.97); box-shadow: inset 4px 4px 8px var(--shadow-dark), inset -4px -4px 8px var(--shadow-light); }
 
         /* Умный дом */
         .section-title { margin: 10px 20px; font-size: 18px; font-weight: bold; color: var(--text-color); }
@@ -161,7 +166,7 @@
         .horizontal-scroll::-webkit-scrollbar { display: none; }
         
         .sh-card { min-width: 160px; padding: 15px; display: flex; flex-direction: column; gap: 10px; }
-        .sh-camera { height: 90px; background-color: #333; border-radius: 10px; position: relative; background-size: cover; background-position: center; }
+        .sh-camera { height: 90px; background-color: #333; border-radius: 10px; position: relative; background-size: cover; background-position: center; cursor: pointer;}
         .sh-camera::after { content: 'LIVE'; position: absolute; top: 5px; left: 5px; background: red; color: white; font-size: 8px; padding: 2px 4px; border-radius: 3px;}
         .sh-title { font-size: 14px; font-weight: bold; color: var(--text-color); margin-bottom: 2px;}
         .sh-subtitle { font-size: 11px; font-weight: 300; color: var(--text-muted); }
@@ -201,18 +206,28 @@
         .sheet-header h3 { margin: 0; color: var(--text-color); }
         .close-btn { width: 30px; height: 30px; border-radius: 50%; border: none; color: var(--text-color); font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink:0; background: transparent; transition: background 0.2s;}
         
+        /* Окно Камер (Intercom/Parking) */
+        .cam-sheet-preview { width: 100%; height: 250px; background-color: #333; border-radius: 16px; background-size: cover; background-position: center; position: relative;}
+        .live-badge { position: absolute; top: 15px; left: 15px; background: rgba(0,0,0,0.6); color: white; font-size: 12px; font-weight: bold; padding: 4px 8px; border-radius: 6px; display: flex; align-items: center; gap: 6px; backdrop-filter: blur(4px);}
+        .live-dot { width: 8px; height: 8px; background: red; border-radius: 50%; animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
+        .cam-controls { display: flex; gap: 15px; margin-top: 10px; }
+
         /* Окно оплаты */
         .amount-input-wrapper { display: flex; justify-content: center; align-items: center; margin: 10px 0; padding: 15px; border-radius: 20px;}
         .amount-input { width: 50%; background: transparent; border: none; outline: none; font-size: 40px; font-weight: bold; color: var(--brand-purple-light); text-align: right; transition: color 0.3s ease; -moz-appearance: textfield; }
         .amount-input::-webkit-outer-spin-button, .amount-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
         .amount-currency { font-size: 40px; font-weight: bold; color: var(--brand-purple-light); margin-left: 8px; transition: color 0.3s ease;}
+        
         .chip-row { display: flex; gap: 8px; justify-content: space-between; }
         .amt-chip { flex: 1; padding: 10px 0; border-radius: 12px; font-size: 12px; font-weight: bold; color: var(--text-color); cursor: pointer; text-align: center; border: 1px solid transparent;}
         .amt-chip.active { color: var(--brand-purple-light); border-color: var(--brand-purple-light); }
         .amt-chip:active { transform: scale(0.95); }
+
         .pay-method { padding: 15px; border-radius: 15px; display: flex; justify-content: space-between; align-items: center; border: 2px solid transparent; cursor: pointer;}
         .pay-method.active { border-color: var(--brand-purple-light); }
         .pay-method-name { font-weight: bold; color: var(--text-color); font-size: 14px; display: flex; align-items: center; gap: 10px;}
+        
         .account-item { padding: 15px; border-radius: 15px; display: flex; align-items: center; gap: 15px; cursor: pointer; border: 2px solid transparent;}
         .account-item.active { border-color: var(--status-green); }
         .acc-icon { display: flex; align-items: center; color: var(--brand-purple-light); }
@@ -420,7 +435,6 @@
         </div>
 
         <div id="tab-main" class="tab-content active">
-            
             <div class="stories-container">
                 <div class="story" onclick="openStory(this, 'Лайфхаки', 'story1.png')">
                     <div class="story-circle neumorphic unread">
@@ -475,23 +489,21 @@
                 </div>
             </div>
 
-            <h3 class="section-title">Умный дом</h3>
+            <h3 class="section-title">Мой дом</h3>
             <div class="horizontal-scroll">
-                <div class="sh-card neumorphic">
+                <div class="sh-card neumorphic" onclick="openSheet('camSheetIntercom')">
                     <div class="sh-camera" style="background-image: url('intercom.png');"></div>
                     <div>
                         <div class="sh-title">Домофон</div>
                         <div class="sh-subtitle">Пр. Острякова 81</div>
                     </div>
-                    <button class="btn-open neumorphic" onclick="openDoor(this, 'Дверь открыта')">Открыть</button>
                 </div>
-                <div class="sh-card neumorphic">
+                <div class="sh-card neumorphic" onclick="openSheet('camSheetParking')">
                     <div class="sh-camera" style="background-image: url('parking.png');"></div>
                     <div>
                         <div class="sh-title">Парковка</div>
                         <div class="sh-subtitle">Пр. Острякова 81</div>
                     </div>
-                    <button class="btn-open neumorphic" onclick="openDoor(this, 'Доступ разрешен')">Открыть шлагбаум</button>
                 </div>
             </div>
         </div>
@@ -607,6 +619,7 @@
                     </div>
                 </div>
             </div>
+
         </div>
 
         <div id="tab-tariffs" class="tab-content">
@@ -775,6 +788,38 @@
     </div>
 
     <div class="sheet-overlay" id="sheetOverlay" onclick="closeAllSheets()"></div>
+
+    <div class="bottom-sheet" id="camSheetIntercom">
+        <div class="sheet-header">
+            <h3>Домофон (Пр. Острякова 81)</h3>
+            <button class="close-btn neumorphic" onclick="closeAllSheets()">
+                <svg class="svg-icon" style="width: 16px; height:16px;" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+        </div>
+        <div class="cam-sheet-preview" style="background-image: url('intercom.png');">
+            <div class="live-badge"><div class="live-dot"></div> LIVE</div>
+        </div>
+        <div class="cam-controls">
+            <button class="btn btn-primary" style="background: var(--status-green);" onclick="openDoor(this, 'Дверь открыта')">Открыть</button>
+            <button class="btn btn-danger neumorphic" onclick="closeAllSheets()">Отклонить</button>
+        </div>
+    </div>
+
+    <div class="bottom-sheet" id="camSheetParking">
+        <div class="sheet-header">
+            <h3>Парковка (Пр. Острякова 81)</h3>
+            <button class="close-btn neumorphic" onclick="closeAllSheets()">
+                <svg class="svg-icon" style="width: 16px; height:16px;" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+        </div>
+        <div class="cam-sheet-preview" style="background-image: url('parking.png');">
+            <div class="live-badge"><div class="live-dot"></div> LIVE</div>
+        </div>
+        <div class="cam-controls">
+            <button class="btn btn-primary" style="background: var(--status-green);" onclick="openDoor(this, 'Доступ разрешен')">Открыть шлагбаум</button>
+            <button class="btn btn-danger neumorphic" onclick="closeAllSheets()">Отклонить</button>
+        </div>
+    </div>
 
     <div class="bottom-sheet" id="diagSheet">
         <div class="sheet-header">
@@ -965,7 +1010,7 @@
             }
         }
 
-        // ВНУТРЕННЯЯ НАВИГАЦИЯ (Универсальная)
+        // ВНУТРЕННЯЯ НАВИГАЦИЯ
         function switchInnerTab(secId, groupPrefix) {
             tryHaptic(20);
             const tabGroup = document.getElementById('tab-' + groupPrefix);
@@ -1143,7 +1188,7 @@
                 btn.style.color = 'var(--status-green)';
                 setTimeout(() => {
                     btn.innerText = origText;
-                    btn.style.color = 'var(--brand-purple-light)';
+                    btn.style.color = 'white';
                 }, 2000);
             }, 800);
         }
@@ -1185,7 +1230,7 @@
             }
         }
 
-        // --- ЯНДЕКС КАРТЫ И ГОРОД ---
+        // --- ЯНДЕКС КАРТЫ ---
         var tourismMap;
         var allPlacemarks = [];
         var landmarks = [
@@ -1274,6 +1319,7 @@
             });
         }
 
+        // --- ДЕМОНСТРАЦИЯ И АЛЕРТЫ ---
         function updateSimStatus() {
             tryHaptic(30);
             const status = document.getElementById('statusSelect').value;
