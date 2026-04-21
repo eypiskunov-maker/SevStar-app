@@ -177,12 +177,13 @@
         /* --- ВЫЕЗЖАЮЩИЕ ОКНА --- */
         .sheet-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: var(--overlay-bg); z-index: 2000; opacity: 0; transition: opacity 0.3s ease; backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); }
         .sheet-overlay.active { display: block; opacity: 1; }
-        .bottom-sheet { position: fixed; bottom: 0; left: 0; right: 0; margin: 0 auto; max-width: 400px; background: var(--bg-color); border-radius: 30px 30px 0 0; padding: 30px 20px 40px 20px; z-index: 2001; transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1); display: flex; flex-direction: column; gap: 20px; box-shadow: 0 -10px 30px rgba(0,0,0,0.3); }
+        .bottom-sheet { position: fixed; bottom: 0; left: 0; right: 0; margin: 0 auto; max-width: 400px; background: var(--bg-color); border-radius: 30px 30px 0 0; padding: 30px 20px 40px 20px; z-index: 2001; transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1); display: flex; flex-direction: column; gap: 20px; box-shadow: 0 -10px 30px rgba(0,0,0,0.3); max-height: 90vh; overflow-y: auto;}
         .bottom-sheet.active { transform: translateY(0); }
         .sheet-header { display: flex; justify-content: space-between; align-items: center; }
         .sheet-header h3 { margin: 0; color: var(--text-color); }
-        .close-btn { width: 30px; height: 30px; border-radius: 50%; border: none; color: var(--text-color); font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center;}
+        .close-btn { width: 30px; height: 30px; border-radius: 50%; border: none; color: var(--text-color); font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink:0;}
         
+        /* Окно оплаты */
         .amount-input-wrapper { display: flex; justify-content: center; align-items: center; margin: 10px 0; padding: 15px; border-radius: 20px;}
         .amount-input { width: 50%; background: transparent; border: none; outline: none; font-size: 40px; font-weight: bold; color: var(--brand-purple-light); text-align: right; transition: color 0.3s ease; -moz-appearance: textfield; }
         .amount-input::-webkit-outer-spin-button, .amount-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
@@ -203,6 +204,22 @@
         .acc-details h4 { margin: 0 0 3px 0; color: var(--text-color); font-size: 15px;}
         .acc-details p { margin: 0; color: var(--text-muted); font-size: 12px;}
 
+        /* Стили окна диагностики */
+        .diag-list { display: flex; flex-direction: column; gap: 12px; }
+        .diag-item { display: flex; align-items: center; gap: 15px; transition: opacity 0.3s ease; }
+        .diag-item.active { opacity: 1 !important; }
+        .diag-icon { width: 36px; height: 36px; border-radius: 50%; display: flex; justify-content: center; align-items: center; color: var(--text-muted); flex-shrink: 0; transition: color 0.3s;}
+        .diag-item.success .diag-icon { color: var(--status-green) !important; box-shadow: inset 2px 2px 5px rgba(0,0,0,0.1); }
+        .diag-item.error .diag-icon { color: var(--brand-yellow) !important; }
+        .diag-text { font-size: 14px; font-weight: 600; color: var(--text-color); flex-grow: 1; }
+        .diag-status { font-size: 12px; font-weight: bold; color: var(--text-muted); transition: color 0.3s;}
+        .diag-item.success .diag-status { color: var(--status-green); }
+        .diag-item.error .diag-status { color: var(--brand-yellow); }
+        
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+        .spinner { animation: spin 2s linear infinite; }
+
+        /* Тумблер */
         .row-toggle { display: flex; justify-content: space-between; align-items: center; padding: 5px 10px; }
         .toggle-label { font-size: 14px; font-weight: 600; color: var(--text-color); }
         .switch { position: relative; display: inline-block; width: 50px; height: 28px; }
@@ -360,9 +377,8 @@
             
             <div class="header-right">
                 <div class="weather-mini" onclick="switchTab('city'); setTimeout(()=>switchInnerTab('weather', 'city'), 50);">
-                    <span style="font-size: 11px; font-weight: 300; color: var(--text-muted);">Севастополь</span>
-                    <span style="font-size: 14px; font-weight: 600; color: var(--text-color); display: flex; align-items: center; gap: 4px;">
-                        <svg class="svg-icon" style="width: 14px; height: 14px; color: var(--brand-yellow);" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+                    <span style="font-size: 16px; font-weight: 600; color: var(--text-color); display: flex; align-items: center; gap: 4px;">
+                        <svg class="svg-icon" style="width: 16px; height: 16px; color: var(--brand-yellow);" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
                         +28°
                     </span>
                 </div>
@@ -409,6 +425,12 @@
                     </div>
                     <span>ТВ</span>
                 </div>
+                <div class="story">
+                    <div class="story-circle neumorphic unread" style="background-image: url('story5.png');" onclick="tryHaptic(20)">
+                        <svg class="svg-icon fallback-icon" viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                    </div>
+                    <span>Скидки</span>
+                </div>
             </div>
 
             <div class="main-card neumorphic glow-green" id="balanceCard">
@@ -420,7 +442,7 @@
                 <div class="card-buttons">
                     <button class="btn btn-primary" onclick="openSheet('paymentSheet')">Пополнить</button>
                     <div class="secondary-buttons">
-                        <button class="btn btn-secondary neumorphic" onclick="runDiagnostics(this)">
+                        <button class="btn btn-secondary neumorphic" onclick="runDiagnosticsSheet()">
                             <svg class="svg-icon" style="width: 16px; height: 16px;" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
                             Диагностика
                         </button>
@@ -798,6 +820,43 @@
         </button>
     </div>
 
+    <div class="bottom-sheet" id="diagSheet">
+        <div class="sheet-header">
+            <h3>Диагностика линии</h3>
+            <button class="close-btn neumorphic" onclick="closeAllSheets()">
+                <svg class="svg-icon" style="width: 16px; height:16px;" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+        </div>
+        
+        <div class="diag-list">
+            <div class="diag-item" id="diag-step-1">
+                <div class="diag-icon neumorphic-inset"><svg class="svg-icon spinner" viewBox="0 0 24 24"><line x1="12" y1="2" x2="12" y2="6"/><line x1="12" y1="18" x2="12" y2="22"/><line x1="4.93" y1="4.93" x2="7.76" y2="7.76"/><line x1="16.24" y1="16.24" x2="19.07" y2="19.07"/><line x1="2" y1="12" x2="6" y2="12"/><line x1="18" y1="12" x2="22" y2="12"/><line x1="4.93" y1="19.07" x2="7.76" y2="16.24"/><line x1="16.24" y1="7.76" x2="19.07" y2="4.93"/></svg></div>
+                <div class="diag-text">Проверка баланса</div>
+                <div class="diag-status">...</div>
+            </div>
+            <div class="diag-item" id="diag-step-2" style="opacity: 0.4;">
+                <div class="diag-icon neumorphic-inset"><svg class="svg-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg></div>
+                <div class="diag-text">Поиск аварий на линии</div>
+                <div class="diag-status"></div>
+            </div>
+            <div class="diag-item" id="diag-step-3" style="opacity: 0.4;">
+                <div class="diag-icon neumorphic-inset"><svg class="svg-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg></div>
+                <div class="diag-text">Связь с роутером</div>
+                <div class="diag-status"></div>
+            </div>
+        </div>
+
+        <div id="diag-result" style="display: none; animation: fadeIn 0.5s ease;">
+            <div class="neumorphic-inset" style="padding: 15px; border-radius: 16px; background: rgba(236, 177, 68, 0.1); border: 1px solid rgba(236, 177, 68, 0.3);">
+                <p style="font-size: 13px; color: var(--text-color); margin: 0; line-height: 1.4;">
+                    <strong>Рекомендация:</strong><br>
+                    Пожалуйста, отключите роутер от питания на 2 минуты и включите обратно. Если проблема сохранится, напишите в чат поддержки или позвоните нам по номеру <a href="tel:+79788990000" style="color: var(--brand-purple-light); text-decoration: none; font-weight: bold;">+7 978 899 00 00</a>
+                </p>
+            </div>
+            <button class="btn btn-primary" style="margin-top: 15px; padding: 15px 0; font-size: 15px;" onclick="tryHaptic(20); closeAllSheets();">Написать в чат</button>
+        </div>
+    </div>
+
     <script>
         // БАЗОВЫЕ УТИЛИТЫ
         function tryHaptic(pattern) { try { if (navigator && navigator.vibrate) navigator.vibrate(pattern); } catch (e) {} }
@@ -831,7 +890,7 @@
             }
         }
 
-        // ВНУТРЕННЯЯ НАВИГАЦИЯ (Универсальная для Города и Тарифов)
+        // ВНУТРЕННЯЯ НАВИГАЦИЯ
         function switchInnerTab(secId, groupPrefix) {
             tryHaptic(20);
             const tabGroup = document.getElementById('tab-' + groupPrefix);
@@ -931,19 +990,75 @@
             }, 1200); 
         }
 
-        function runDiagnostics(btn) {
-            tryHaptic(40);
-            const origText = btn.innerHTML;
-            btn.innerHTML = 'Проверка...';
-            btn.style.color = 'var(--brand-yellow)'; 
+        // НОВАЯ ЛОГИКА ДИАГНОСТИКИ (Пошаговая анимация)
+        function runDiagnosticsSheet() {
+            tryHaptic(20);
+            
+            // Сброс состояний
+            for(let i=1; i<=3; i++) {
+                let el = document.getElementById('diag-step-'+i);
+                el.className = 'diag-item';
+                if(i>1) el.style.opacity = '0.4';
+                el.querySelector('.diag-icon').innerHTML = '<svg class="svg-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg>';
+                el.querySelector('.diag-status').innerText = '';
+                el.querySelector('.diag-icon').style.color = 'var(--text-muted)';
+                el.querySelector('.diag-status').style.color = 'var(--text-muted)';
+            }
+            document.getElementById('diag-result').style.display = 'none';
+            
+            // Открываем окно
+            openSheet('diagSheet');
+            
+            // Шаг 1: Баланс
+            let s1 = document.getElementById('diag-step-1');
+            s1.classList.add('active');
+            s1.querySelector('.diag-icon').innerHTML = '<svg class="svg-icon spinner" viewBox="0 0 24 24"><line x1="12" y1="2" x2="12" y2="6"/><line x1="12" y1="18" x2="12" y2="22"/><line x1="4.93" y1="4.93" x2="7.76" y2="7.76"/><line x1="16.24" y1="16.24" x2="19.07" y2="19.07"/><line x1="2" y1="12" x2="6" y2="12"/><line x1="18" y1="12" x2="22" y2="12"/><line x1="4.93" y1="19.07" x2="7.76" y2="16.24"/><line x1="16.24" y1="7.76" x2="19.07" y2="4.93"/></svg>';
+            s1.querySelector('.diag-icon').style.color = 'var(--brand-purple-light)';
+            s1.querySelector('.diag-status').innerText = 'Проверка...';
+
             setTimeout(() => {
-                tryHaptic([30, 30]);
-                btn.innerHTML = 'Всё в норме!';
-                btn.style.color = 'var(--status-green)';
+                tryHaptic(30);
+                s1.classList.add('success');
+                s1.querySelector('.diag-icon').innerHTML = '<svg class="svg-icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>';
+                s1.querySelector('.diag-status').innerText = 'ОК';
+                
+                // Шаг 2: Аварии
+                let s2 = document.getElementById('diag-step-2');
+                s2.classList.add('active');
+                s2.style.opacity = '1';
+                s2.querySelector('.diag-icon').innerHTML = '<svg class="svg-icon spinner" viewBox="0 0 24 24"><line x1="12" y1="2" x2="12" y2="6"/><line x1="12" y1="18" x2="12" y2="22"/><line x1="4.93" y1="4.93" x2="7.76" y2="7.76"/><line x1="16.24" y1="16.24" x2="19.07" y2="19.07"/><line x1="2" y1="12" x2="6" y2="12"/><line x1="18" y1="12" x2="22" y2="12"/><line x1="4.93" y1="19.07" x2="7.76" y2="16.24"/><line x1="16.24" y1="7.76" x2="19.07" y2="4.93"/></svg>';
+                s2.querySelector('.diag-icon').style.color = 'var(--brand-purple-light)';
+                s2.querySelector('.diag-status').innerText = 'Проверка...';
+
                 setTimeout(() => {
-                    btn.innerHTML = origText;
-                    btn.style.color = 'var(--text-color)';
-                }, 2000);
+                    tryHaptic(30);
+                    s2.classList.add('success');
+                    s2.querySelector('.diag-icon').innerHTML = '<svg class="svg-icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>';
+                    s2.querySelector('.diag-status').innerText = 'ОК';
+                    
+                    // Шаг 3: Роутер
+                    let s3 = document.getElementById('diag-step-3');
+                    s3.classList.add('active');
+                    s3.style.opacity = '1';
+                    s3.querySelector('.diag-icon').innerHTML = '<svg class="svg-icon spinner" viewBox="0 0 24 24"><line x1="12" y1="2" x2="12" y2="6"/><line x1="12" y1="18" x2="12" y2="22"/><line x1="4.93" y1="4.93" x2="7.76" y2="7.76"/><line x1="16.24" y1="16.24" x2="19.07" y2="19.07"/><line x1="2" y1="12" x2="6" y2="12"/><line x1="18" y1="12" x2="22" y2="12"/><line x1="4.93" y1="19.07" x2="7.76" y2="16.24"/><line x1="16.24" y1="7.76" x2="19.07" y2="4.93"/></svg>';
+                    s3.querySelector('.diag-icon').style.color = 'var(--brand-purple-light)';
+                    s3.querySelector('.diag-status').innerText = 'Проверка...';
+
+                    setTimeout(() => {
+                        tryHaptic([40, 40]);
+                        s3.classList.add('error');
+                        s3.querySelector('.diag-icon').innerHTML = '<svg class="svg-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>';
+                        s3.querySelector('.diag-status').innerText = 'Нет ответа';
+                        
+                        setTimeout(() => {
+                            document.getElementById('diag-result').style.display = 'block';
+                            // Плавный скролл вниз окна
+                            const sheet = document.getElementById('diagSheet');
+                            sheet.scrollTo({ top: sheet.scrollHeight, behavior: 'smooth' });
+                        }, 300);
+
+                    }, 1500);
+                }, 1500);
             }, 1500);
         }
 
@@ -984,7 +1099,7 @@
             }, 1500);
         }
 
-        // Анимация аудио в туризме
+        // Анимация аудио
         function toggleAudio(card) {
             var icon = card.querySelector('.play-icon');
             var waveform = card.querySelector('.audio-waveform');
@@ -1001,7 +1116,7 @@
             }
         }
 
-        // --- ЯНДЕКС КАРТЫ И ГОРОД ---
+        // --- ЯНДЕКС КАРТЫ ---
         var tourismMap;
         var allPlacemarks = [];
         var landmarks = [
