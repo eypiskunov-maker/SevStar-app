@@ -4,10 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Севстар - Главный экран</title>
+    
+    <script src="https://api-maps.yandex.ru/2.1/?apikey=fe5b4280-5dbf-4b6b-a2df-165ce36f06e4&lang=ru_RU" type="text/javascript"></script>
+
     <style>
         /* Базовая палитра и Светлая тема */
         :root {
             --brand-purple: rgb(100, 45, 144);
+            --brand-purple-light: rgb(100, 45, 144); /* В светлой теме обычный */
             --brand-yellow: rgb(236, 177, 68);
             --status-green: #4caf50;
             --status-red: #f44336;
@@ -22,6 +26,7 @@
 
         /* Темная тема */
         [data-theme="dark"] {
+            --brand-purple-light: rgb(185, 120, 235); /* Яркий читаемый фиолетовый для цифр */
             --bg-color: #1e1e1e;
             --text-color: #e0e0e0;
             --text-muted: rgba(224, 224, 224, 0.6);
@@ -40,7 +45,6 @@
             transition: background-color 0.3s ease;
         }
 
-        /* Глобальные стили для SVG иконок */
         .svg-icon {
             width: 24px; height: 24px;
             stroke: currentColor; stroke-width: 2;
@@ -95,10 +99,7 @@
         .stories-container { display: flex; overflow-x: auto; padding: 10px 20px; gap: 15px; scrollbar-width: none; }
         .stories-container::-webkit-scrollbar { display: none; }
         .story { display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer;}
-        .story-circle {
-            width: 60px; height: 60px; border-radius: 50%; display: flex;
-            justify-content: center; align-items: center; color: var(--brand-purple);
-        }
+        .story-circle { width: 60px; height: 60px; border-radius: 50%; display: flex; justify-content: center; align-items: center; color: var(--brand-purple); }
         .story span { font-size: 11px; color: var(--text-color); font-weight: 500;}
 
         /* Баланс */
@@ -107,7 +108,7 @@
         .main-card.glow-red { box-shadow: 0 0 20px rgba(244, 67, 54, 0.2), 6px 6px 12px var(--shadow-dark), -6px -6px 12px var(--shadow-light); }
         
         .balance-title { font-size: 14px; color: var(--text-color); opacity: 0.7; margin: 0 0 5px 0;}
-        .balance-amount { font-size: 36px; font-weight: bold; color: var(--brand-purple); margin: 0 0 5px 0;}
+        .balance-amount { font-size: 36px; font-weight: bold; color: var(--brand-purple-light); margin: 0 0 5px 0; transition: color 0.3s ease;}
         .status-text { font-size: 14px; color: var(--status-green); font-weight: 500; display: flex; align-items: center; gap: 5px;}
         .status-text::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
         .balance-subtext { font-size: 12px; color: var(--text-muted); margin-top: 4px; padding-left: 13px; }
@@ -117,22 +118,23 @@
         .btn { flex: 1; padding: 15px 0; border: none; border-radius: 12px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s ease; }
         .btn-primary { background: var(--brand-purple); color: #fff; width: 100%; box-shadow: 4px 4px 10px rgba(100, 45, 144, 0.3);}
         .btn-primary:active { transform: scale(0.97); }
-        .btn-secondary { color: var(--brand-purple); font-size: 13px; }
+        .btn-secondary { color: var(--text-color); font-size: 13px; }
         .btn-secondary:active { transform: scale(0.97); }
 
-        /* Умный дом */
+        /* Умный дом / Карточки */
         .section-title { margin: 10px 20px; font-size: 18px; font-weight: bold; color: var(--text-color); }
-        .smart-home-container { display: flex; overflow-x: auto; padding: 10px 20px 20px 20px; gap: 15px; scrollbar-width: none; }
-        .smart-home-container::-webkit-scrollbar { display: none; }
+        .horizontal-scroll { display: flex; overflow-x: auto; padding: 10px 20px 20px 20px; gap: 15px; scrollbar-width: none; }
+        .horizontal-scroll::-webkit-scrollbar { display: none; }
+        
         .sh-card { min-width: 160px; padding: 15px; display: flex; flex-direction: column; gap: 10px; }
         .sh-camera { height: 90px; background-color: #333; border-radius: 10px; position: relative; background-size: cover; background-position: center; }
         .sh-camera::after { content: 'LIVE'; position: absolute; top: 5px; left: 5px; background: red; color: white; font-size: 8px; padding: 2px 4px; border-radius: 3px;}
         .sh-title { font-size: 14px; font-weight: bold; color: var(--text-color); margin-bottom: 2px;}
         .sh-subtitle { font-size: 11px; font-weight: 300; color: var(--text-muted); }
-        .btn-open { padding: 12px 0; border: none; color: var(--brand-purple); font-weight: bold; width: 100%; cursor: pointer; transition: all 0.2s; }
+        .btn-open { padding: 12px 0; border: none; color: var(--brand-purple-light); font-weight: bold; width: 100%; cursor: pointer; transition: all 0.2s; }
         .btn-open:active { transform: scale(0.95); box-shadow: inset 4px 4px 8px var(--shadow-dark), inset -4px -4px 8px var(--shadow-light); }
 
-        /* Информер (Погода) */
+        /* Информер (Главная) */
         .informer { margin: 0 20px 30px 20px; padding: 20px; display: flex; align-items: center; gap: 15px; }
         .informer.alert { box-shadow: 0 0 15px rgba(244, 67, 54, 0.2), inset 2px 2px 5px rgba(255,255,255,0.1); border: 1px solid rgba(244, 67, 54, 0.3); }
         .informer-icon { display: flex; align-items: center; justify-content: center; color: var(--brand-yellow); }
@@ -140,16 +142,6 @@
         .informer-text h4 { margin: 0 0 5px 0; color: var(--text-color); }
         .informer-text p { margin: 0; font-size: 12px; color: var(--text-muted); }
         .informer.alert .informer-text h4 { color: var(--status-red); }
-
-        /* --- ПРОФИЛЬ --- */
-        .profile-header { padding: 20px; text-align: center; }
-        .profile-avatar-large { width: 80px; height: 80px; border-radius: 50%; background: var(--brand-purple); color: white; display: flex; justify-content: center; align-items: center; font-size: 30px; margin: 0 auto 15px auto; box-shadow: 0 5px 15px rgba(100,45,144,0.4);}
-        .profile-name { font-size: 22px; font-weight: bold; color: var(--text-color); margin: 0;}
-        .profile-phone { font-size: 14px; color: var(--text-muted); margin-top: 5px; }
-
-        .profile-card { margin: 10px 20px; padding: 20px; display: flex; justify-content: space-between; align-items: center; }
-        .p-card-title { font-size: 14px; color: var(--text-muted); margin-bottom: 5px;}
-        .p-card-val { font-size: 18px; font-weight: bold; color: var(--text-color);}
 
         /* --- ВЫЕЗЖАЮЩИЕ ОКНА (Bottom Sheets) --- */
         .sheet-overlay {
@@ -172,17 +164,30 @@
         .sheet-header h3 { margin: 0; color: var(--text-color); }
         .close-btn { width: 30px; height: 30px; border-radius: 50%; border: none; color: var(--text-color); font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center;}
         
-        /* Окно оплаты */
-        .amount-input-wrapper { text-align: center; margin: 10px 0; padding: 15px; border-radius: 20px;}
-        .amount-input { width: 100%; background: transparent; border: none; outline: none; font-size: 40px; font-weight: bold; color: var(--brand-purple); text-align: center; }
+        /* Окно оплаты: Интерактивный ввод */
+        .amount-input-wrapper { display: flex; justify-content: center; align-items: center; margin: 10px 0; padding: 15px; border-radius: 20px;}
+        .amount-input { 
+            width: 50%; background: transparent; border: none; outline: none; 
+            font-size: 40px; font-weight: bold; color: var(--brand-purple-light); 
+            text-align: right; transition: color 0.3s ease;
+            -moz-appearance: textfield; /* Убираем стрелочки */
+        }
+        .amount-input::-webkit-outer-spin-button, .amount-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+        .amount-currency { font-size: 40px; font-weight: bold; color: var(--brand-purple-light); margin-left: 8px; transition: color 0.3s ease;}
+        
+        .chip-row { display: flex; gap: 8px; justify-content: space-between; }
+        .amt-chip { flex: 1; padding: 10px 0; border-radius: 12px; font-size: 12px; font-weight: bold; color: var(--text-color); cursor: pointer; text-align: center; border: 1px solid transparent;}
+        .amt-chip.active { color: var(--brand-purple-light); border-color: var(--brand-purple-light); }
+        .amt-chip:active { transform: scale(0.95); }
+
         .pay-method { padding: 15px; border-radius: 15px; display: flex; justify-content: space-between; align-items: center; border: 2px solid transparent; cursor: pointer;}
-        .pay-method.active { border-color: var(--brand-purple); }
+        .pay-method.active { border-color: var(--brand-purple-light); }
         .pay-method-name { font-weight: bold; color: var(--text-color); font-size: 14px; display: flex; align-items: center; gap: 10px;}
         
         /* Окно аккаунтов */
         .account-item { padding: 15px; border-radius: 15px; display: flex; align-items: center; gap: 15px; cursor: pointer; border: 2px solid transparent;}
         .account-item.active { border-color: var(--status-green); }
-        .acc-icon { display: flex; align-items: center; color: var(--brand-purple); }
+        .acc-icon { display: flex; align-items: center; color: var(--brand-purple-light); }
         .acc-details h4 { margin: 0 0 3px 0; color: var(--text-color); font-size: 15px;}
         .acc-details p { margin: 0; color: var(--text-muted); font-size: 12px;}
 
@@ -208,8 +213,38 @@
             display: flex; flex-direction: column; align-items: center; gap: 4px;
             color: var(--text-muted); cursor: pointer; font-size: 11px; font-weight: 600; transition: color 0.2s;
         }
-        .nav-item.active { color: var(--brand-purple); }
+        .nav-item.active { color: var(--brand-purple-light); }
         .nav-icon { display: flex; align-items: center; margin-bottom: 2px;}
+
+        /* --- СТИЛИ ДЛЯ ГОРОДА (Из Мой Севастополь) --- */
+        .buoy-card { min-width: 220px; padding: 15px; display: flex; flex-direction: column; cursor: pointer; transition: transform 0.2s; }
+        .buoy-card:active { transform: scale(0.96); }
+        .buoy-header { display: flex; justify-content: space-between; margin-bottom: 6px; align-items: flex-start; }
+        .buoy-header h4 { font-size: 15px; margin: 0; color: var(--text-color); }
+        .buoy-header .btemp { font-size: 20px; font-weight: bold; color: var(--brand-purple-light); white-space: nowrap; }
+        .buoy-desc { font-size: 11px; color: var(--text-muted); line-height: 1.3; margin-bottom: 10px; display: -webkit-box; -webkit-box-orient: vertical; overflow: hidden; height: 28px; }
+        .buoy-stats { display: flex; gap: 8px; font-size: 11px; color: var(--text-color); font-weight: 500; }
+        .buoy-stats div { display: flex; align-items: center; gap: 4px; opacity: 0.8; }
+        
+        .map-filter-bar { display: flex; gap: 8px; overflow-x: auto; padding: 0 20px 15px 20px; scrollbar-width: none; }
+        .map-filter-bar::-webkit-scrollbar { display: none; }
+        .filter-chip { padding: 8px 14px; border-radius: 20px; font-size: 12px; font-weight: 600; white-space: nowrap; cursor: pointer; border: none; color: var(--text-color); background: var(--bg-color); transition: all 0.2s ease;}
+        .filter-chip.active { color: var(--brand-purple-light); box-shadow: inset 3px 3px 6px var(--shadow-dark), inset -3px -3px 6px var(--shadow-light); }
+        
+        .landmark-scroll { display: flex; gap: 12px; overflow-x: auto; padding: 0 20px 20px 20px; scrollbar-width: none;}
+        .landmark-scroll::-webkit-scrollbar { display: none; }
+        .landmark-chip { display: flex; align-items: center; gap: 8px; padding: 10px 14px; border-radius: 16px; min-width: fit-content; cursor: pointer; transition: transform 0.2s ease; }
+        .landmark-chip:active { transform: scale(0.96); }
+        .lm-icon { width: 32px; height: 32px; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: var(--brand-purple-light); flex-shrink: 0; box-shadow: inset 2px 2px 4px var(--shadow-dark), inset -2px -2px 4px var(--shadow-light);}
+        .lm-text { font-size: 12px; font-weight: 600; color: var(--text-color); }
+
+        .profile-header { padding: 20px; text-align: center; }
+        .profile-avatar-large { width: 80px; height: 80px; border-radius: 50%; background: var(--brand-purple); color: white; display: flex; justify-content: center; align-items: center; font-size: 30px; margin: 0 auto 15px auto; box-shadow: 0 5px 15px rgba(100,45,144,0.4);}
+        .profile-name { font-size: 22px; font-weight: bold; color: var(--text-color); margin: 0;}
+        .profile-phone { font-size: 14px; color: var(--text-muted); margin-top: 5px; }
+        .profile-card { margin: 10px 20px; padding: 20px; display: flex; justify-content: space-between; align-items: center; }
+        .p-card-title { font-size: 14px; color: var(--text-muted); margin-bottom: 5px;}
+        .p-card-val { font-size: 18px; font-weight: bold; color: var(--text-color);}
 
     </style>
 </head>
@@ -280,7 +315,7 @@
             </div>
 
             <h3 class="section-title">Умный дом</h3>
-            <div class="smart-home-container">
+            <div class="horizontal-scroll">
                 <div class="sh-card neumorphic">
                     <div class="sh-camera" style="background-image: url('intercom.png');"></div>
                     <div>
@@ -311,12 +346,50 @@
             </div>
         </div>
 
+        <div id="tab-city" class="tab-content">
+            <h2 class="section-title" style="margin-top: 20px;">Пляжи Севастополя</h2>
+            <p style="font-size: 12px; color: var(--text-muted); margin: -5px 20px 10px 20px;">Данные с официальных буев</p>
+            
+            <div id="beaches-horizontal-scroll" class="horizontal-scroll" style="margin-bottom: 5px;">
+                <div style="padding: 20px; font-size: 14px; color: var(--text-muted);">Загрузка данных...</div>
+            </div>
+
+            <div id="map-city" class="neumorphic-inset" style="height: 250px; margin: 0 20px 25px 20px; border-radius: 20px; overflow: hidden;"></div>
+
+            <h2 class="section-title">Достопримечательности</h2>
+            <div class="map-filter-bar">
+                <button class="filter-chip neumorphic active" onclick="filterMapMarkers('all', this)">Все</button>
+                <button class="filter-chip neumorphic" onclick="filterMapMarkers('monument', this)">Памятники</button>
+                <button class="filter-chip neumorphic" onclick="filterMapMarkers('museum', this)">Музеи</button>
+                <button class="filter-chip neumorphic" onclick="filterMapMarkers('nature', this)">Природа</button>
+                <button class="filter-chip neumorphic" onclick="filterMapMarkers('church', this)">Храмы</button>
+            </div>
+
+            <div id="map-tourism" class="neumorphic-inset" style="height: 300px; margin: 0 20px 20px 20px; border-radius: 20px; overflow: hidden;"></div>
+
+            <h3 class="section-title" style="font-size: 14px; color: var(--text-muted);">БЫСТРЫЙ ДОСТУП</h3>
+            <div class="landmark-scroll" style="margin-bottom: 24px;">
+                <div class="landmark-chip neumorphic" onclick="focusLandmark(44.6181, 33.5266)">
+                    <div class="lm-icon"><svg class="svg-icon" viewBox="0 0 24 24"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/><path d="M18 14h-8"/><path d="M15 18h-5"/><path d="M10 6h8v4h-8V6Z"/></svg></div>
+                    <span class="lm-text">Графская пристань</span>
+                </div>
+                <div class="landmark-chip neumorphic" onclick="focusLandmark(44.6116, 33.4932)">
+                    <div class="lm-icon"><svg class="svg-icon" viewBox="0 0 24 24"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg></div>
+                    <span class="lm-text">Херсонес</span>
+                </div>
+                <div class="landmark-chip neumorphic" onclick="focusLandmark(44.5967, 33.5836)">
+                    <div class="lm-icon"><svg class="svg-icon" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+                    <span class="lm-text">Сапун-гора</span>
+                </div>
+            </div>
+        </div>
+
         <div id="tab-tariffs" class="tab-content">
-            <h3 class="section-title">Мои услуги</h3>
-            <div class="profile-card neumorphic" style="margin-top:20px;">
+            <h3 class="section-title" style="margin-top: 20px;">Мои услуги</h3>
+            <div class="profile-card neumorphic" style="margin-top:10px;">
                 <div>
                     <div class="p-card-title">Текущий тариф</div>
-                    <div class="p-card-val" style="color:var(--brand-purple);">Ультра (1000 Мбит/с)</div>
+                    <div class="p-card-val" style="color:var(--brand-purple-light);">Ультра (1000 Мбит/с)</div>
                 </div>
             </div>
         </div>
@@ -357,6 +430,10 @@
                 <span class="nav-icon"><svg class="svg-icon" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span>
                 <span>Главная</span>
             </div>
+            <div class="nav-item" id="nav-city" onclick="switchTab('city')">
+                <span class="nav-icon"><svg class="svg-icon" viewBox="0 0 24 24"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg></span>
+                <span>Город</span>
+            </div>
             <div class="nav-item" id="nav-tariffs" onclick="switchTab('tariffs')">
                 <span class="nav-icon"><svg class="svg-icon" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></span>
                 <span>Тарифы</span>
@@ -377,8 +454,18 @@
                 <svg class="svg-icon" style="width: 16px; height:16px;" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
             </button>
         </div>
+        
         <div class="amount-input-wrapper neumorphic-inset">
-            <input type="text" class="amount-input" value="500 ₽" readonly>
+            <input type="number" id="payAmountInput" class="amount-input" value="500" oninput="updatePayBtn()">
+            <span class="amount-currency">₽</span>
+        </div>
+        
+        <div class="chip-row">
+            <div class="amt-chip neumorphic" onclick="setPayAmount(100, this)">100</div>
+            <div class="amt-chip neumorphic" onclick="setPayAmount(300, this)">300</div>
+            <div class="amt-chip neumorphic active" onclick="setPayAmount(500, this)">500</div>
+            <div class="amt-chip neumorphic" onclick="setPayAmount(1000, this)">1000</div>
+            <div class="amt-chip neumorphic" onclick="setPayAmount(1500, this)">1500</div>
         </div>
         
         <div class="pay-method neumorphic active" id="methodSBP" onclick="selectPayMethod('SBP')">
@@ -395,9 +482,9 @@
             <svg class="svg-icon" viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
         </div>
 
-        <div class="pay-method neumorphic" id="methodAddCard" onclick="selectPayMethod('AddCard')" style="border-style: dashed; border-color: var(--text-muted);">
-            <span class="pay-method-name" style="color: var(--text-muted);">Добавить карту</span>
-            <svg class="svg-icon" style="color: var(--text-muted);" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        <div class="pay-method neumorphic-inset" id="methodAddCard" onclick="selectPayMethod('AddCard')" style="border: 2px dashed var(--text-muted); opacity: 0.8;">
+            <span class="pay-method-name">Добавить карту</span>
+            <svg class="svg-icon" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
         </div>
 
         <div class="row-toggle">
@@ -444,31 +531,49 @@
         const svgSun = `<svg class="svg-icon" style="width: 32px; height: 32px;" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>`;
         const svgAlert = `<svg class="svg-icon" style="width: 32px; height: 32px;" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>`;
 
-        function tryHaptic(pattern) {
-            try { if (navigator && navigator.vibrate) { navigator.vibrate(pattern); } } catch (e) {}
+        // БАЗОВЫЕ УТИЛИТЫ
+        function tryHaptic(pattern) { try { if (navigator && navigator.vibrate) navigator.vibrate(pattern); } catch (e) {} }
+        function playAudioFile(id) { try { const s = document.getElementById(id); if (s) { s.currentTime = 0; s.play().catch(()=>{}); } } catch(e) {} }
+
+        // --- ЛОГИКА ОПЛАТЫ ---
+        function setPayAmount(val, chipElem) {
+            tryHaptic(20);
+            document.getElementById('payAmountInput').value = val;
+            updatePayBtn();
+            // Подсветка чипов
+            document.querySelectorAll('.amt-chip').forEach(el => el.classList.remove('active'));
+            if(chipElem) chipElem.classList.add('active');
         }
-        function playAudioFile(elementId) {
-            try {
-                const sound = document.getElementById(elementId);
-                if (sound) { sound.currentTime = 0; sound.play().catch(()=>{}); }
-            } catch(e) {}
+        function updatePayBtn() {
+            const val = document.getElementById('payAmountInput').value || 0;
+            document.getElementById('finalPayBtn').textContent = `Оплатить ${val} ₽`;
+            // Убираем подсветку если ввели руками
+            document.querySelectorAll('.amt-chip').forEach(el => el.classList.remove('active'));
         }
 
+        // НАВИГАЦИЯ
         function switchTab(tabId) {
             tryHaptic(20);
             document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
             document.getElementById('tab-' + tabId).classList.add('active');
             document.getElementById('nav-' + tabId).classList.add('active');
+            
+            // Фикс Яндекс Карт при переходе на вкладку Город
+            if (tabId === 'city') {
+                if (window.cityMap) window.cityMap.container.fitToViewport();
+                if (window.tourismMap) window.tourismMap.container.fitToViewport();
+            }
         }
 
+        // ТЕМА
         function toggleTheme() {
             tryHaptic(30);
-            const isDark = document.getElementById('themeToggle').checked;
-            if (isDark) { document.documentElement.setAttribute('data-theme', 'dark'); } 
+            if (document.getElementById('themeToggle').checked) { document.documentElement.setAttribute('data-theme', 'dark'); } 
             else { document.documentElement.removeAttribute('data-theme'); }
         }
 
+        // ВЫЕЗЖАЮЩИЕ ОКНА
         function openSheet(sheetId) {
             tryHaptic(20);
             const overlay = document.getElementById('sheetOverlay');
@@ -476,7 +581,6 @@
             overlay.style.display = 'block';
             setTimeout(() => { overlay.classList.add('active'); sheet.classList.add('active'); }, 10);
         }
-
         function closeAllSheets() {
             tryHaptic(20);
             const overlay = document.getElementById('sheetOverlay');
@@ -505,6 +609,7 @@
         function processPayment() {
             tryHaptic(40);
             const btn = document.getElementById('finalPayBtn');
+            const val = document.getElementById('payAmountInput').value || 0;
             btn.textContent = 'Обработка...';
             btn.style.opacity = '0.7';
 
@@ -514,13 +619,15 @@
                 btn.textContent = 'Успешно!';
                 btn.style.background = 'var(--status-green)';
                 btn.style.opacity = '1';
-                document.getElementById('balanceText').textContent = '1750 ₽';
-                document.getElementById('daysLeftText').textContent = 'Хватит на 55 дней';
+                
+                // Имитация пополнения баланса
+                const currentBal = 1250;
+                document.getElementById('balanceText').textContent = (currentBal + parseInt(val)) + ' ₽';
 
                 setTimeout(() => {
                     closeAllSheets();
                     setTimeout(() => {
-                        btn.textContent = 'Оплатить 500 ₽';
+                        btn.textContent = `Оплатить ${val} ₽`;
                         btn.style.background = 'var(--brand-purple)';
                     }, 500);
                 }, 1500);
@@ -538,7 +645,7 @@
                 btn.style.color = 'var(--status-green)';
                 setTimeout(() => {
                     btn.innerText = origText;
-                    btn.style.color = 'var(--brand-purple)';
+                    btn.style.color = 'var(--text-color)';
                 }, 2000);
             }, 1500);
         }
@@ -555,11 +662,105 @@
                 btn.style.color = 'var(--status-green)';
                 setTimeout(() => {
                     btn.innerText = origText;
-                    btn.style.color = 'var(--brand-purple)';
+                    btn.style.color = 'var(--brand-purple-light)';
                 }, 2000);
             }, 800);
         }
 
+        // --- ЯНДЕКС КАРТЫ И ГОРОД (Из Мой Севастополь) ---
+        var tourismMap;
+        var allPlacemarks = [];
+        var landmarks = [
+            { coords: [44.6181, 33.5266], name: 'Графская пристань', type: 'monument' },
+            { coords: [44.6116, 33.4932], name: 'Херсонес Таврический', type: 'museum' },
+            { coords: [44.6153, 33.5246], name: 'Владимирский собор', type: 'church' },
+            { coords: [44.6193, 33.5247], name: 'Памятник затопленным кораблям', type: 'monument' },
+            { coords: [44.5967, 33.5836], name: 'Сапун-гора', type: 'museum' },
+            { coords: [44.5015, 33.5960], name: 'Балаклава', type: 'nature' }
+        ];
+
+        ymaps.ready(initMaps);
+        function initMaps() {
+            // Карта города (для пляжей)
+            window.cityMap = new ymaps.Map("map-city", { 
+                center: [44.6166, 33.5254], zoom: 10, controls: ['zoomControl'] 
+            });
+            window.cityPlacemarks = [];
+
+            // Карта туризма
+            window.tourismMap = new ymaps.Map("map-tourism", {
+                center: [44.5900, 33.5200], zoom: 11, controls: ['zoomControl']
+            });
+
+            var colorMap = { monument: 'islands#redDotIcon', museum: 'islands#blueDotIcon', nature: 'islands#greenDotIcon', church: 'islands#violetDotIcon' };
+
+            landmarks.forEach(function(lm) {
+                var placemark = new ymaps.Placemark(lm.coords, { hintContent: lm.name }, { preset: colorMap[lm.type] || 'islands#blueDotIcon' });
+                placemark.landmarkType = lm.type;
+                allPlacemarks.push(placemark);
+                window.tourismMap.geoObjects.add(placemark);
+            });
+            
+            updateWeather(); // Запуск отрисовки буев
+        }
+
+        function filterMapMarkers(type, btn) {
+            document.querySelectorAll('.filter-chip').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            if (!window.tourismMap) return;
+            window.tourismMap.geoObjects.removeAll();
+            allPlacemarks.forEach(function(pm) {
+                if (type === 'all' || pm.landmarkType === type) window.tourismMap.geoObjects.add(pm);
+            });
+        }
+
+        function focusLandmark(lat, lng) {
+            if (!window.tourismMap) return;
+            window.tourismMap.setCenter([lat, lng], 15, { duration: 500 });
+        }
+
+        // Генерация карточек буев (Севастополь)
+        function updateWeather() {
+            const beaches = [
+                { name: 'Учкуевка', lat: 44.653, lng: 33.539, temp: 23, wave: 0.5 },
+                { name: 'Омега', lat: 44.598, lng: 33.441, temp: 24, wave: 0.2 },
+                { name: 'Парк Победы', lat: 44.603, lng: 33.461, temp: 23, wave: 0.4 },
+                { name: 'Яшмовый', lat: 44.502, lng: 33.504, temp: 22, wave: 0.8 }
+            ];
+
+            const scrollContainer = document.getElementById('beaches-horizontal-scroll');
+            if (!scrollContainer) return;
+            scrollContainer.innerHTML = '';
+
+            beaches.forEach((beach, index) => {
+                const card = document.createElement('div');
+                card.className = 'buoy-card neumorphic';
+                card.onclick = () => {
+                    if (window.cityMap) window.cityMap.setCenter([beach.lat, beach.lng], 14, { duration: 500 });
+                };
+                card.innerHTML = `
+                    <div class="buoy-header">
+                        <div>
+                            <h4>${beach.name}</h4>
+                            <div style="font-size: 11px; color: var(--text-muted); margin-top:2px;">Воздух: 27°C</div>
+                        </div>
+                        <div class="btemp">${beach.temp}°C</div>
+                    </div>
+                    <div class="buoy-stats" style="margin-top: 10px;">
+                        <div class="neumorphic-inset" style="padding: 6px 10px; border-radius: 8px;"><svg class="svg-icon" style="width: 14px; height:14px; color:var(--brand-purple-light);" viewBox="0 0 24 24"><path d="M2 12h4l3-9 5 18 3-9h5"/></svg> ${beach.wave} м</div>
+                    </div>
+                `;
+                scrollContainer.appendChild(card);
+
+                // Добавляем метку на карту
+                if (window.cityMap && ymaps) {
+                    const placemark = new ymaps.Placemark([beach.lat, beach.lng], { hintContent: beach.name }, { preset: 'islands#blueWaterIcon' });
+                    window.cityMap.geoObjects.add(placemark);
+                }
+            });
+        }
+
+        // ТЕСТОВАЯ ПАНЕЛЬ СТАТУСОВ
         function updateSimStatus() {
             tryHaptic(30);
             const status = document.getElementById('statusSelect').value;
