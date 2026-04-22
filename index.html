@@ -149,18 +149,19 @@
 
         /* КАРТОЧКИ АККАУНТА (свайп) */
         .accounts-slider-wrapper {
-            margin: 10px 20px 20px 20px;
+            margin: 10px 0 10px 0;
+            padding-bottom: 15px;
             position: relative;
             overflow: hidden;
-            border-radius: 20px;
         }
         .accounts-slider {
             display: flex;
             transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             will-change: transform;
+            padding: 15px 0 25px 0;
         }
         .main-card {
-            min-width: 100%; padding: 25px; position: relative;
+            min-width: calc(100% - 40px); margin: 0 20px; padding: 25px; position: relative;
             box-sizing: border-box;
             border-radius: 20px;
             flex-shrink: 0;
@@ -466,7 +467,7 @@
         .option-price { font-size: 13px; font-weight: 700; color: var(--brand-purple-light); white-space: nowrap; }
 
         /* --- ТАРИФЫ --- */
-        .tariff-card { margin: 0 20px 20px 20px; padding: 25px; position: relative; overflow: hidden; }
+        .tariff-card { margin: 0 20px 20px 20px; padding: 25px; position: relative; overflow: hidden; flex-shrink: 0; }
         .t-badge { position: absolute; top: 0; right: 0; padding: 8px 16px; border-radius: 0 20px 0 20px; font-size: 11px; font-weight: bold; color: #fff; box-shadow: -2px 2px 10px rgba(0,0,0,0.1); }
         .t-badge.gold { background: var(--grad-gold); color: #8a6327;}
         .t-badge.purple { background: var(--grad-speed); }
@@ -477,7 +478,7 @@
         .t-speed { font-size: 42px; font-weight: 900; background: var(--grad-speed); -webkit-background-clip: text; -webkit-text-fill-color: transparent; line-height: 1; }
         .t-speed small { font-size: 16px; font-weight: 600; }
         .t-features { margin-bottom: 20px; }
-        .t-feature-item { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; font-size: 13px; color: var(--text-color); font-weight: 500;}
+        .t-feature-item { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 8px; font-size: 13px; color: var(--text-color); font-weight: 500; line-height: 1.3;}
         .t-feature-item .svg-icon { color: var(--status-green); width: 18px; height: 18px; flex-shrink: 0;}
         .t-footer { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(128,128,128,0.1); padding-top: 15px;}
         .t-price { font-size: 24px; font-weight: 800; color: var(--text-color);}
@@ -872,7 +873,7 @@
                             </div>
                             <div class="promo-cta">Подключить →</div>
                         </div>
-                        <div class="promo-emoji">🎬</div>
+                        <div class="promo-emoji"><svg class="svg-icon" style="width:48px;height:48px;" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"/><line x1="7" y1="2" x2="7" y2="22"/><line x1="17" y1="2" x2="17" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/><line x1="2" y1="7" x2="7" y2="7"/><line x1="2" y1="17" x2="7" y2="17"/><line x1="17" y1="17" x2="22" y2="17"/><line x1="17" y1="7" x2="22" y2="7"/></svg></div>
                     </div>
                     <div class="promo-card" onclick="tryHaptic(20)">
                         <div class="promo-card-inner" style="background:linear-gradient(135deg,#0F766E,#14B8A6);">
@@ -883,7 +884,7 @@
                             </div>
                             <div class="promo-cta">Узнать больше →</div>
                         </div>
-                        <div class="promo-emoji">🏠</div>
+                        <div class="promo-emoji"><svg class="svg-icon" style="width:48px;height:48px;" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
                     </div>
                     <div class="promo-card" onclick="tryHaptic(20)">
                         <div class="promo-card-inner" style="background:linear-gradient(135deg,#B45309,#F59E0B);">
@@ -894,7 +895,7 @@
                             </div>
                             <div class="promo-cta">Оформить →</div>
                         </div>
-                        <div class="promo-emoji">📡</div>
+                        <div class="promo-emoji"><svg class="svg-icon" style="width:48px;height:48px;" viewBox="0 0 24 24"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg></div>
                     </div>
                 </div>
             </div>
@@ -902,13 +903,13 @@
             <!-- 2. ЦИФРОВЫЕ РАЗВЛЕЧЕНИЯ -->
             <div class="srv-section">
                 <div class="srv-section-title">
-                    <div class="srv-section-title-icon" style="background:linear-gradient(135deg,#EF4444,#F87171);">🎥</div>
+                    <div class="srv-section-title-icon" style="background:linear-gradient(135deg,#EF4444,#F87171);"><svg class="svg-icon" style="width:14px;height:14px;" viewBox="0 0 24 24"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg></div>
                     Онлайн-кинотеатры
                 </div>
                 <div class="sub-grid">
                     <div class="sub-card neumorphic" onclick="tryHaptic(20)">
                         <div class="sub-logo-area">
-                            <div class="sub-logo" style="background:linear-gradient(135deg,#4CAF50,#81C784);">🎞</div>
+                            <div class="sub-logo" style="background:linear-gradient(135deg,#4CAF50,#81C784);"><svg class="svg-icon" style="width:18px;height:18px;color:white;" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"/><line x1="7" y1="2" x2="7" y2="22"/><line x1="17" y1="2" x2="17" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/><line x1="2" y1="7" x2="7" y2="7"/><line x1="2" y1="17" x2="7" y2="17"/><line x1="17" y1="17" x2="22" y2="17"/><line x1="17" y1="7" x2="22" y2="7"/></svg></div>
                             <span class="sub-badge popular">Популярно</span>
                         </div>
                         <div class="sub-name">Иви</div>
@@ -917,7 +918,7 @@
                     </div>
                     <div class="sub-card neumorphic" onclick="tryHaptic(20)">
                         <div class="sub-logo-area">
-                            <div class="sub-logo" style="background:linear-gradient(135deg,#FF5722,#FF8A65);">🎯</div>
+                            <div class="sub-logo" style="background:linear-gradient(135deg,#FF5722,#FF8A65);"><svg class="svg-icon" style="width:18px;height:18px;color:white;" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div>
                             <span class="sub-badge free">30 дней ₽0</span>
                         </div>
                         <div class="sub-name">Кинопоиск</div>
@@ -926,7 +927,7 @@
                     </div>
                     <div class="sub-card neumorphic" onclick="tryHaptic(20)">
                         <div class="sub-logo-area">
-                            <div class="sub-logo" style="background:linear-gradient(135deg,#7C3AED,#A78BFA);">▶️</div>
+                            <div class="sub-logo" style="background:linear-gradient(135deg,#7C3AED,#A78BFA);"><svg class="svg-icon" style="width:18px;height:18px;color:white;" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
                             <span class="sub-badge free">Акция</span>
                         </div>
                         <div class="sub-name">Premier</div>
@@ -935,7 +936,7 @@
                     </div>
                     <div class="sub-card neumorphic" onclick="tryHaptic(20)">
                         <div class="sub-logo-area">
-                            <div class="sub-logo" style="background:linear-gradient(135deg,#0284C7,#38BDF8);">🌊</div>
+                            <div class="sub-logo" style="background:linear-gradient(135deg,#0284C7,#38BDF8);"><svg class="svg-icon" style="width:18px;height:18px;color:white;" viewBox="0 0 24 24"><path d="M2 12h4l3-9 5 18 3-9h5"/></svg></div>
                             <span class="sub-badge popular">4K</span>
                         </div>
                         <div class="sub-name">Start</div>
@@ -947,13 +948,13 @@
 
             <div class="srv-section" style="margin-top:10px;">
                 <div class="srv-section-title">
-                    <div class="srv-section-title-icon" style="background:linear-gradient(135deg,#2563EB,#60A5FA);">📺</div>
+                    <div class="srv-section-title-icon" style="background:linear-gradient(135deg,#2563EB,#60A5FA);"><svg class="svg-icon" style="width:14px;height:14px;" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="15" rx="2" ry="2"/><polyline points="17 2 12 7 7 2"/></svg></div>
                     Тематические пакеты ТВ
                 </div>
                 <div class="sub-grid">
                     <div class="sub-card neumorphic" onclick="tryHaptic(20)">
                         <div class="sub-logo-area">
-                            <div class="sub-logo" style="background:linear-gradient(135deg,#F59E0B,#FCD34D);">🧒</div>
+                            <div class="sub-logo" style="background:linear-gradient(135deg,#F59E0B,#FCD34D);"><svg class="svg-icon" style="width:18px;height:18px;color:white;" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg></div>
                         </div>
                         <div class="sub-name">Детский</div>
                         <div class="sub-desc">Мультфильмы 24/7</div>
@@ -961,7 +962,7 @@
                     </div>
                     <div class="sub-card neumorphic" onclick="tryHaptic(20)">
                         <div class="sub-logo-area">
-                            <div class="sub-logo" style="background:linear-gradient(135deg,#10B981,#34D399);">⚽</div>
+                            <div class="sub-logo" style="background:linear-gradient(135deg,#10B981,#34D399);"><svg class="svg-icon" style="width:18px;height:18px;color:white;" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 2v6"/><path d="M12 22v-6"/><path d="M4.93 4.93l4.24 4.24"/><path d="M19.07 19.07l-4.24-4.24"/><path d="M2 12h6"/><path d="M22 12h-6"/><path d="M4.93 19.07l4.24-4.24"/><path d="M19.07 4.93l-4.24 4.24"/></svg></div>
                             <span class="sub-badge popular">Топ</span>
                         </div>
                         <div class="sub-name">Спортивный</div>
@@ -970,7 +971,7 @@
                     </div>
                     <div class="sub-card neumorphic" onclick="tryHaptic(20)">
                         <div class="sub-logo-area">
-                            <div class="sub-logo" style="background:linear-gradient(135deg,#6366F1,#818CF8);">🔬</div>
+                            <div class="sub-logo" style="background:linear-gradient(135deg,#6366F1,#818CF8);"><svg class="svg-icon" style="width:18px;height:18px;color:white;" viewBox="0 0 24 24"><path d="M10 2v7.31"/><path d="M14 9.3V1.99"/><path d="M8.5 2h7"/><path d="M14 9.3a6.5 6.5 0 1 1-4 0"/><line x1="5.52" y1="16" x2="18.48" y2="16"/></svg></div>
                         </div>
                         <div class="sub-name">Познавательный</div>
                         <div class="sub-desc">Наука и документалки</div>
@@ -978,7 +979,7 @@
                     </div>
                     <div class="sub-card neumorphic" onclick="tryHaptic(20)">
                         <div class="sub-logo-area">
-                            <div class="sub-logo" style="background:linear-gradient(135deg,#BE185D,#F472B6);">🔞</div>
+                            <div class="sub-logo" style="background:linear-gradient(135deg,#BE185D,#F472B6);"><svg class="svg-icon" style="width:18px;height:18px;color:white;" viewBox="0 0 24 24"><path d="M2 12h20"/><path d="M12 2v20"/><circle cx="12" cy="12" r="10"/></svg></div>
                         </div>
                         <div class="sub-name">18+</div>
                         <div class="sub-desc">Взрослый контент</div>
@@ -990,12 +991,12 @@
             <!-- 3. ОБОРУДОВАНИЕ -->
             <div class="srv-section" style="margin-top:10px;">
                 <div class="srv-section-title">
-                    <div class="srv-section-title-icon" style="background:linear-gradient(135deg,#EA580C,#FB923C);">📡</div>
+                    <div class="srv-section-title-icon" style="background:linear-gradient(135deg,#EA580C,#FB923C);"><svg class="svg-icon" style="width:14px;height:14px;" viewBox="0 0 24 24"><rect x="4" y="8" width="16" height="12" rx="2" ry="2"/><line x1="8" y1="8" x2="8" y2="4"/><line x1="16" y1="8" x2="16" y2="4"/><line x1="12" y1="8" x2="12" y2="2"/></svg></div>
                     Оборудование
                 </div>
                 <div class="equip-scroll">
                     <div class="equip-card neumorphic" onclick="tryHaptic(20)">
-                        <div class="equip-icon" style="background:linear-gradient(135deg,#64748B,#94A3B8);">📶</div>
+                        <div class="equip-icon" style="background:linear-gradient(135deg,#64748B,#94A3B8);"><svg class="svg-icon" style="width:22px;height:22px;color:white;" viewBox="0 0 24 24"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg></div>
                         <div class="equip-name">Роутер базовый</div>
                         <div class="equip-prices">
                             <div class="equip-buy">2 490 ₽</div>
@@ -1004,7 +1005,7 @@
                     </div>
                     <div class="equip-card neumorphic" onclick="tryHaptic(20)" style="position:relative;">
                         <div style="position:absolute;top:8px;right:8px;background:rgba(234,88,12,0.1);color:#EA580C;font-size:9px;font-weight:700;padding:3px 7px;border-radius:10px;">Хит</div>
-                        <div class="equip-icon" style="background:linear-gradient(135deg,#1D4ED8,#60A5FA);">🔥</div>
+                        <div class="equip-icon" style="background:linear-gradient(135deg,#1D4ED8,#60A5FA);"><svg class="svg-icon" style="width:22px;height:22px;color:white;" viewBox="0 0 24 24"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg></div>
                         <div class="equip-name">Гигабитный роутер</div>
                         <div class="equip-prices">
                             <div class="equip-buy">5 990 ₽</div>
@@ -1012,7 +1013,7 @@
                         </div>
                     </div>
                     <div class="equip-card neumorphic" onclick="tryHaptic(20)">
-                        <div class="equip-icon" style="background:linear-gradient(135deg,#7C3AED,#C084FC);">🕸</div>
+                        <div class="equip-icon" style="background:linear-gradient(135deg,#7C3AED,#C084FC);"><svg class="svg-icon" style="width:22px;height:22px;color:white;" viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></div>
                         <div class="equip-name">Mesh-система</div>
                         <div class="equip-prices">
                             <div class="equip-buy">12 990 ₽</div>
@@ -1020,7 +1021,7 @@
                         </div>
                     </div>
                     <div class="equip-card neumorphic" onclick="tryHaptic(20)">
-                        <div class="equip-icon" style="background:linear-gradient(135deg,#0F766E,#2DD4BF);">📺</div>
+                        <div class="equip-icon" style="background:linear-gradient(135deg,#0F766E,#2DD4BF);"><svg class="svg-icon" style="width:22px;height:22px;color:white;" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="15" rx="2" ry="2"/><polyline points="17 2 12 7 7 2"/></svg></div>
                         <div class="equip-name">ТВ-приставка</div>
                         <div class="equip-prices">
                             <div class="equip-buy">3 490 ₽</div>
@@ -1028,7 +1029,7 @@
                         </div>
                     </div>
                     <div class="equip-card neumorphic" onclick="tryHaptic(20)">
-                        <div class="equip-icon" style="background:linear-gradient(135deg,#BE185D,#EC4899);">🏠</div>
+                        <div class="equip-icon" style="background:linear-gradient(135deg,#BE185D,#EC4899);"><svg class="svg-icon" style="width:22px;height:22px;color:white;" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
                         <div class="equip-name">Умный датчик</div>
                         <div class="equip-prices">
                             <div class="equip-buy">1 290 ₽</div>
@@ -1041,7 +1042,7 @@
             <!-- 4. БЕЗОПАСНОСТЬ -->
             <div class="srv-section" style="margin-top:5px;">
                 <div class="srv-section-title">
-                    <div class="srv-section-title-icon" style="background:linear-gradient(135deg,#15803D,#4ADE80);">🔒</div>
+                    <div class="srv-section-title-icon" style="background:linear-gradient(135deg,#15803D,#4ADE80);"><svg class="svg-icon" style="width:14px;height:14px;" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
                     Безопасность и Умный город
                 </div>
                 <div class="security-list">
@@ -1081,12 +1082,12 @@
             <!-- 5. ПОЛЕЗНЫЕ ОПЦИИ -->
             <div class="srv-section" style="margin-top:5px;">
                 <div class="srv-section-title">
-                    <div class="srv-section-title-icon" style="background:linear-gradient(135deg,#92400E,#F59E0B);">⚡</div>
+                    <div class="srv-section-title-icon" style="background:linear-gradient(135deg,#92400E,#F59E0B);"><svg class="svg-icon" style="width:14px;height:14px;" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
                     Полезные опции
                 </div>
                 <div class="options-list">
                     <div class="option-item neumorphic" onclick="tryHaptic(20)">
-                        <div class="option-icon" style="background:linear-gradient(135deg,#15803D,#4ADE80);">🛡</div>
+                        <div class="option-icon" style="background:linear-gradient(135deg,#15803D,#4ADE80);"><svg class="svg-icon" style="width:20px;height:20px;color:white;" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
                         <div class="option-text">
                             <h4>Антивирус</h4>
                             <p>Kaspersky, Dr.Web, PRO32 — защита всех устройств</p>
@@ -1094,7 +1095,7 @@
                         <div class="option-price">от 119 ₽/мес</div>
                     </div>
                     <div class="option-item neumorphic" onclick="tryHaptic(20)">
-                        <div class="option-icon" style="background:linear-gradient(135deg,#1D4ED8,#60A5FA);">🌐</div>
+                        <div class="option-icon" style="background:linear-gradient(135deg,#1D4ED8,#60A5FA);"><svg class="svg-icon" style="width:20px;height:20px;color:white;" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
                         <div class="option-text">
                             <h4>Статический IP</h4>
                             <p>Для удалённой работы и видеонаблюдения</p>
@@ -1102,7 +1103,7 @@
                         <div class="option-price">99 ₽/мес</div>
                     </div>
                     <div class="option-item neumorphic" onclick="tryHaptic(20)">
-                        <div class="option-icon" style="background:linear-gradient(135deg,#B45309,#F59E0B);">⚡</div>
+                        <div class="option-icon" style="background:linear-gradient(135deg,#B45309,#F59E0B);"><svg class="svg-icon" style="width:20px;height:20px;color:white;" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
                         <div class="option-text">
                             <h4>Турбо-кнопка</h4>
                             <p>Максимальная скорость на 24 часа — по запросу</p>
@@ -1110,7 +1111,7 @@
                         <div class="option-price">49 ₽/раз</div>
                     </div>
                     <div class="option-item neumorphic" onclick="tryHaptic(20)">
-                        <div class="option-icon" style="background:linear-gradient(135deg,#6D28D9,#C084FC);">🔧</div>
+                        <div class="option-icon" style="background:linear-gradient(135deg,#6D28D9,#C084FC);"><svg class="svg-icon" style="width:20px;height:20px;color:white;" viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></div>
                         <div class="option-text">
                             <h4>Компьютерная помощь</h4>
                             <p>Вызов мастера на дом для настройки техники</p>
@@ -1290,14 +1291,13 @@
         <div class="tariff-card neumorphic" style="margin:0;">
             <div class="t-badge purple">ВЫГОДНО</div>
             <h3 class="t-title">Комбо Оптимум</h3>
-            <p class="t-desc">Интернет + ТВ + Умный город</p>
             <div class="t-speed-wrap">
                 <div class="t-speed">100 <small>Мбит/с</small></div>
             </div>
             <div class="t-features">
                 <div class="t-feature-item">
                     <svg class="svg-icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
-                    Телевидение — более 190 каналов
+                    Телевидение - более 190 каналов
                 </div>
                 <div class="t-feature-item">
                     <svg class="svg-icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
@@ -1305,7 +1305,11 @@
                 </div>
                 <div class="t-feature-item">
                     <svg class="svg-icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
-                    Мой двор + Домофон (Мой подъезд)
+                    Мой двор
+                </div>
+                <div class="t-feature-item">
+                    <svg class="svg-icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+                    Домофон или Мой подъезд
                 </div>
                 <div class="t-feature-item">
                     <svg class="svg-icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
@@ -1322,27 +1326,52 @@
         <div class="tariff-card neumorphic" style="margin:0;border:1px solid var(--brand-yellow);">
             <div class="t-badge gold">РЕКОМЕНДУЕМ</div>
             <h3 class="t-title">Комбо Драйв</h3>
-            <p class="t-desc">Максимум скорости и видеонаблюдения</p>
             <div class="t-speed-wrap">
                 <div class="t-speed">300 <small>Мбит/с</small></div>
             </div>
             <div class="t-features">
                 <div class="t-feature-item">
                     <svg class="svg-icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
-                    Телевидение 190+ каналов с управлением эфиром
+                    Телевидение - более 190 каналов, с функцией управления эфиром
                 </div>
                 <div class="t-feature-item">
                     <svg class="svg-icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
-                    Севстар.Око — видеонаблюдение
+                    Севстар. Око
                 </div>
                 <div class="t-feature-item">
                     <svg class="svg-icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
-                    Камера 2 МП + архив 7 дней
+                    Видеонаблюдение: камера 2 МП + 7 дней архива
                 </div>
             </div>
             <div class="t-footer">
                 <div class="t-price">1 740 ₽<small>/мес</small></div>
                 <button class="btn btn-primary" style="width:auto;padding:10px 20px;background:var(--grad-gold);color:#7a4f10;" onclick="connectTariff(this)">Подключить</button>
+            </div>
+        </div>
+
+        <!-- Ссылка на базовые тарифы -->
+        <div style="text-align: center; margin-top: 10px;">
+            <span onclick="document.getElementById('basicTariffs').style.display='flex'; this.style.display='none';" style="color:var(--brand-purple-light); font-size:13px; font-weight:600; cursor:pointer; text-decoration:underline;">Показать базовые тарифы</span>
+        </div>
+
+        <!-- Базовые тарифы -->
+        <div id="basicTariffs" style="display:none; flex-direction:column; gap:20px; margin-top:10px;">
+            <div class="tariff-card neumorphic" style="margin:0;">
+                <h3 class="t-title">Базовый интернет</h3>
+                <p class="t-desc">Только интернет без дополнительных услуг</p>
+                <div class="t-speed-wrap">
+                    <div class="t-speed" style="background:var(--text-color); -webkit-background-clip: text;">100 <small>Мбит/с</small></div>
+                </div>
+                <div class="t-features">
+                    <div class="t-feature-item">
+                        <svg class="svg-icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+                        Стабильный домашний интернет
+                    </div>
+                </div>
+                <div class="t-footer">
+                    <div class="t-price">650 ₽<small>/мес</small></div>
+                    <button class="btn btn-secondary neumorphic" style="width:auto;padding:10px 20px;" onclick="connectTariff(this)">Подключить</button>
+                </div>
             </div>
         </div>
     </div>
