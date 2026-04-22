@@ -86,7 +86,7 @@
 
         /* Хедер с мини-погодой и SAFE AREA */
         .header { 
-            padding: env(safe-area-inset-top, 40px) 20px 10px 20px; /* Отступ от челки iPhone */
+            padding: env(safe-area-inset-top, 40px) 20px 10px 20px;
             display: flex; justify-content: space-between; align-items: center; z-index: 10; gap: 10px;
         }
         .logo-wrapper { flex-shrink: 1; min-width: 0; }
@@ -122,7 +122,7 @@
         @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
 
         /* --- ГЛАВНАЯ --- */
-        .stories-container { display: flex; overflow-x: auto; padding: 15px 20px 20px 20px; gap: 15px; scrollbar-width: none; }
+        .stories-container { display: flex; overflow-x: auto; padding: 15px 20px 20px 20px; margin-top: -15px; gap: 15px; scrollbar-width: none; }
         .stories-container::-webkit-scrollbar { display: none; }
         .story { display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer; transition: transform 0.1s; }
         .story:active { transform: scale(0.95); }
@@ -140,7 +140,7 @@
         .story span { font-size: 11px; color: var(--text-color); font-weight: 500;}
 
         /* Баланс */
-        .main-card { margin: 0 20px 20px 20px; padding: 25px; position: relative; }
+        .main-card { margin: 10px 20px 20px 20px; padding: 25px; position: relative; }
         .main-card.glow-green { box-shadow: 0 0 20px rgba(76, 175, 80, 0.2), 6px 6px 12px var(--shadow-dark), -6px -6px 12px var(--shadow-light); }
         .main-card.glow-red { box-shadow: 0 0 20px rgba(244, 67, 54, 0.2), 6px 6px 12px var(--shadow-dark), -6px -6px 12px var(--shadow-light); }
         
@@ -176,8 +176,7 @@
         /* ПОЛНОЭКРАННЫЕ СТОРИС */
         .story-viewer {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background: #111; z-index: 99999;
-            display: flex; flex-direction: column;
+            background: #111; z-index: 99999; display: flex; flex-direction: column;
             color: white; opacity: 0; pointer-events: none; 
             transition: opacity 0.3s ease, transform 0.3s ease;
             transform: translateY(20px) scale(0.98);
@@ -195,18 +194,17 @@
         .story-avatar { width: 32px; height: 32px; border-radius: 50%; background: white; color: var(--brand-purple); display: flex; justify-content: center; align-items: center; }
         .story-close { background: none; border: none; color: white; padding: 5px; cursor: pointer; display: flex; align-items: center; justify-content: center;}
 
-        /* --- ВЫЕЗЖАЮЩИЕ ОКНА --- */
+        /* ВЫЕЗЖАЮЩИЕ ОКНА */
         .sheet-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: var(--overlay-bg); z-index: 2000; opacity: 0; transition: opacity 0.3s ease; backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); }
         .sheet-overlay.active { display: block; opacity: 1; }
         
         .bottom-sheet { position: fixed; bottom: 0; left: 0; right: 0; margin: 0 auto; max-width: 400px; background: var(--bg-color); border-radius: 30px 30px 0 0; padding: 30px 20px 40px 20px; z-index: 2001; transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1); display: flex; flex-direction: column; gap: 20px; box-shadow: 0 -10px 30px rgba(0,0,0,0.3); max-height: 90vh; overflow-y: auto;}
         .bottom-sheet.active { transform: translateY(0); }
-        
         .sheet-header { display: flex; justify-content: space-between; align-items: center; }
         .sheet-header h3 { margin: 0; color: var(--text-color); }
         .close-btn { width: 30px; height: 30px; border-radius: 50%; border: none; color: var(--text-color); font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink:0; background: transparent; transition: background 0.2s;}
         
-        /* Окно Камер (Intercom/Parking) */
+        /* Окно Камер */
         .cam-sheet-preview { width: 100%; height: 250px; background-color: #333; border-radius: 16px; background-size: cover; background-position: center; position: relative;}
         .live-badge { position: absolute; top: 15px; left: 15px; background: rgba(0,0,0,0.6); color: white; font-size: 12px; font-weight: bold; padding: 4px 8px; border-radius: 6px; display: flex; align-items: center; gap: 6px; backdrop-filter: blur(4px);}
         .live-dot { width: 8px; height: 8px; background: red; border-radius: 50%; animation: pulse 1.5s infinite; }
@@ -216,7 +214,6 @@
         /* Окно оплаты */
         .amount-input-wrapper { display: flex; justify-content: center; align-items: center; margin: 10px 0; padding: 15px; border-radius: 20px;}
         .amount-input { width: 50%; background: transparent; border: none; outline: none; font-size: 40px; font-weight: bold; color: var(--brand-purple-light); text-align: right; transition: color 0.3s ease; -moz-appearance: textfield; }
-        .amount-input::-webkit-outer-spin-button, .amount-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
         .amount-currency { font-size: 40px; font-weight: bold; color: var(--brand-purple-light); margin-left: 8px; transition: color 0.3s ease;}
         
         .chip-row { display: flex; gap: 8px; justify-content: space-between; }
@@ -367,16 +364,28 @@
         .t-footer { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(128,128,128,0.1); padding-top: 15px;}
         .t-price { font-size: 24px; font-weight: 800; color: var(--text-color);}
         .t-price small { font-size: 12px; color: var(--text-muted); font-weight: normal;}
+        
         .btn-current { pointer-events: none; color: var(--status-green); font-size: 13px; font-weight: bold; display: flex; align-items: center; gap: 5px; padding: 10px 15px; border-radius: 12px;}
+
+        /* --- СЕРВИСЫ (Витрина) --- */
+        .service-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 0 20px 20px 20px; }
+        .service-card { padding: 15px; border-radius: 20px; display: flex; flex-direction: column; gap: 10px; cursor: pointer; transition: transform 0.2s;}
+        .service-card:active { transform: scale(0.96); }
+        .srv-icon { width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: var(--brand-purple-light); margin-bottom: 5px;}
+        .srv-title { font-size: 14px; font-weight: bold; color: var(--text-color); margin: 0; line-height: 1.2;}
+        .srv-desc { font-size: 11px; color: var(--text-muted); margin: 0;}
+        .srv-price { font-size: 13px; font-weight: bold; color: var(--brand-purple-light); margin-top: auto; padding-top: 5px;}
 
         /* --- ПРОФИЛЬ --- */
         .profile-header { padding: 20px; text-align: center; }
         .profile-avatar-large { width: 80px; height: 80px; border-radius: 50%; background: var(--brand-purple); color: white; display: flex; justify-content: center; align-items: center; font-size: 30px; margin: 0 auto 15px auto; box-shadow: 0 5px 15px rgba(100,45,144,0.4);}
         .profile-name { font-size: 22px; font-weight: bold; color: var(--text-color); margin: 0;}
         .profile-phone { font-size: 14px; color: var(--text-muted); margin-top: 5px; }
-        .profile-card { margin: 10px 20px; padding: 20px; display: flex; justify-content: space-between; align-items: center; }
+        .profile-card { margin: 10px 20px; padding: 20px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: transform 0.1s;}
+        .profile-card:active { transform: scale(0.98); }
         .p-card-title { font-size: 14px; color: var(--text-muted); margin-bottom: 5px;}
         .p-card-val { font-size: 18px; font-weight: bold; color: var(--text-color);}
+        .p-card-icon { color: var(--brand-purple-light); }
 
     </style>
 </head>
@@ -622,101 +631,60 @@
 
         </div>
 
-        <div id="tab-tariffs" class="tab-content">
-            <div class="inner-tabs-wrapper">
-                <div class="inner-tabs">
-                    <div class="inner-tab-btn active" id="tbtn-net" onclick="switchInnerTab('net', 'tariffs')">Интернет</div>
-                    <div class="inner-tab-btn" id="tbtn-tv" onclick="switchInnerTab('tv', 'tariffs')">ТВ</div>
-                    <div class="inner-tab-btn" id="tbtn-all" onclick="switchInnerTab('all', 'tariffs')">Беру всё</div>
+        <div id="tab-services" class="tab-content">
+            <h2 class="section-title" style="margin-top: 20px;">Магазин услуг</h2>
+            
+            <div class="service-grid">
+                <div class="service-card neumorphic" onclick="tryHaptic(20)">
+                    <div class="srv-icon neumorphic-inset">
+                        <svg class="svg-icon" viewBox="0 0 24 24"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+                    </div>
+                    <div>
+                        <h4 class="srv-title">Севстар.Око</h4>
+                        <p class="srv-desc">Камеры во дворе</p>
+                    </div>
+                    <div class="srv-price">От 150 ₽/мес</div>
+                </div>
+
+                <div class="service-card neumorphic" onclick="tryHaptic(20)">
+                    <div class="srv-icon neumorphic-inset">
+                        <svg class="svg-icon" viewBox="0 0 24 24"><rect x="2" y="14" width="20" height="8" rx="2" ry="2"/><line x1="6" y1="18" x2="6.01" y2="18"/><line x1="10" y1="18" x2="10.01" y2="18"/><path d="M12 14v-4"/><path d="M8 8a4 4 0 0 1 8 0"/><path d="M5 5a8 8 0 0 1 14 0"/></svg>
+                    </div>
+                    <div>
+                        <h4 class="srv-title">Wi-Fi Роутеры</h4>
+                        <p class="srv-desc">Покупка и аренда</p>
+                    </div>
+                    <div class="srv-price">От 99 ₽/мес</div>
+                </div>
+
+                <div class="service-card neumorphic" onclick="tryHaptic(20)">
+                    <div class="srv-icon neumorphic-inset">
+                        <svg class="svg-icon" viewBox="0 0 24 24"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"/><circle cx="12" cy="14" r="4"/><line x1="12" y1="6" x2="12.01" y2="6"/></svg>
+                    </div>
+                    <div>
+                        <h4 class="srv-title">Домофон</h4>
+                        <p class="srv-desc">Умный доступ</p>
+                    </div>
+                    <div class="srv-price">От 200 ₽/мес</div>
+                </div>
+
+                <div class="service-card neumorphic" onclick="tryHaptic(20)">
+                    <div class="srv-icon neumorphic-inset">
+                        <svg class="svg-icon" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                    </div>
+                    <div>
+                        <h4 class="srv-title">Антивирусы</h4>
+                        <p class="srv-desc">Защита устройств</p>
+                    </div>
+                    <div class="srv-price">От 119 ₽/мес</div>
                 </div>
             </div>
-
-            <div id="tsec-net" class="inner-section active">
-                <div class="tariff-card neumorphic">
-                    <div class="t-badge current">ВАШ ТАРИФ</div>
-                    <h3 class="t-title">Гипердрайв</h3>
-                    <p class="t-desc">Максимум скорости для всей семьи</p>
-                    
-                    <div class="t-speed-wrap">
-                        <div class="t-speed">1000 <small>Мбит/с</small></div>
-                    </div>
-                    
-                    <div class="t-features">
-                        <div class="t-feature-item"><svg class="svg-icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> Идеально для 4K и Игр</div>
-                        <div class="t-feature-item"><svg class="svg-icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> Поддержка 24/7</div>
-                        <div class="t-feature-item"><svg class="svg-icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> Гигабитный роутер в аренду</div>
-                    </div>
-                    
-                    <div class="t-footer">
-                        <div class="t-price">950 ₽<small>/мес</small></div>
-                        <div class="btn-current neumorphic-inset"><svg class="svg-icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> Активен</div>
-                    </div>
-                </div>
-
-                <div class="tariff-card neumorphic">
-                    <h3 class="t-title">Стандарт</h3>
-                    <p class="t-desc">Отличный выбор для серфинга и соцсетей</p>
-                    
-                    <div class="t-speed-wrap">
-                        <div class="t-speed" style="background: var(--text-color); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">100 <small>Мбит/с</small></div>
-                    </div>
-                    
-                    <div class="t-features">
-                        <div class="t-feature-item"><svg class="svg-icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> Стабильный сигнал</div>
-                        <div class="t-feature-item"><svg class="svg-icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> Хватит на 2-3 устройства</div>
-                    </div>
-                    
-                    <div class="t-footer">
-                        <div class="t-price">650 ₽<small>/мес</small></div>
-                        <button class="btn btn-primary" style="width: auto; padding: 10px 20px;" onclick="connectTariff(this)">Перейти</button>
-                    </div>
-                </div>
-            </div>
-
-            <div id="tsec-tv" class="inner-section">
-                <div class="tariff-card neumorphic">
-                    <div class="t-badge purple">ПОПУЛЯРНЫЙ</div>
-                    <h3 class="t-title">Максимум ТВ</h3>
-                    <p class="t-desc">Все каналы в отличном качестве</p>
-                    
-                    <div class="t-speed-wrap">
-                        <div class="t-speed">260+ <small>каналов</small></div>
-                    </div>
-                    
-                    <div class="t-features">
-                        <div class="t-feature-item"><svg class="svg-icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> 60 каналов в HD и 4K</div>
-                        <div class="t-feature-item"><svg class="svg-icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> Архив передач за 7 дней</div>
-                        <div class="t-feature-item"><svg class="svg-icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> Доступ на 5 устройствах</div>
-                    </div>
-                    
-                    <div class="t-footer">
-                        <div class="t-price">450 ₽<small>/мес</small></div>
-                        <button class="btn btn-primary" style="width: auto; padding: 10px 20px;" onclick="connectTariff(this)">Подключить</button>
-                    </div>
-                </div>
-            </div>
-
-            <div id="tsec-all" class="inner-section">
-                <div class="tariff-card neumorphic">
-                    <div class="t-badge gold">ХИТ ПРОДАЖ</div>
-                    <h3 class="t-title">Севстар.Всё</h3>
-                    <p class="t-desc">Полный комплект умного дома и связи</p>
-                    
-                    <div class="t-speed-wrap">
-                        <div class="t-speed">1000 <small>Мбит/с</small> <span style="font-size:24px; color:var(--text-muted)">+ 260 ТВ</span></div>
-                    </div>
-                    
-                    <div class="t-features">
-                        <div class="t-feature-item"><svg class="svg-icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> Умный Домофон бесплатно</div>
-                        <div class="t-feature-item"><svg class="svg-icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> Городские камеры Око</div>
-                        <div class="t-feature-item"><svg class="svg-icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> Экономия 40%</div>
-                    </div>
-                    
-                    <div class="t-footer">
-                        <div class="t-price">1350 ₽<small>/мес</small></div>
-                        <button class="btn btn-primary" style="width: auto; padding: 10px 20px;" onclick="connectTariff(this)">Подключить</button>
-                    </div>
-                </div>
+            
+            <div style="margin: 0 20px;">
+                <button class="btn btn-secondary neumorphic" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px;" onclick="window.open('https://sevstar.net/', '_blank')">
+                    Все услуги на сайте
+                    <svg class="svg-icon" style="width: 16px; height: 16px;" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                </button>
             </div>
         </div>
 
@@ -725,6 +693,17 @@
                 <div class="profile-avatar-large">ЕБ</div>
                 <h2 class="profile-name">Евгений</h2>
                 <p class="profile-phone">+7 (978) 123-45-67</p>
+            </div>
+
+            <h3 class="section-title">Ваш тариф</h3>
+            <div class="profile-card neumorphic" onclick="openSheet('tariffSheet')">
+                <div>
+                    <div class="p-card-title">Домашний интернет</div>
+                    <div class="p-card-val" style="color: var(--brand-purple-light);">Гипердрайв</div>
+                </div>
+                <div class="p-card-icon">
+                    <svg class="svg-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                </div>
             </div>
 
             <h3 class="section-title">Настройки приложения</h3>
@@ -736,21 +715,7 @@
                 </label>
             </div>
 
-            <h3 class="section-title">Детали договора</h3>
-            <div class="profile-card neumorphic">
-                <div>
-                    <div class="p-card-title">Тариф</div>
-                    <div class="p-card-val">Гипердрайв</div>
-                </div>
-            </div>
-            <div class="profile-card neumorphic">
-                <div>
-                    <div class="p-card-title">Лицевой счет</div>
-                    <div class="p-card-val">№ 5543210</div>
-                </div>
-            </div>
-
-            <h3 class="section-title">Демонстрация состояний</h3>
+            <h3 class="section-title">Демонстрация (Тест)</h3>
             <div class="profile-card neumorphic">
                 <div class="toggle-label">Статус договора</div>
                 <select id="statusSelect" onchange="updateSimStatus()" style="background: transparent; color: var(--brand-purple-light); border: none; font-weight: bold; font-size: 16px; outline: none; text-align: right; cursor: pointer; -webkit-appearance: none;">
@@ -765,6 +730,8 @@
                     <option value="alert">Авария</option>
                 </select>
             </div>
+            
+            <br><br>
         </div>
 
         <div class="bottom-nav neumorphic">
@@ -776,9 +743,9 @@
                 <span class="nav-icon"><svg class="svg-icon" viewBox="0 0 24 24"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg></span>
                 <span>Город</span>
             </div>
-            <div class="nav-item" id="nav-tariffs" onclick="switchTab('tariffs')">
+            <div class="nav-item" id="nav-services" onclick="switchTab('services')">
                 <span class="nav-icon"><svg class="svg-icon" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></span>
-                <span>Тарифы</span>
+                <span>Сервисы</span>
             </div>
             <div class="nav-item" id="nav-profile" onclick="switchTab('profile')">
                 <span class="nav-icon"><svg class="svg-icon" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>
@@ -789,6 +756,57 @@
 
     <div class="sheet-overlay" id="sheetOverlay" onclick="closeAllSheets()"></div>
 
+    <div class="bottom-sheet" id="tariffSheet">
+        <div class="sheet-header">
+            <h3>Управление тарифом</h3>
+            <button class="close-btn neumorphic" onclick="closeAllSheets()">
+                <svg class="svg-icon" style="width: 16px; height:16px;" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+        </div>
+
+        <div class="tariff-card neumorphic-inset" style="margin: 0;">
+            <div class="t-badge current">ТЕКУЩИЙ</div>
+            <h3 class="t-title">Гипердрайв</h3>
+            <div class="t-speed-wrap" style="margin-bottom: 10px;">
+                <div class="t-speed" style="font-size: 32px;">1000 <small>Мбит/с</small></div>
+            </div>
+            <div class="t-footer" style="padding-top: 0; border: none;">
+                <div class="t-price">950 ₽<small>/мес</small></div>
+                <div class="btn-current"><svg class="svg-icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> Активен</div>
+            </div>
+        </div>
+
+        <h4 style="color: var(--text-color); margin: 10px 0 0 0;">Доступные улучшения:</h4>
+
+        <div class="tariff-card neumorphic" style="margin: 0; border: 1px solid var(--brand-yellow);">
+            <div class="t-badge gold">РЕКОМЕНДУЕМ</div>
+            <h3 class="t-title">Севстар.Всё</h3>
+            <p class="t-desc">Комплект умного дома и связи</p>
+            <div class="t-speed-wrap">
+                <div class="t-speed">1000 <small>Мбит/с</small> <span style="font-size:20px; color:var(--text-muted)">+ 260 ТВ</span></div>
+            </div>
+            <div class="t-footer">
+                <div class="t-price">1350 ₽<small>/мес</small></div>
+                <button class="btn btn-primary" style="width: auto; padding: 10px 20px; background: var(--grad-speed);" onclick="connectTariff(this)">Подключить</button>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 10px;">
+            <button class="btn" style="background: transparent; color: var(--text-muted); text-decoration: underline;" onclick="document.getElementById('cheapTariff').style.display='block'; this.style.display='none';">Показать другие тарифы</button>
+        </div>
+
+        <div id="cheapTariff" class="tariff-card neumorphic" style="margin: 0; display: none; opacity: 0.8;">
+            <h3 class="t-title">Стандарт</h3>
+            <div class="t-speed-wrap" style="margin-bottom: 10px;">
+                <div class="t-speed" style="font-size: 28px; background: var(--text-color); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">100 <small>Мбит/с</small></div>
+            </div>
+            <div class="t-footer">
+                <div class="t-price">650 ₽<small>/мес</small></div>
+                <button class="btn btn-secondary neumorphic-inset" style="width: auto; padding: 8px 16px;" onclick="connectTariff(this)">Перейти</button>
+            </div>
+        </div>
+    </div>
+    
     <div class="bottom-sheet" id="camSheetIntercom">
         <div class="sheet-header">
             <h3>Домофон (Пр. Острякова 81)</h3>
@@ -996,7 +1014,7 @@
             document.querySelectorAll('.amt-chip').forEach(el => el.classList.remove('active'));
         }
 
-        // НАВИГАЦИЯ (Глобальные табы)
+        // НАВИГАЦИЯ
         function switchTab(tabId) {
             tryHaptic(20);
             document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
@@ -1010,7 +1028,6 @@
             }
         }
 
-        // ВНУТРЕННЯЯ НАВИГАЦИЯ
         function switchInnerTab(secId, groupPrefix) {
             tryHaptic(20);
             const tabGroup = document.getElementById('tab-' + groupPrefix);
@@ -1230,7 +1247,7 @@
             }
         }
 
-        // --- ЯНДЕКС КАРТЫ ---
+        // --- ЯНДЕКС КАРТЫ И ГОРОД ---
         var tourismMap;
         var allPlacemarks = [];
         var landmarks = [
@@ -1319,7 +1336,6 @@
             });
         }
 
-        // --- ДЕМОНСТРАЦИЯ И АЛЕРТЫ ---
         function updateSimStatus() {
             tryHaptic(30);
             const status = document.getElementById('statusSelect').value;
