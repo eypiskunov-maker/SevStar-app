@@ -1615,7 +1615,22 @@
             <div class="acc-detail-row"><div class="acc-detail-label">Дата подключения</div><div class="acc-detail-val" id="det-connDate">...</div></div>
             <div class="acc-detail-row"><div class="acc-detail-label">Стаж</div><div class="acc-detail-val" id="det-tenure">...</div></div>
         </div>
-        <button class="btn btn-secondary neumorphic" style="width:100%; margin-top:10px; color:var(--status-red);" onclick="togglePauseAccount()">Поставить на паузу</button>
+
+        <div class="card-buttons" style="margin-top: 15px;">
+            <button class="btn btn-primary" onclick="closeAllSheets(); setTimeout(()=>openSheet('paymentSheet'), 400)">Пополнить</button>
+            <div class="secondary-buttons">
+                <button class="btn btn-secondary neumorphic" onclick="closeAllSheets(); setTimeout(()=>runDiagnosticsSheet(), 400)">
+                    <svg class="svg-icon" style="width:16px;height:16px;" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                    Диагностика
+                </button>
+                <button class="btn btn-secondary neumorphic" onclick="closeAllSheets(); setTimeout(()=>openChat(), 400)">
+                    <svg class="svg-icon" style="width:16px;height:16px;" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                    Чат
+                </button>
+            </div>
+        </div>
+
+        <button class="btn btn-secondary neumorphic" style="width:100%; margin-top:15px; color:var(--status-red);" onclick="togglePauseAccount()">Поставить на паузу</button>
     </div>
 
     <script>
