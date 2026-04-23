@@ -19,6 +19,7 @@
             --brand-purple-light: rgb(100, 45, 144);
             --brand-yellow: rgb(236, 177, 68);
             --status-green: #4caf50;
+            --status-orange: #ff9800;
             --status-red: #f44336;
             
             --bg-color: #f0f0f3;
@@ -172,6 +173,7 @@
         .accounts-list-mode .balance-amount { font-size: 28px; margin: 5px 0; }
         .accounts-list-mode .balance-title { margin-bottom: 0; }
         .main-card.glow-green { box-shadow: 0 0 20px rgba(76, 175, 80, 0.2), 6px 6px 12px var(--shadow-dark), -6px -6px 12px var(--shadow-light); background: var(--bg-color); }
+        .main-card.glow-yellow { box-shadow: 0 0 20px rgba(255, 152, 0, 0.2), 6px 6px 12px var(--shadow-dark), -6px -6px 12px var(--shadow-light); background: var(--bg-color); }
         .main-card.glow-red { box-shadow: 0 0 20px rgba(244, 67, 54, 0.2), 6px 6px 12px var(--shadow-dark), -6px -6px 12px var(--shadow-light); background: var(--bg-color); }
         
         /* Точки-индикаторы */
@@ -1727,7 +1729,7 @@
                         <div>
                             <p class="balance-title">${acc.address}</p>
                             <h2 class="balance-amount" style="${acc.id === 2 ? 'color:var(--brand-purple-light);' : ''}">${acc.balance}</h2>
-                            <div class="status-text">${acc.status}</div>
+                            <div class="status-text" style="color: var(--status-${acc.color === 'yellow' ? 'orange' : acc.color});">${acc.status}</div>
                             <div class="balance-subtext">${acc.days}</div>
                         </div>
                         ${displayAccountsAsList ? '<svg class="svg-icon" style="width:24px;height:24px;color:var(--brand-purple-light);opacity:0.5;margin-top:10px;" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>' : ''}
