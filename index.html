@@ -165,7 +165,10 @@
             box-sizing: border-box;
             border-radius: 20px;
             flex-shrink: 0;
+            transition: all 0.3s ease;
         }
+        .accounts-list-mode { display: flex; flex-direction: column; gap: 15px; margin: 10px 0; padding: 0 20px;}
+        .accounts-list-mode .main-card { margin: 0; min-width: unset; width: 100%; box-shadow: 2px 2px 10px rgba(0,0,0,0.05); }
         .main-card.glow-green { box-shadow: 0 0 20px rgba(76, 175, 80, 0.2), 6px 6px 12px var(--shadow-dark), -6px -6px 12px var(--shadow-light); background: var(--bg-color); }
         .main-card.glow-red { box-shadow: 0 0 20px rgba(244, 67, 54, 0.2), 6px 6px 12px var(--shadow-dark), -6px -6px 12px var(--shadow-light); background: var(--bg-color); }
         
@@ -247,6 +250,19 @@
         .live-dot { width: 8px; height: 8px; background: red; border-radius: 50%; animation: pulse 1.5s infinite; }
         @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
         .cam-controls { display: flex; gap: 15px; margin-top: 10px; }
+
+        /* Окно аккаунтов и деталей */
+        .acc-list-item { display: flex; justify-content: space-between; align-items: center; padding: 15px; margin-bottom: 10px; border-radius: 16px; cursor: pointer; transition: transform 0.1s;}
+        .acc-list-item:active { transform: scale(0.98); }
+        .acc-list-info { display: flex; flex-direction: column; gap: 5px; flex-grow: 1; }
+        .acc-list-addr { font-size: 15px; font-weight: bold; color: var(--text-color); }
+        .acc-list-num { font-size: 12px; color: var(--text-muted); }
+        .acc-star { width: 40px; height: 40px; display: flex; justify-content: center; align-items: center; cursor: pointer; color: #ccc; transition: color 0.2s;}
+        .acc-star.active { color: var(--brand-yellow); }
+        .acc-detail-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid rgba(128,128,128,0.1); }
+        .acc-detail-row:last-child { border-bottom: none; }
+        .acc-detail-label { font-size: 14px; color: var(--text-muted); }
+        .acc-detail-val { font-size: 14px; font-weight: bold; color: var(--text-color); text-align: right; }
 
         /* Окно оплаты */
         .amount-input-wrapper { display: flex; justify-content: center; align-items: center; margin: 10px 0; padding: 15px; border-radius: 20px;}
@@ -487,9 +503,12 @@
 
         /* --- ПРОФИЛЬ --- */
         .profile-header { padding: 20px; text-align: center; }
-        .profile-avatar-large { width: 80px; height: 80px; border-radius: 50%; background: var(--brand-purple); color: white; display: flex; justify-content: center; align-items: center; font-size: 30px; margin: 0 auto 15px auto; box-shadow: 0 5px 15px rgba(100,45,144,0.4);}
-        .profile-name { font-size: 22px; font-weight: bold; color: var(--text-color); margin: 0;}
-        .profile-phone { font-size: 14px; color: var(--text-muted); margin-top: 5px; }
+        .profile-header-clickable { display: inline-flex; flex-direction: column; align-items: center; cursor: pointer; padding: 10px; border-radius: 20px; transition: background 0.2s; position: relative;}
+        .profile-header-clickable:active { background: rgba(0,0,0,0.05); }
+        .profile-header-dropdown-icon { position: absolute; right: -20px; top: 50%; transform: translateY(-50%); color: var(--brand-purple-light); }
+        .profile-avatar-large { width: 80px; height: 80px; border-radius: 50%; background: var(--brand-purple); color: white; display: flex; justify-content: center; align-items: center; font-size: 30px; margin: 0 auto 15px auto; box-shadow: 0 5px 15px rgba(100,45,144,0.4); pointer-events: none;}
+        .profile-name { font-size: 22px; font-weight: bold; color: var(--text-color); margin: 0; pointer-events: none;}
+        .profile-phone { font-size: 14px; color: var(--text-muted); margin-top: 5px; pointer-events: none;}
         .profile-card { margin: 10px 20px; padding: 20px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: transform 0.1s;}
         .profile-card:active { transform: scale(0.98); }
         .p-card-title { font-size: 14px; color: var(--text-muted); margin-bottom: 5px;}
@@ -693,50 +712,10 @@
             <!-- СВАЙПАБЕЛЬНЫЕ КАРТОЧКИ АККАУНТОВ -->
             <div class="accounts-slider-wrapper" id="accountsWrapper">
                 <div class="accounts-slider" id="accountsSlider">
-                    <!-- Карточка 1 -->
-                    <div class="main-card glow-green" id="card-acc1">
-                        <p class="balance-title" id="currentAddressTitle">Пр. Острякова 81</p>
-                        <h2 class="balance-amount" id="balanceText">1 250 ₽</h2>
-                        <div class="status-text" id="statusText">Интернет активен</div>
-                        <div class="balance-subtext" id="daysLeftText">Хватит на 30 дней</div>
-                        <div class="card-buttons">
-                            <button class="btn btn-primary" onclick="openSheet('paymentSheet')">Пополнить</button>
-                            <div class="secondary-buttons">
-                                <button class="btn btn-secondary neumorphic" onclick="runDiagnosticsSheet()">
-                                    <svg class="svg-icon" style="width:16px;height:16px;" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-                                    Диагностика
-                                </button>
-                                <button class="btn btn-secondary neumorphic" onclick="openChat()">
-                                    <svg class="svg-icon" style="width:16px;height:16px;" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-                                    Чат
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Карточка 2 -->
-                    <div class="main-card glow-green" id="card-acc2" style="opacity:0.9;">
-                        <p class="balance-title">ул. Ленина 15 (Родители)</p>
-                        <h2 class="balance-amount" style="color:var(--brand-purple-light);">320 ₽</h2>
-                        <div class="status-text">Интернет активен</div>
-                        <div class="balance-subtext">Хватит на 8 дней</div>
-                        <div class="card-buttons">
-                            <button class="btn btn-primary" onclick="openSheet('paymentSheet')">Пополнить</button>
-                            <div class="secondary-buttons">
-                                <button class="btn btn-secondary neumorphic" onclick="runDiagnosticsSheet()">
-                                    <svg class="svg-icon" style="width:16px;height:16px;" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-                                    Диагностика
-                                </button>
-                                <button class="btn btn-secondary neumorphic" onclick="openChat()">
-                                    <svg class="svg-icon" style="width:16px;height:16px;" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-                                    Чат
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+                    <!-- Карточки будут добавлены через JS -->
                 </div>
                 <div class="slider-dots" id="sliderDots">
-                    <div class="slider-dot active" onclick="goToSlide(0)"></div>
-                    <div class="slider-dot" onclick="goToSlide(1)"></div>
+                    <!-- Точки будут добавлены через JS -->
                 </div>
             </div>
 
@@ -1132,9 +1111,21 @@
         <!-- ПРОФИЛЬ -->
         <div id="tab-profile" class="tab-content">
             <div class="profile-header">
-                <div class="profile-avatar-large">ЕБ</div>
-                <h2 class="profile-name">Евгений</h2>
-                <p class="profile-phone">+7 (978) 123-45-67</p>
+                <div class="profile-header-clickable" onclick="openSheet('accountsSheet')">
+                    <div class="profile-avatar-large">ЕБ</div>
+                    <h2 class="profile-name">Евгений</h2>
+                    <p class="profile-phone">+7 (978) 123-45-67</p>
+                    <div class="profile-header-dropdown-icon">
+                        <svg class="svg-icon" style="width:24px;height:24px;" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-card neumorphic" onclick="alert('У вас пока нет активных промокодов.')" style="justify-content: center; margin-bottom: 25px;">
+                <div style="font-weight:bold; color:var(--brand-purple-light); display:flex; align-items:center; gap:10px;">
+                    <svg class="svg-icon" style="width:20px;height:20px;" viewBox="0 0 24 24"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+                    Промокод
+                </div>
             </div>
 
             <h3 class="section-title">Ваш тариф</h3>
@@ -1149,6 +1140,13 @@
             </div>
 
             <h3 class="section-title">Настройки приложения</h3>
+            <div class="profile-card neumorphic">
+                <div class="toggle-label">Отображать аккаунты списком</div>
+                <label class="switch">
+                    <input type="checkbox" id="listModeToggle" onchange="toggleAccountDisplayMode()">
+                    <span class="slider round"></span>
+                </label>
+            </div>
             <div class="profile-card neumorphic">
                 <div class="toggle-label">Темная тема оформления</div>
                 <label class="switch">
@@ -1582,6 +1580,40 @@
                 <svg class="svg-icon" style="width:18px;height:18px;" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
             </button>
         </div>
+    </div>
+
+    <!-- ОКНО СПИСКА АККАУНТОВ -->
+    <div class="bottom-sheet" id="accountsSheet">
+        <div class="sheet-header">
+            <h3>Мои аккаунты</h3>
+            <button class="close-btn neumorphic" onclick="closeAllSheets()">
+                <svg class="svg-icon" style="width:16px;height:16px;" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+        </div>
+        <div id="accountsSheetList" style="margin-top: 10px; display:flex; flex-direction:column;">
+            <!-- Список аккаунтов генерируется через JS -->
+        </div>
+        <button class="btn btn-primary neumorphic" style="width:100%; margin-top:10px;" onclick="alert('Открытие формы добавления аккаунта...')">Добавить новый аккаунт</button>
+    </div>
+
+    <!-- ОКНО ДЕТАЛЕЙ АККАУНТА -->
+    <div class="bottom-sheet" id="accountDetailsSheet">
+        <div class="sheet-header">
+            <h3>Детали аккаунта</h3>
+            <button class="close-btn neumorphic" onclick="closeAllSheets()">
+                <svg class="svg-icon" style="width:16px;height:16px;" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+        </div>
+        <div class="neumorphic-inset" style="padding: 20px; border-radius: 20px; margin-top: 10px;">
+            <div class="acc-detail-row"><div class="acc-detail-label">Уникальный номер</div><div class="acc-detail-val" id="det-uniqueNum">...</div></div>
+            <div class="acc-detail-row"><div class="acc-detail-label">Номер телефона</div><div class="acc-detail-val" id="det-phone">...</div></div>
+            <div class="acc-detail-row"><div class="acc-detail-label">E-mail</div><div class="acc-detail-val" id="det-email">...</div></div>
+            <div class="acc-detail-row"><div class="acc-detail-label">Расчетный день</div><div class="acc-detail-val" id="det-billDay">...</div></div>
+            <div class="acc-detail-row"><div class="acc-detail-label">Адрес</div><div class="acc-detail-val" id="det-addr">...</div></div>
+            <div class="acc-detail-row"><div class="acc-detail-label">Дата подключения</div><div class="acc-detail-val" id="det-connDate">...</div></div>
+            <div class="acc-detail-row"><div class="acc-detail-label">Стаж</div><div class="acc-detail-val" id="det-tenure">...</div></div>
+        </div>
+        <button class="btn btn-secondary neumorphic" style="width:100%; margin-top:10px; color:var(--status-red);" onclick="togglePauseAccount()">Поставить на паузу</button>
     </div>
 
     <script>
