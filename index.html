@@ -168,7 +168,9 @@
             transition: all 0.3s ease;
         }
         .accounts-list-mode { display: flex; flex-direction: column; gap: 15px; margin: 10px 0; padding: 0 20px;}
-        .accounts-list-mode .main-card { margin: 0; min-width: unset; width: 100%; box-shadow: 2px 2px 10px rgba(0,0,0,0.05); }
+        .accounts-list-mode .main-card { margin: 0; min-width: unset; width: 100%; box-shadow: 2px 2px 10px rgba(0,0,0,0.05); padding: 15px 20px; }
+        .accounts-list-mode .balance-amount { font-size: 28px; margin: 5px 0; }
+        .accounts-list-mode .balance-title { margin-bottom: 0; }
         .main-card.glow-green { box-shadow: 0 0 20px rgba(76, 175, 80, 0.2), 6px 6px 12px var(--shadow-dark), -6px -6px 12px var(--shadow-light); background: var(--bg-color); }
         .main-card.glow-red { box-shadow: 0 0 20px rgba(244, 67, 54, 0.2), 6px 6px 12px var(--shadow-dark), -6px -6px 12px var(--shadow-light); background: var(--bg-color); }
         
@@ -1685,12 +1687,9 @@
         }
 
         function getAccountHTML(acc) {
-            return `
-                <div class="main-card glow-${acc.color}" onclick="showAccountDetails(${acc.id})" style="cursor:pointer;">
-                    <p class="balance-title">${acc.address}</p>
-                    <h2 class="balance-amount" style="${acc.id === 2 ? 'color:var(--brand-purple-light);' : ''}">${acc.balance}</h2>
-                    <div class="status-text">${acc.status}</div>
-                    <div class="balance-subtext">${acc.days}</div>
+            let buttonsHtml = '';
+            if (!displayAccountsAsList) {
+                buttonsHtml = `
                     <div class="card-buttons">
                         <button class="btn btn-primary" onclick="event.stopPropagation(); openSheet('paymentSheet')">Пополнить</button>
                         <div class="secondary-buttons">
@@ -1704,6 +1703,21 @@
                             </button>
                         </div>
                     </div>
+                `;
+            }
+
+            return `
+                <div class="main-card glow-${acc.color}" onclick="showAccountDetails(${acc.id})" style="cursor:pointer;">
+                    <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+                        <div>
+                            <p class="balance-title">${acc.address}</p>
+                            <h2 class="balance-amount" style="${acc.id === 2 ? 'color:var(--brand-purple-light);' : ''}">${acc.balance}</h2>
+                            <div class="status-text">${acc.status}</div>
+                            <div class="balance-subtext">${acc.days}</div>
+                        </div>
+                        ${displayAccountsAsList ? '<svg class="svg-icon" style="width:24px;height:24px;color:var(--brand-purple-light);opacity:0.5;margin-top:10px;" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>' : ''}
+                    </div>
+                    ${buttonsHtml}
                 </div>
             `;
         }
@@ -1905,6 +1919,51 @@
             overlay.classList.remove('active');
             setTimeout(() => { overlay.style.display = 'none'; }, 400);
         }
+
+        // --- СВАЙП ВНИЗ ДЛЯ BOTTOM SHEETS ---
+        document.addEventListener('DOMContentLoaded', () => {
+            let bsTouchStartY = 0;
+            let bsCurrentY = 0;
+            let activeSheet = null;
+
+            document.querySelectorAll('.bottom-sheet').forEach(sheet => {
+                sheet.addEventListener('touchstart', e => {
+                    // Разрешаем свайп только если не скроллим содержимое (scrollTop === 0)
+                    if (sheet.scrollTop > 0) return;
+                    bsTouchStartY = e.touches[0].clientY;
+                    bsCurrentY = 0;
+                    activeSheet = sheet;
+                    sheet.style.transition = 'none';
+                }, {passive: true});
+
+                sheet.addEventListener('touchmove', e => {
+                    if (!activeSheet || sheet.scrollTop > 0) return;
+                    const dy = e.touches[0].clientY - bsTouchStartY;
+                    if (dy > 0) { // Свайп вниз
+                        e.preventDefault();
+                        bsCurrentY = dy;
+                        sheet.style.transform = `translateY(${dy}px)`;
+                    }
+                }, {passive: false});
+
+                sheet.addEventListener('touchend', e => {
+                    if (!activeSheet) return;
+                    sheet.style.transition = 'transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1)';
+                    if (bsCurrentY > 100) {
+                        closeAllSheets();
+                    } else {
+                        sheet.style.transform = 'translateY(0)';
+                    }
+                    setTimeout(() => {
+                        if(!sheet.classList.contains('active')) {
+                            sheet.style.transform = '';
+                        }
+                    }, 400);
+                    activeSheet = null;
+                    bsCurrentY = 0;
+                });
+            });
+        });
 
         // ЧАТ
         function openChat() {
