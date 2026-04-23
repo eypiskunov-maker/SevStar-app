@@ -1589,24 +1589,158 @@
         function tryHaptic(p) { try { if (navigator && navigator.vibrate) navigator.vibrate(p); } catch(e){} }
         function playAudioFile(id) { try { const s = document.getElementById(id); if(s){ s.currentTime=0; s.play().catch(()=>{}); } } catch(e){} }
 
-        // --- СВАЙП КАРТОЧЕК АККАУНТОВ ---
+        // --- ДАННЫЕ АККАУНТОВ И СОСТОЯНИЕ ---
+        let displayAccountsAsList = false;
+        let accountsData = [
+            { id: 1, address: 'Пр. Острякова 81', balance: '1 250 ₽', status: 'Интернет активен', days: 'Хватит на 30 дней', isFavorite: true, uniqueNum: '100123', phone: '+7 (978) 123-45-67', email: 'user1@mail.ru', billDay: '15 число', connDate: '12.05.2020', tenure: '4 года 3 мес', color: 'green' },
+            { id: 2, address: 'ул. Ленина 15 (Родители)', balance: '320 ₽', status: 'Интернет активен', days: 'Хватит на 8 дней', isFavorite: true, uniqueNum: '100456', phone: '+7 (978) 765-43-21', email: 'parents@mail.ru', billDay: '1 число', connDate: '01.09.2022', tenure: '1 год 8 мес', color: 'green' },
+            { id: 3, address: 'ул. Хрусталева 12', balance: '-150 ₽', status: 'Интернет заблокирован', days: 'Пополните счет', isFavorite: false, uniqueNum: '100789', phone: '+7 (978) 111-22-33', email: 'office@mail.ru', billDay: '10 число', connDate: '15.01.2023', tenure: '1 год 3 мес', color: 'red' },
+            { id: 4, address: 'ул. Гоголя 4', balance: '850 ₽', status: 'Интернет активен', days: 'Хватит на 20 дней', isFavorite: false, uniqueNum: '100999', phone: '+7 (978) 555-66-77', email: 'gogol@mail.ru', billDay: '5 число', connDate: '05.11.2021', tenure: '2 года 5 мес', color: 'green' },
+            { id: 5, address: 'пр. Героев Сталинграда 50', balance: '0 ₽', status: 'Ожидает оплаты', days: 'Завтра списание', isFavorite: false, uniqueNum: '101234', phone: '+7 (978) 999-00-11', email: 'hero@mail.ru', billDay: '20 число', connDate: '20.08.2019', tenure: '4 года 8 мес', color: 'yellow' },
+            { id: 6, address: 'ул. Меньшикова 17', balance: '400 ₽', status: 'Интернет активен', days: 'Хватит на 10 дней', isFavorite: false, uniqueNum: '102345', phone: '+7 (978) 333-44-55', email: 'men@mail.ru', billDay: '12 число', connDate: '10.10.2020', tenure: '3 года 6 мес', color: 'green' },
+            { id: 7, address: 'ул. Фадеева 23', balance: '100 ₽', status: 'Интернет активен', days: 'Хватит на 2 дня', isFavorite: false, uniqueNum: '103456', phone: '+7 (978) 222-33-44', email: 'fadeev@mail.ru', billDay: '28 число', connDate: '01.02.2021', tenure: '3 года 2 мес', color: 'green' },
+            { id: 8, address: 'ул. Вакуленчука 29', balance: '2000 ₽', status: 'Интернет активен', days: 'Хватит на 60 дней', isFavorite: false, uniqueNum: '104567', phone: '+7 (978) 444-55-66', email: 'vakul@mail.ru', billDay: '18 число', connDate: '15.06.2018', tenure: '5 лет 10 мес', color: 'green' },
+            { id: 9, address: 'ул. Руднева 39', balance: '550 ₽', status: 'Интернет активен', days: 'Хватит на 15 дней', isFavorite: false, uniqueNum: '105678', phone: '+7 (978) 666-77-88', email: 'rudnev@mail.ru', billDay: '22 число', connDate: '22.12.2022', tenure: '1 год 4 мес', color: 'green' },
+            { id: 10, address: 'ул. М.Крылова 1', balance: '300 ₽', status: 'Интернет активен', days: 'Хватит на 7 дней', isFavorite: false, uniqueNum: '106789', phone: '+7 (978) 888-99-00', email: 'krylov@mail.ru', billDay: '8 число', connDate: '08.08.2023', tenure: '8 мес', color: 'green' }
+        ];
+
+        // --- СВАЙП И РЕНДЕР КАРТОЧЕК АККАУНТОВ ---
         let currentSlide = 0;
-        let totalSlides = 2;
+        let totalSlides = 0;
         let touchStartX = 0;
         let touchStartY = 0;
         let isDragging = false;
-
+        
         const slider = document.getElementById('accountsSlider');
         const wrapper = document.getElementById('accountsWrapper');
+        const sliderDots = document.getElementById('sliderDots');
+
+        function toggleAccountDisplayMode() {
+            tryHaptic(20);
+            displayAccountsAsList = document.getElementById('listModeToggle').checked;
+            renderMainAccounts();
+        }
+
+        function toggleFavorite(id) {
+            tryHaptic(20);
+            const acc = accountsData.find(a => a.id === id);
+            if(acc) {
+                acc.isFavorite = !acc.isFavorite;
+                renderAccountsSheet();
+                renderMainAccounts();
+            }
+        }
+
+        function showAccountDetails(id) {
+            tryHaptic(20);
+            const acc = accountsData.find(a => a.id === id);
+            if(acc) {
+                document.getElementById('det-uniqueNum').innerText = acc.uniqueNum;
+                document.getElementById('det-phone').innerText = acc.phone;
+                document.getElementById('det-email').innerText = acc.email;
+                document.getElementById('det-billDay').innerText = acc.billDay;
+                document.getElementById('det-addr').innerText = acc.address;
+                document.getElementById('det-connDate').innerText = acc.connDate;
+                document.getElementById('det-tenure').innerText = acc.tenure;
+                openSheet('accountDetailsSheet');
+            }
+        }
+
+        function togglePauseAccount() {
+            tryHaptic(20);
+            alert("Аккаунт успешно поставлен на паузу.");
+            closeAllSheets();
+        }
+
+        function getAccountHTML(acc) {
+            return `
+                <div class="main-card glow-${acc.color}" onclick="showAccountDetails(${acc.id})" style="cursor:pointer;">
+                    <p class="balance-title">${acc.address}</p>
+                    <h2 class="balance-amount" style="${acc.id === 2 ? 'color:var(--brand-purple-light);' : ''}">${acc.balance}</h2>
+                    <div class="status-text">${acc.status}</div>
+                    <div class="balance-subtext">${acc.days}</div>
+                    <div class="card-buttons">
+                        <button class="btn btn-primary" onclick="event.stopPropagation(); openSheet('paymentSheet')">Пополнить</button>
+                        <div class="secondary-buttons">
+                            <button class="btn btn-secondary neumorphic" onclick="event.stopPropagation(); runDiagnosticsSheet()">
+                                <svg class="svg-icon" style="width:16px;height:16px;" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                                Диагностика
+                            </button>
+                            <button class="btn btn-secondary neumorphic" onclick="event.stopPropagation(); openChat()">
+                                <svg class="svg-icon" style="width:16px;height:16px;" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                                Чат
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderMainAccounts() {
+            const favAccounts = accountsData.filter(a => a.isFavorite);
+            totalSlides = favAccounts.length;
+            currentSlide = 0;
+            
+            if (displayAccountsAsList) {
+                wrapper.className = "accounts-list-mode";
+                slider.style.transform = 'none';
+                slider.style.display = 'contents';
+                sliderDots.style.display = 'none';
+                
+                let html = '';
+                favAccounts.forEach(acc => html += getAccountHTML(acc));
+                if(favAccounts.length === 0) html = '<div style="padding:20px; text-align:center; color:var(--text-muted);">Нет избранных аккаунтов. Выберите их в профиле.</div>';
+                slider.innerHTML = html;
+            } else {
+                wrapper.className = "accounts-slider-wrapper";
+                slider.style.display = 'flex';
+                slider.style.transform = `translateX(0%)`;
+                sliderDots.style.display = 'flex';
+                
+                let html = '';
+                let dotsHtml = '';
+                favAccounts.forEach((acc, i) => {
+                    html += getAccountHTML(acc);
+                    dotsHtml += `<div class="slider-dot ${i === 0 ? 'active' : ''}" onclick="goToSlide(${i})"></div>`;
+                });
+                if(favAccounts.length === 0) {
+                    html = '<div style="padding:20px; text-align:center; color:var(--text-muted); width:100%;">Нет избранных аккаунтов. Выберите их в профиле.</div>';
+                    dotsHtml = '';
+                    totalSlides = 1;
+                }
+                slider.innerHTML = html;
+                sliderDots.innerHTML = dotsHtml;
+            }
+        }
+
+        function renderAccountsSheet() {
+            const listContainer = document.getElementById('accountsSheetList');
+            let html = '';
+            accountsData.forEach(acc => {
+                html += `
+                    <div class="acc-list-item neumorphic">
+                        <div class="acc-list-info" onclick="showAccountDetails(${acc.id})">
+                            <div class="acc-list-addr">${acc.address}</div>
+                            <div class="acc-list-num">ЛС: ${acc.uniqueNum}</div>
+                        </div>
+                        <div class="acc-star ${acc.isFavorite ? 'active' : ''}" onclick="toggleFavorite(${acc.id})">
+                            <svg class="svg-icon" style="width:24px;height:24px; fill:${acc.isFavorite ? 'currentColor' : 'none'};" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                        </div>
+                    </div>
+                `;
+            });
+            listContainer.innerHTML = html;
+        }
 
         wrapper.addEventListener('touchstart', e => {
+            if(displayAccountsAsList || totalSlides <= 1) return;
             touchStartX = e.touches[0].clientX;
             touchStartY = e.touches[0].clientY;
             isDragging = true;
         }, { passive: true });
 
         wrapper.addEventListener('touchmove', e => {
-            if (!isDragging) return;
+            if (!isDragging || displayAccountsAsList || totalSlides <= 1) return;
             const dx = e.touches[0].clientX - touchStartX;
             const dy = e.touches[0].clientY - touchStartY;
             if (Math.abs(dx) > Math.abs(dy)) {
@@ -1618,7 +1752,7 @@
         }, { passive: false });
 
         wrapper.addEventListener('touchend', e => {
-            if (!isDragging) return;
+            if (!isDragging || displayAccountsAsList || totalSlides <= 1) return;
             isDragging = false;
             const dx = e.changedTouches[0].clientX - touchStartX;
             if (dx < -40 && currentSlide < totalSlides - 1) goToSlide(currentSlide + 1);
@@ -1627,6 +1761,7 @@
         });
 
         function goToSlide(index) {
+            if(displayAccountsAsList || totalSlides <= 1) return;
             tryHaptic(20);
             currentSlide = Math.max(0, Math.min(index, totalSlides - 1));
             slider.style.transition = 'transform 0.4s cubic-bezier(0.25,0.46,0.45,0.94)';
@@ -1635,6 +1770,14 @@
                 d.classList.toggle('active', i === currentSlide);
             });
         }
+        
+        // Инициализация при загрузке
+        document.addEventListener('DOMContentLoaded', () => {
+            renderMainAccounts();
+            renderAccountsSheet();
+        });
+
+
 
         // --- СТОРИС ---
         let storyTimeout;
