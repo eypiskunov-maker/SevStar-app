@@ -4657,10 +4657,20 @@
 
         wrapper.addEventListener('touchstart', e => {
             if (displayAccountsAsList || totalSlides <= 1) return;
+            // Если тап начался на кнопке или ссылке — НЕ начинаем свайп слайдера
+            var tgt = e.target;
+            while (tgt && tgt !== wrapper) {
+                if (tgt.tagName === 'BUTTON' || tgt.tagName === 'A' || tgt.tagName === 'INPUT' || tgt.tagName === 'SELECT') {
+                    isDragging = false;
+                    dragActive = false;
+                    return; // Полностью пропускаем инициализацию свайпа
+                }
+                tgt = tgt.parentElement;
+            }
             touchStartX = e.touches[0].clientX;
             touchStartY = e.touches[0].clientY;
             dragStartX = touchStartX;
-            dragActive = false; // Еще не начали перетаскивание
+            dragActive = false;
             isDragging = true;
         }, { passive: true });
 
@@ -4952,8 +4962,24 @@
             let bsCurrentY = 0;
             let activeSheet = null;
 
+            // Проверяем, начался ли тач на интерактивном элементе
+            function isInteractiveElement(el, container) {
+                while (el && el !== container) {
+                    if (el.tagName === 'BUTTON' || el.tagName === 'A' || el.tagName === 'INPUT' || el.tagName === 'SELECT' || el.tagName === 'TEXTAREA') {
+                        return true;
+                    }
+                    el = el.parentElement;
+                }
+                return false;
+            }
+
             document.querySelectorAll('.bottom-sheet').forEach(sheet => {
                 sheet.addEventListener('touchstart', e => {
+                    // НЕ начинаем свайп если тач был на кнопке
+                    if (isInteractiveElement(e.target, sheet)) {
+                        activeSheet = null;
+                        return;
+                    }
                     // Разрешаем свайп только если не скроллим содержимое (scrollTop === 0)
                     if (sheet.scrollTop > 0) return;
                     bsTouchStartY = e.touches[0].clientY;
@@ -4989,6 +5015,68 @@
                     bsCurrentY = 0;
                 });
             });
+
+            // --- iOS TAP POLYFILL ---
+            // На iOS click-события могут не срабатывать внутри контейнеров
+            // с touch-обработчиками. Этот полифилл гарантирует срабатывание
+            // кнопок через touchstart/touchend, с защитой от двойного вызова.
+            (function() {
+                var tapTarget = null;
+                var tapStartX = 0;
+                var tapStartY = 0;
+                var tapStartTime = 0;
+                var lastClickedBtn = null;
+                var lastClickTime = 0;
+
+                // Отслеживаем все нативные click-события на кнопках
+                document.addEventListener('click', function(e) {
+                    var t = e.target;
+                    while (t && t !== document.body) {
+                        if (t.tagName === 'BUTTON' || t.tagName === 'A') {
+                            lastClickedBtn = t;
+                            lastClickTime = Date.now();
+                            return;
+                        }
+                        t = t.parentElement;
+                    }
+                }, true); // capturing phase — срабатывает ДО onclick
+
+                document.addEventListener('touchstart', function(e) {
+                    var t = e.target;
+                    while (t && t !== document.body) {
+                        if (t.tagName === 'BUTTON' || t.tagName === 'A') {
+                            tapTarget = t;
+                            tapStartX = e.touches[0].clientX;
+                            tapStartY = e.touches[0].clientY;
+                            tapStartTime = Date.now();
+                            return;
+                        }
+                        t = t.parentElement;
+                    }
+                    tapTarget = null;
+                }, { passive: true });
+
+                document.addEventListener('touchend', function(e) {
+                    if (!tapTarget) return;
+                    var dx = e.changedTouches[0].clientX - tapStartX;
+                    var dy = e.changedTouches[0].clientY - tapStartY;
+                    var dt = Date.now() - tapStartTime;
+                    var dist = Math.sqrt(dx * dx + dy * dy);
+                    var btn = tapTarget;
+                    tapTarget = null;
+
+                    // Если палец не двигался далеко (<12px) и тап был быстрым (<400ms)
+                    if (dist < 12 && dt < 400) {
+                        // Ждем 80ms — достаточно чтобы нативный click успел сработать
+                        setTimeout(function() {
+                            // Если нативный click НЕ сработал на этой кнопке
+                            if (lastClickedBtn !== btn || (Date.now() - lastClickTime) > 200) {
+                                btn.click();
+                            }
+                        }, 80);
+                    }
+                }, { passive: true });
+            })();
         });
 
         // ЧАТ
