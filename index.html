@@ -4207,8 +4207,8 @@
                 <div class="p-card-title" id="det-tariffName">Оптимум 100 Мбит/с</div>
                 <div class="p-card-val" style="color:var(--brand-purple-light);" id="det-tariffPrice">845 ₽/мес</div>
             </div>
-            <button class="btn btn-secondary neumorphic" style="padding:8px 14px;font-size:12px;white-space:nowrap;"
-                onclick="openSheet('tariffSheet')" ontouchstart="">Сменить тариф</button>
+            <button class="btn btn-secondary neumorphic" style="padding:8px 14px;font-size:12px;white-space:nowrap; pointer-events:auto;"
+                onclick="openSheet('tariffSheet')" ontouchstart="event.stopPropagation();">Сменить тариф</button>
         </div>
 
         <!-- Подключенные услуги -->
@@ -4216,8 +4216,8 @@
         <div id="det-services-list" style="padding: 0 20px;"></div>
         <div style="padding: 0 20px; margin-top:10px;">
             <button class="btn btn-secondary neumorphic"
-                style="width:100%;display:flex;align-items:center;justify-content:center;gap:8px;"
-                onclick="openSheet('servicesSheet')" ontouchstart="">
+                style="width:100%;display:flex;align-items:center;justify-content:center;gap:8px; pointer-events:auto;"
+                onclick="openSheet('servicesSheet')" ontouchstart="event.stopPropagation();">
                 <svg class="svg-icon" style="width:16px;height:16px;" viewBox="0 0 24 24">
                     <line x1="12" y1="5" x2="12" y2="19" />
                     <line x1="5" y1="12" x2="19" y2="12" />
@@ -4229,8 +4229,8 @@
         <!-- Контроль расходов -->
         <div style="padding: 0 20px; margin-top:15px;">
             <button class="btn btn-primary"
-                style="width:100%;display:flex;align-items:center;justify-content:center;gap:8px;"
-                onclick="openCostControl()" ontouchstart="">
+                style="width:100%;display:flex;align-items:center;justify-content:center;gap:8px; pointer-events:auto;"
+                onclick="openCostControl()" ontouchstart="event.stopPropagation();">
                 <svg class="svg-icon" style="width:16px;height:16px;" viewBox="0 0 24 24" fill="none">
                     <path d="M11 8V17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                     <path d="M9 15H15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -4322,9 +4322,9 @@
         let accountsData = [
             { id: 1, address: 'Пр. Острякова 81', balance: '1 250 ₽', status: 'Интернет активен', days: 'Хватит на 30 дней', isFavorite: true, uniqueNum: '100123', phone: '+7 (978) 123-45-67', email: 'user1@mail.ru', billDay: '15 число', connDate: '12.05.2020', tenure: '4 года 3 мес', color: 'green', cameras: [{ type: 'intercom', title: 'Домофон', icon: 'intercom.png', sheet: 'camSheetIntercom' }, { type: 'camera', title: 'Парковка', icon: 'parking.png', sheet: 'camSheetParking' }] },
             { id: 2, address: 'ул. Ленина 15 (Родители)', balance: '320 ₽', status: 'Интернет активен', days: 'Хватит на 8 дней', isFavorite: true, uniqueNum: '100456', phone: '+7 (978) 765-43-21', email: 'parents@mail.ru', billDay: '1 число', connDate: '01.09.2022', tenure: '1 год 8 мес', color: 'green', cameras: [{ type: 'intercom', title: 'Домофон', icon: 'intercom.png', sheet: 'camSheetIntercom' }] },
-            { id: 3, address: 'ул. Хрусталева 12', balance: '-150 ₽', status: 'Интернет заблокирован', days: 'Пополните счет', isFavorite: false, uniqueNum: '100789', phone: '+7 (978) 111-22-33', email: 'office@mail.ru', billDay: '10 число', connDate: '15.01.2023', tenure: '1 год 3 мес', color: 'red', cameras: [] },
-            { id: 4, address: 'ул. Гоголя 4', balance: '850 ₽', status: 'Интернет активен', days: 'Хватит на 20 дней', isFavorite: false, uniqueNum: '100999', phone: '+7 (978) 555-66-77', email: 'gogol@mail.ru', billDay: '5 число', connDate: '05.11.2021', tenure: '2 года 5 мес', color: 'green', cameras: [] },
-            { id: 5, address: 'пр. Героев Сталинграда 50', balance: '0 ₽', status: 'Ожидает оплаты', days: 'Завтра списание', isFavorite: false, uniqueNum: '101234', phone: '+7 (978) 999-00-11', email: 'hero@mail.ru', billDay: '20 число', connDate: '20.08.2019', tenure: '4 года 8 мес', color: 'yellow', cameras: [{ type: 'camera', title: 'Двор', icon: 'parking.png', sheet: 'camSheetParking' }] },
+            { id: 3, address: 'ул. Хрусталева 12', balance: '-150 ₽', status: 'Интернет заблокирован', days: 'Пополните счет', isFavorite: true, uniqueNum: '100789', phone: '+7 (978) 111-22-33', email: 'office@mail.ru', billDay: '10 число', connDate: '15.01.2023', tenure: '1 год 3 мес', color: 'red', cameras: [] },
+            { id: 4, address: 'ул. Гоголя 4', balance: '850 ₽', status: 'Интернет активен', days: 'Хватит на 20 дней', isFavorite: true, uniqueNum: '100999', phone: '+7 (978) 555-66-77', email: 'gogol@mail.ru', billDay: '5 число', connDate: '05.11.2021', tenure: '2 года 5 мес', color: 'green', cameras: [] },
+            { id: 5, address: 'пр. Героев Сталинграда 50', balance: '0 ₽', status: 'Ожидает оплаты', days: 'Завтра списание', isFavorite: true, uniqueNum: '101234', phone: '+7 (978) 999-00-11', email: 'hero@mail.ru', billDay: '20 число', connDate: '20.08.2019', tenure: '4 года 8 мес', color: 'yellow', cameras: [{ type: 'camera', title: 'Двор', icon: 'parking.png', sheet: 'camSheetParking' }] },
             { id: 6, address: 'ул. Меньшикова 17', balance: '400 ₽', status: 'Интернет активен', days: 'Хватит на 10 дней', isFavorite: false, uniqueNum: '102345', phone: '+7 (978) 333-44-55', email: 'men@mail.ru', billDay: '12 число', connDate: '10.10.2020', tenure: '3 года 6 мес', color: 'green', cameras: [] },
             { id: 7, address: 'ул. Фадеева 23', balance: '100 ₽', status: 'Интернет активен', days: 'Хватит на 2 дня', isFavorite: false, uniqueNum: '103456', phone: '+7 (978) 222-33-44', email: 'fadeev@mail.ru', billDay: '28 число', connDate: '01.02.2021', tenure: '3 года 2 мес', color: 'green', cameras: [] },
             { id: 8, address: 'ул. Вакуленчука 29', balance: '2000 ₽', status: 'Интернет активен', days: 'Хватит на 60 дней', isFavorite: false, uniqueNum: '104567', phone: '+7 (978) 444-55-66', email: 'vakul@mail.ru', billDay: '18 число', connDate: '15.06.2018', tenure: '5 лет 10 мес', color: 'green', cameras: [] },
@@ -4537,12 +4537,12 @@
 
             var buttonsHtml = '';
             if (!displayAccountsAsList) {
-                buttonsHtml = '<div class="card-buttons">' +
-                    '<button class="btn btn-primary" onclick="event.stopPropagation(); openSheet(\'paymentSheet\')" ontouchstart="">Пополнить</button>' +
+                buttonsHtml = '<div class="card-buttons" style="position:relative; z-index:10;">' +
+                    '<button class="btn btn-primary" onclick="event.stopPropagation(); openSheet(\'paymentSheet\')" style="pointer-events:auto;" ontouchstart="event.stopPropagation();">Пополнить</button>' +
                     '<div class="secondary-buttons">' +
-                    '<button class="btn btn-secondary neumorphic" onclick="event.stopPropagation(); runDiagnosticsSheet()" ontouchstart="">' +
+                    '<button class="btn btn-secondary neumorphic" onclick="event.stopPropagation(); runDiagnosticsSheet()" style="pointer-events:auto;" ontouchstart="event.stopPropagation();">' +
                     '<svg class="svg-icon" style="width:16px;height:16px;" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Диагностика</button>' +
-                    '<button class="btn btn-secondary neumorphic" onclick="event.stopPropagation(); openChat()" ontouchstart="">' +
+                    '<button class="btn btn-secondary neumorphic" onclick="event.stopPropagation(); openChat()" style="pointer-events:auto;" ontouchstart="event.stopPropagation();">' +
                     '<svg class="svg-icon" style="width:16px;height:16px;" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> Чат</button>' +
                     '</div></div>';
             }
