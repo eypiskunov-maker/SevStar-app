@@ -926,7 +926,16 @@
             gap: 20px;
             box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.2);
             max-height: 90vh;
+            overflow: hidden; /* НЕ скроллим сам sheet — скроллим .sheet-body внутри */
+        }
+
+        .sheet-body {
             overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 0;
         }
 
         .bottom-sheet.active {
@@ -4165,6 +4174,9 @@
             </button>
         </div>
 
+        <!-- Скроллируемый контент -->
+        <div class="sheet-body">
+
         <!-- Данные аккаунта -->
         <div class="neumorphic-inset" style="padding: 20px; border-radius: 20px; margin-top: 10px;">
             <div class="acc-detail-row">
@@ -4208,7 +4220,7 @@
                 <div class="p-card-title" id="det-tariffName">Оптимум 100 Мбит/с</div>
                 <div class="p-card-val" style="color:var(--brand-purple-light);" id="det-tariffPrice">845 ₽/мес</div>
             </div>
-            <button class="btn btn-secondary neumorphic" style="padding:8px 14px;font-size:12px;white-space:nowrap; pointer-events:auto; touch-action:manipulation; position:relative; z-index:5;"
+            <button class="btn btn-secondary neumorphic" style="padding:8px 14px;font-size:12px;white-space:nowrap;"
                 onclick="openSheet('tariffSheet')">Сменить тариф</button>
         </div>
 
@@ -4216,33 +4228,35 @@
         <h3 class="section-title" style="margin-top:15px;">Подключенные услуги</h3>
         <div id="det-services-list" style="padding: 0 20px;"></div>
         <div style="padding: 0 20px; margin-top:10px;">
-            <button class="btn btn-secondary neumorphic" data-action="addService"
-                style="width:100%;touch-action:manipulation;">
+            <button class="btn btn-secondary neumorphic"
+                style="width:100%;"
+                onclick="openSheet('servicesSheet')">
                 + Добавить услугу
             </button>
         </div>
 
         <!-- Контроль расходов -->
         <div style="padding: 0 20px; margin-top:15px;">
-            <button class="btn btn-primary" data-action="costControl"
-                style="width:100%;touch-action:manipulation;">
+            <button class="btn btn-primary"
+                style="width:100%;"
+                onclick="openCostControl()">
                 ₽ Контроль расходов
             </button>
         </div>
 
         <div class="card-buttons" style="margin-top: 15px;">
-            <button class="btn btn-primary" data-action="topUp"
-                style="touch-action:manipulation;">Пополнить</button>
+            <button class="btn btn-primary"
+                onclick="closeAllSheets(); setTimeout(function(){openSheet('paymentSheet')}, 400)">Пополнить</button>
             <div class="secondary-buttons">
-                <button class="btn btn-secondary neumorphic" data-action="diagnostics"
-                    style="touch-action:manipulation;">
+                <button class="btn btn-secondary neumorphic"
+                    onclick="closeAllSheets(); setTimeout(function(){runDiagnosticsSheet()}, 400)">
                     <svg class="svg-icon" style="width:16px;height:16px;" viewBox="0 0 24 24">
                         <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
                     </svg>
                     Диагностика
                 </button>
-                <button class="btn btn-secondary neumorphic" data-action="chatOpen"
-                    style="touch-action:manipulation;">
+                <button class="btn btn-secondary neumorphic"
+                    onclick="closeAllSheets(); setTimeout(function(){openChat()}, 400)">
                     <svg class="svg-icon" style="width:16px;height:16px;" viewBox="0 0 24 24">
                         <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
                     </svg>
@@ -4251,8 +4265,10 @@
             </div>
         </div>
 
-        <button class="btn btn-secondary neumorphic" data-action="pauseAccount"
-            style="width:100%; margin-top:15px; color:var(--status-red);touch-action:manipulation;">Поставить на паузу</button>
+        <button class="btn btn-secondary neumorphic" style="width:100%; margin-top:15px; color:var(--status-red);"
+            onclick="togglePauseAccount()">Поставить на паузу</button>
+
+        </div><!-- /sheet-body -->
     </div>
 
     <!-- ШТОРКА ОБРАТНОЙ СВЯЗИ -->
@@ -4526,12 +4542,12 @@
 
             var buttonsHtml = '';
             if (!displayAccountsAsList) {
-                buttonsHtml = '<div class="card-buttons" style="position:relative; z-index:100;">' +
-                    '<button class="btn btn-primary" data-action="cardTopUp" data-acc="' + acc.id + '" style="touch-action:manipulation;">Пополнить</button>' +
+                buttonsHtml = '<div class="card-buttons" style="position:relative; z-index:10;">' +
+                    '<button class="btn btn-primary" onclick="event.stopPropagation(); openSheet(\'paymentSheet\')">Пополнить</button>' +
                     '<div class="secondary-buttons">' +
-                    '<button class="btn btn-secondary neumorphic" data-action="cardDiag" data-acc="' + acc.id + '" style="touch-action:manipulation;">' +
+                    '<button class="btn btn-secondary neumorphic" onclick="event.stopPropagation(); runDiagnosticsSheet()">' +
                     '<svg class="svg-icon" style="width:16px;height:16px;" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Диагностика</button>' +
-                    '<button class="btn btn-secondary neumorphic" data-action="cardChat" data-acc="' + acc.id + '" style="touch-action:manipulation;">' +
+                    '<button class="btn btn-secondary neumorphic" onclick="event.stopPropagation(); openChat()">' +
                     '<svg class="svg-icon" style="width:16px;height:16px;" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> Чат</button>' +
                     '</div></div>';
             }
@@ -4944,117 +4960,19 @@
             setTimeout(() => { overlay.style.display = 'none'; }, 400);
         }
 
-        // --- ОБРАБОТЧИК data-action КНОПОК (iOS-совместимый) ---
-        // Вместо onclick используем touchend для надёжной работы на iPhone
-        (function() {
-            var actionTouchStart = null;
-            var actionStartX = 0;
-            var actionStartY = 0;
-
-            // Ищем ближайший элемент с data-action
-            function findAction(el) {
-                while (el && el !== document.body) {
-                    if (el.dataset && el.dataset.action) return el;
-                    el = el.parentElement;
-                }
-                return null;
-            }
-
-            // Обработка действий
-            function handleAction(action) {
-                tryHaptic(20);
-                switch(action) {
-                    case 'addService':
-                        openSheet('servicesSheet');
-                        break;
-                    case 'costControl':
-                        openCostControl();
-                        break;
-                    case 'topUp':
-                        closeAllSheets();
-                        setTimeout(function(){ openSheet('paymentSheet'); }, 400);
-                        break;
-                    case 'diagnostics':
-                        closeAllSheets();
-                        setTimeout(function(){ runDiagnosticsSheet(); }, 400);
-                        break;
-                    case 'chatOpen':
-                        closeAllSheets();
-                        setTimeout(function(){ openChat(); }, 400);
-                        break;
-                    case 'pauseAccount':
-                        togglePauseAccount();
-                        break;
-                    case 'cardTopUp':
-                        openSheet('paymentSheet');
-                        break;
-                    case 'cardDiag':
-                        runDiagnosticsSheet();
-                        break;
-                    case 'cardChat':
-                        openChat();
-                        break;
-                }
-            }
-
-            document.addEventListener('touchstart', function(e) {
-                var btn = findAction(e.target);
-                if (btn) {
-                    actionTouchStart = btn;
-                    actionStartX = e.touches[0].clientX;
-                    actionStartY = e.touches[0].clientY;
-                }
-            }, { passive: true });
-
-            document.addEventListener('touchend', function(e) {
-                if (!actionTouchStart) return;
-                var btn = actionTouchStart;
-                actionTouchStart = null;
-                var dx = e.changedTouches[0].clientX - actionStartX;
-                var dy = e.changedTouches[0].clientY - actionStartY;
-                var dist = Math.sqrt(dx*dx + dy*dy);
-                // Палец не ушёл далеко — это тап
-                if (dist < 15) {
-                    e.preventDefault(); // Блокируем click чтобы не было дубля
-                    handleAction(btn.dataset.action);
-                }
-            }, { passive: false });
-
-            // Также ловим обычный click (для десктопа)
-            document.addEventListener('click', function(e) {
-                var btn = findAction(e.target);
-                if (btn) {
-                    handleAction(btn.dataset.action);
-                }
-            });
-        })();
-
         // --- СВАЙП ВНИЗ ДЛЯ BOTTOM SHEETS ---
         document.addEventListener('DOMContentLoaded', () => {
             let bsTouchStartY = 0;
             let bsCurrentY = 0;
             let activeSheet = null;
 
-            // Проверяем, начался ли тач на интерактивном элементе
-            function isInteractiveElement(el, container) {
-                while (el && el !== container) {
-                    if (el.tagName === 'BUTTON' || el.tagName === 'A' || el.tagName === 'INPUT' || el.tagName === 'SELECT' || el.tagName === 'TEXTAREA') {
-                        return true;
-                    }
-                    el = el.parentElement;
-                }
-                return false;
-            }
-
             document.querySelectorAll('.bottom-sheet').forEach(sheet => {
                 sheet.addEventListener('touchstart', e => {
-                    // НЕ начинаем свайп если тач был на кнопке
-                    if (isInteractiveElement(e.target, sheet)) {
-                        activeSheet = null;
-                        return;
-                    }
                     // Разрешаем свайп только если не скроллим содержимое (scrollTop === 0)
                     if (sheet.scrollTop > 0) return;
+                    // Также проверяем scrollTop у sheet-body если есть
+                    var body = sheet.querySelector('.sheet-body');
+                    if (body && body.scrollTop > 0) return;
                     bsTouchStartY = e.touches[0].clientY;
                     bsCurrentY = 0;
                     activeSheet = sheet;
@@ -5062,9 +4980,14 @@
                 }, { passive: true });
 
                 sheet.addEventListener('touchmove', e => {
-                    if (!activeSheet || sheet.scrollTop > 0) return;
+                    if (!activeSheet) return;
+                    var body = sheet.querySelector('.sheet-body');
+                    if ((body && body.scrollTop > 0) || sheet.scrollTop > 0) {
+                        activeSheet = null;
+                        return;
+                    }
                     const dy = e.touches[0].clientY - bsTouchStartY;
-                    if (dy > 0) { // Свайп вниз
+                    if (dy > 0) {
                         e.preventDefault();
                         bsCurrentY = dy;
                         sheet.style.transform = `translateY(${dy}px)`;
@@ -5088,68 +5011,6 @@
                     bsCurrentY = 0;
                 });
             });
-
-            // --- iOS TAP POLYFILL ---
-            // На iOS click-события могут не срабатывать внутри контейнеров
-            // с touch-обработчиками. Этот полифилл гарантирует срабатывание
-            // кнопок через touchstart/touchend, с защитой от двойного вызова.
-            (function() {
-                var tapTarget = null;
-                var tapStartX = 0;
-                var tapStartY = 0;
-                var tapStartTime = 0;
-                var lastClickedBtn = null;
-                var lastClickTime = 0;
-
-                // Отслеживаем все нативные click-события на кнопках
-                document.addEventListener('click', function(e) {
-                    var t = e.target;
-                    while (t && t !== document.body) {
-                        if (t.tagName === 'BUTTON' || t.tagName === 'A') {
-                            lastClickedBtn = t;
-                            lastClickTime = Date.now();
-                            return;
-                        }
-                        t = t.parentElement;
-                    }
-                }, true); // capturing phase — срабатывает ДО onclick
-
-                document.addEventListener('touchstart', function(e) {
-                    var t = e.target;
-                    while (t && t !== document.body) {
-                        if (t.tagName === 'BUTTON' || t.tagName === 'A') {
-                            tapTarget = t;
-                            tapStartX = e.touches[0].clientX;
-                            tapStartY = e.touches[0].clientY;
-                            tapStartTime = Date.now();
-                            return;
-                        }
-                        t = t.parentElement;
-                    }
-                    tapTarget = null;
-                }, { passive: true });
-
-                document.addEventListener('touchend', function(e) {
-                    if (!tapTarget) return;
-                    var dx = e.changedTouches[0].clientX - tapStartX;
-                    var dy = e.changedTouches[0].clientY - tapStartY;
-                    var dt = Date.now() - tapStartTime;
-                    var dist = Math.sqrt(dx * dx + dy * dy);
-                    var btn = tapTarget;
-                    tapTarget = null;
-
-                    // Если палец не двигался далеко (<12px) и тап был быстрым (<400ms)
-                    if (dist < 12 && dt < 400) {
-                        // Ждем 80ms — достаточно чтобы нативный click успел сработать
-                        setTimeout(function() {
-                            // Если нативный click НЕ сработал на этой кнопке
-                            if (lastClickedBtn !== btn || (Date.now() - lastClickTime) > 200) {
-                                btn.click();
-                            }
-                        }, 80);
-                    }
-                }, { passive: true });
-            })();
         });
 
         // ЧАТ
