@@ -4216,45 +4216,33 @@
         <h3 class="section-title" style="margin-top:15px;">Подключенные услуги</h3>
         <div id="det-services-list" style="padding: 0 20px;"></div>
         <div style="padding: 0 20px; margin-top:10px;">
-            <button class="btn btn-secondary neumorphic"
-                style="width:100%;display:flex;align-items:center;justify-content:center;gap:8px; pointer-events:auto; touch-action:manipulation; position:relative; z-index:5;"
-                onclick="openSheet('servicesSheet')">
-                <svg class="svg-icon" style="width:16px;height:16px;" viewBox="0 0 24 24">
-                    <line x1="12" y1="5" x2="12" y2="19" />
-                    <line x1="5" y1="12" x2="19" y2="12" />
-                </svg>
-                Добавить услугу
+            <button class="btn btn-secondary neumorphic" data-action="addService"
+                style="width:100%;touch-action:manipulation;">
+                + Добавить услугу
             </button>
         </div>
 
         <!-- Контроль расходов -->
         <div style="padding: 0 20px; margin-top:15px;">
-            <button class="btn btn-primary"
-                style="width:100%;display:flex;align-items:center;justify-content:center;gap:8px; pointer-events:auto; touch-action:manipulation; position:relative; z-index:5;"
-                onclick="openCostControl()">
-                <svg class="svg-icon" style="width:16px;height:16px;" viewBox="0 0 24 24" fill="none">
-                    <path d="M11 8V17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M9 15H15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" stroke-width="2"/>
-                    <path d="M11 8H13.5C16.5 8 16.5 12 13.5 12H9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-                Контроль расходов
+            <button class="btn btn-primary" data-action="costControl"
+                style="width:100%;touch-action:manipulation;">
+                ₽ Контроль расходов
             </button>
         </div>
 
         <div class="card-buttons" style="margin-top: 15px;">
-            <button class="btn btn-primary"
-                onclick="closeAllSheets(); setTimeout(()=>openSheet('paymentSheet'), 400)">Пополнить</button>
+            <button class="btn btn-primary" data-action="topUp"
+                style="touch-action:manipulation;">Пополнить</button>
             <div class="secondary-buttons">
-                <button class="btn btn-secondary neumorphic"
-                    onclick="closeAllSheets(); setTimeout(()=>runDiagnosticsSheet(), 400)">
+                <button class="btn btn-secondary neumorphic" data-action="diagnostics"
+                    style="touch-action:manipulation;">
                     <svg class="svg-icon" style="width:16px;height:16px;" viewBox="0 0 24 24">
                         <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
                     </svg>
                     Диагностика
                 </button>
-                <button class="btn btn-secondary neumorphic"
-                    onclick="closeAllSheets(); setTimeout(()=>openChat(), 400)">
+                <button class="btn btn-secondary neumorphic" data-action="chatOpen"
+                    style="touch-action:manipulation;">
                     <svg class="svg-icon" style="width:16px;height:16px;" viewBox="0 0 24 24">
                         <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
                     </svg>
@@ -4263,8 +4251,8 @@
             </div>
         </div>
 
-        <button class="btn btn-secondary neumorphic" style="width:100%; margin-top:15px; color:var(--status-red);"
-            onclick="togglePauseAccount()">Поставить на паузу</button>
+        <button class="btn btn-secondary neumorphic" data-action="pauseAccount"
+            style="width:100%; margin-top:15px; color:var(--status-red);touch-action:manipulation;">Поставить на паузу</button>
     </div>
 
     <!-- ШТОРКА ОБРАТНОЙ СВЯЗИ -->
@@ -4539,11 +4527,11 @@
             var buttonsHtml = '';
             if (!displayAccountsAsList) {
                 buttonsHtml = '<div class="card-buttons" style="position:relative; z-index:100;">' +
-                    '<button class="btn btn-primary" onclick="event.stopPropagation(); openSheet(\'paymentSheet\')" style="pointer-events:auto; touch-action:manipulation; position:relative; z-index:101;">Пополнить</button>' +
+                    '<button class="btn btn-primary" data-action="cardTopUp" data-acc="' + acc.id + '" style="touch-action:manipulation;">Пополнить</button>' +
                     '<div class="secondary-buttons">' +
-                    '<button class="btn btn-secondary neumorphic" onclick="event.stopPropagation(); runDiagnosticsSheet()" style="pointer-events:auto; touch-action:manipulation; position:relative; z-index:101;">' +
+                    '<button class="btn btn-secondary neumorphic" data-action="cardDiag" data-acc="' + acc.id + '" style="touch-action:manipulation;">' +
                     '<svg class="svg-icon" style="width:16px;height:16px;" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Диагностика</button>' +
-                    '<button class="btn btn-secondary neumorphic" onclick="event.stopPropagation(); openChat()" style="pointer-events:auto; touch-action:manipulation; position:relative; z-index:101;">' +
+                    '<button class="btn btn-secondary neumorphic" data-action="cardChat" data-acc="' + acc.id + '" style="touch-action:manipulation;">' +
                     '<svg class="svg-icon" style="width:16px;height:16px;" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> Чат</button>' +
                     '</div></div>';
             }
@@ -4955,6 +4943,91 @@
             overlay.classList.remove('active');
             setTimeout(() => { overlay.style.display = 'none'; }, 400);
         }
+
+        // --- ОБРАБОТЧИК data-action КНОПОК (iOS-совместимый) ---
+        // Вместо onclick используем touchend для надёжной работы на iPhone
+        (function() {
+            var actionTouchStart = null;
+            var actionStartX = 0;
+            var actionStartY = 0;
+
+            // Ищем ближайший элемент с data-action
+            function findAction(el) {
+                while (el && el !== document.body) {
+                    if (el.dataset && el.dataset.action) return el;
+                    el = el.parentElement;
+                }
+                return null;
+            }
+
+            // Обработка действий
+            function handleAction(action) {
+                tryHaptic(20);
+                switch(action) {
+                    case 'addService':
+                        openSheet('servicesSheet');
+                        break;
+                    case 'costControl':
+                        openCostControl();
+                        break;
+                    case 'topUp':
+                        closeAllSheets();
+                        setTimeout(function(){ openSheet('paymentSheet'); }, 400);
+                        break;
+                    case 'diagnostics':
+                        closeAllSheets();
+                        setTimeout(function(){ runDiagnosticsSheet(); }, 400);
+                        break;
+                    case 'chatOpen':
+                        closeAllSheets();
+                        setTimeout(function(){ openChat(); }, 400);
+                        break;
+                    case 'pauseAccount':
+                        togglePauseAccount();
+                        break;
+                    case 'cardTopUp':
+                        openSheet('paymentSheet');
+                        break;
+                    case 'cardDiag':
+                        runDiagnosticsSheet();
+                        break;
+                    case 'cardChat':
+                        openChat();
+                        break;
+                }
+            }
+
+            document.addEventListener('touchstart', function(e) {
+                var btn = findAction(e.target);
+                if (btn) {
+                    actionTouchStart = btn;
+                    actionStartX = e.touches[0].clientX;
+                    actionStartY = e.touches[0].clientY;
+                }
+            }, { passive: true });
+
+            document.addEventListener('touchend', function(e) {
+                if (!actionTouchStart) return;
+                var btn = actionTouchStart;
+                actionTouchStart = null;
+                var dx = e.changedTouches[0].clientX - actionStartX;
+                var dy = e.changedTouches[0].clientY - actionStartY;
+                var dist = Math.sqrt(dx*dx + dy*dy);
+                // Палец не ушёл далеко — это тап
+                if (dist < 15) {
+                    e.preventDefault(); // Блокируем click чтобы не было дубля
+                    handleAction(btn.dataset.action);
+                }
+            }, { passive: false });
+
+            // Также ловим обычный click (для десктопа)
+            document.addEventListener('click', function(e) {
+                var btn = findAction(e.target);
+                if (btn) {
+                    handleAction(btn.dataset.action);
+                }
+            });
+        })();
 
         // --- СВАЙП ВНИЗ ДЛЯ BOTTOM SHEETS ---
         document.addEventListener('DOMContentLoaded', () => {
