@@ -714,12 +714,7 @@
             </div>
 
             <!-- КНОПКА ПОКАЗАТЬ СПИСКОМ (появляется динамически) -->
-            <div id="mainListToggleContainer" style="display: none; justify-content: flex-end; padding: 0 20px 10px; margin-top: -10px;">
-                <button class="btn btn-secondary neumorphic" style="padding: 6px 12px; font-size: 12px; display: flex; align-items: center; gap: 5px;" onclick="document.getElementById('listModeToggle').click()">
-                    <svg class="svg-icon" style="width:14px;height:14px;" viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
-                    Показать списком
-                </button>
-            </div>
+            <div id="mainListToggleContainer" style="display: none; justify-content: flex-end; padding: 0 20px 5px; margin-top: -5px;"></div>
 
             <!-- СВАЙПАБЕЛЬНЫЕ КАРТОЧКИ АККАУНТОВ -->
             <div class="accounts-slider-wrapper" id="accountsWrapper">
@@ -1162,6 +1157,17 @@
                 </div>
             </div>
         </div>
+    </div>
+
+    <!-- КОНТРОЛЬ РАСХОДОВ -->
+    <div class="bottom-sheet" id="costControlSheet">
+        <div class="sheet-header">
+            <h3>Контроль расходов</h3>
+            <button class="close-btn neumorphic" onclick="closeAllSheets()">
+                <svg class="svg-icon" style="width:16px;height:16px;" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+        </div>
+        <div id="costControlContent" style="margin-top:10px;"></div>
     </div>
 
     <!-- ДОБАВЛЕНИЕ АККАУНТА -->
@@ -1651,11 +1657,13 @@
     <!-- ОКНО ДЕТАЛЕЙ АККАУНТА -->
     <div class="bottom-sheet" id="accountDetailsSheet">
         <div class="sheet-header">
-            <h3>Детали аккаунта</h3>
+            <h3 id="det-header-title">Детали аккаунта</h3>
             <button class="close-btn neumorphic" onclick="closeAllSheets()">
                 <svg class="svg-icon" style="width:16px;height:16px;" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
             </button>
         </div>
+
+        <!-- Данные аккаунта -->
         <div class="neumorphic-inset" style="padding: 20px; border-radius: 20px; margin-top: 10px;">
             <div class="acc-detail-row"><div class="acc-detail-label">Уникальный номер</div><div class="acc-detail-val" id="det-uniqueNum">...</div></div>
             <div class="acc-detail-row"><div class="acc-detail-label">Номер телефона</div><div class="acc-detail-val" id="det-phone">...</div></div>
@@ -1664,6 +1672,35 @@
             <div class="acc-detail-row"><div class="acc-detail-label">Адрес</div><div class="acc-detail-val" id="det-addr">...</div></div>
             <div class="acc-detail-row"><div class="acc-detail-label">Дата подключения</div><div class="acc-detail-val" id="det-connDate">...</div></div>
             <div class="acc-detail-row"><div class="acc-detail-label">Стаж</div><div class="acc-detail-val" id="det-tenure">...</div></div>
+            <div class="acc-detail-row"><div class="acc-detail-label">IP-адрес</div><div class="acc-detail-val" id="det-ip">...</div></div>
+        </div>
+
+        <!-- Текущий тариф -->
+        <h3 class="section-title" style="margin-top:20px;">Текущий тариф</h3>
+        <div class="profile-card neumorphic" id="det-tariff-card">
+            <div>
+                <div class="p-card-title" id="det-tariffName">Оптимум 100 Мбит/с</div>
+                <div class="p-card-val" style="color:var(--brand-purple-light);" id="det-tariffPrice">845 ₽/мес</div>
+            </div>
+            <button class="btn btn-secondary neumorphic" style="padding:8px 14px;font-size:12px;white-space:nowrap;" onclick="closeAllSheets(); setTimeout(()=>openSheet('tariffSheet'), 400)">Сменить тариф</button>
+        </div>
+
+        <!-- Подключенные услуги -->
+        <h3 class="section-title" style="margin-top:15px;">Подключенные услуги</h3>
+        <div id="det-services-list" style="padding: 0 20px;"></div>
+        <div style="padding: 0 20px; margin-top:10px;">
+            <button class="btn btn-secondary neumorphic" style="width:100%;display:flex;align-items:center;justify-content:center;gap:8px;" onclick="closeAllSheets(); setTimeout(()=>openSheet('servicesSheet'), 400)">
+                <svg class="svg-icon" style="width:16px;height:16px;" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                Добавить услугу
+            </button>
+        </div>
+
+        <!-- Контроль расходов -->
+        <div style="padding: 0 20px; margin-top:15px;">
+            <button class="btn btn-primary" style="width:100%;display:flex;align-items:center;justify-content:center;gap:8px;" onclick="closeAllSheets(); setTimeout(()=>openCostControl(), 400)">
+                <svg class="svg-icon" style="width:16px;height:16px;" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                Контроль расходов
+            </button>
         </div>
 
         <div class="card-buttons" style="margin-top: 15px;">
@@ -1734,6 +1771,7 @@
             tryHaptic(20);
             const acc = accountsData.find(a => a.id === id);
             if(acc) {
+                document.getElementById('det-header-title').innerText = acc.address;
                 document.getElementById('det-uniqueNum').innerText = acc.uniqueNum;
                 document.getElementById('det-phone').innerText = acc.phone;
                 document.getElementById('det-email').innerText = acc.email;
@@ -1741,8 +1779,74 @@
                 document.getElementById('det-addr').innerText = acc.address;
                 document.getElementById('det-connDate').innerText = acc.connDate;
                 document.getElementById('det-tenure').innerText = acc.tenure;
+                document.getElementById('det-ip').innerText = '10.92.' + acc.id + '.1';
+                document.getElementById('det-tariffName').innerText = acc.id <= 3 ? 'Оптимум 100 Мбит/с' : 'Базовый 50 Мбит/с';
+                document.getElementById('det-tariffPrice').innerText = acc.id <= 3 ? '845 ₽/мес' : '590 ₽/мес';
+
+                // Подключенные услуги
+                const svcList = document.getElementById('det-services-list');
+                let svcHtml = '';
+                const services = [{name:'Интернет', price: acc.id <= 3 ? '845 ₽/мес' : '590 ₽/мес'}];
+                if (acc.cameras) {
+                    acc.cameras.forEach(c => {
+                        services.push({name: c.title, price: c.type === 'intercom' ? '200 ₽/мес' : '150 ₽/мес'});
+                    });
+                }
+                if (acc.id % 2 === 0) services.push({name:'Аренда роутера', price:'99 ₽/мес'});
+                services.forEach(s => {
+                    svcHtml += `<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--divider-color);">
+                        <span style="font-size:14px;color:var(--text-color);">${s.name}</span>
+                        <span style="font-size:13px;color:var(--text-muted);">${s.price}</span>
+                    </div>`;
+                });
+                svcList.innerHTML = svcHtml;
+
+                // Сохраняем ID для контроля расходов
+                window._currentDetailAccId = acc.id;
                 openSheet('accountDetailsSheet');
             }
+        }
+
+        function openCostControl() {
+            const acc = accountsData.find(a => a.id === window._currentDetailAccId);
+            if (!acc) return;
+            const container = document.getElementById('costControlContent');
+            let services = [{name:'Интернет', price: acc.id <= 3 ? 845 : 590}];
+            if (acc.cameras) acc.cameras.forEach(c => services.push({name: c.title, price: c.type==='intercom' ? 200 : 150}));
+            if (acc.id % 2 === 0) services.push({name:'Аренда роутера', price: 99});
+            let total = services.reduce((s,v) => s + v.price, 0);
+
+            let html = `<div class="neumorphic-inset" style="padding:20px;border-radius:20px;">`;
+            services.forEach(s => {
+                html += `<div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--divider-color);">
+                    <span style="font-size:14px;">${s.name}</span><span style="font-weight:600;">${s.price} ₽/мес</span>
+                </div>`;
+            });
+            html += `<div style="display:flex;justify-content:space-between;padding:12px 0 0;font-weight:700;font-size:16px;">
+                <span>Итого</span><span style="color:var(--brand-purple-light);">${total} ₽/мес</span>
+            </div></div>`;
+
+            html += `<h3 class="section-title" style="margin-top:20px;">История платежей</h3>`;
+            html += `<div style="display:flex;gap:8px;margin:0 0 15px 0;flex-wrap:wrap;">
+                <button class="filter-chip neumorphic active" onclick="this.parentNode.querySelectorAll('.filter-chip').forEach(b=>b.classList.remove('active'));this.classList.add('active');">За месяц</button>
+                <button class="filter-chip neumorphic" onclick="this.parentNode.querySelectorAll('.filter-chip').forEach(b=>b.classList.remove('active'));this.classList.add('active');">3 месяца</button>
+                <button class="filter-chip neumorphic" onclick="this.parentNode.querySelectorAll('.filter-chip').forEach(b=>b.classList.remove('active'));this.classList.add('active');">Год</button>
+            </div>`;
+            const payments = [
+                {date:'25.04.2026', amount:'-'+total+' ₽', desc:'Ежемесячное списание'},
+                {date:'25.03.2026', amount:'-'+total+' ₽', desc:'Ежемесячное списание'},
+                {date:'20.03.2026', amount:'+2000 ₽', desc:'Пополнение счёта'},
+                {date:'25.02.2026', amount:'-'+total+' ₽', desc:'Ежемесячное списание'},
+            ];
+            payments.forEach(p => {
+                const isPlus = p.amount.startsWith('+');
+                html += `<div class="profile-card neumorphic" style="margin-bottom:8px;">
+                    <div><div style="font-size:14px;font-weight:600;">${p.desc}</div><div style="font-size:12px;color:var(--text-muted);">${p.date}</div></div>
+                    <div style="font-weight:700;color:${isPlus ? 'var(--status-green)' : 'var(--status-red)'};">${p.amount}</div>
+                </div>`;
+            });
+            container.innerHTML = html;
+            openSheet('costControlSheet');
         }
 
         function togglePauseAccount() {
@@ -1751,8 +1855,33 @@
             closeAllSheets();
         }
 
+        function hideAccountCard(accId, event) {
+            event.stopPropagation();
+            tryHaptic(20);
+            const acc = accountsData.find(a => a.id === accId);
+            if (acc) {
+                acc.isFavorite = false;
+                renderMainAccounts();
+                renderAccountsSheet();
+            }
+        }
+
         function getAccountHTML(acc) {
             let buttonsHtml = '';
+            const favAccounts = accountsData.filter(a => a.isFavorite);
+            const canHide = favAccounts.length > 2;
+            const dotsMenu = canHide ? `<div style="position:relative;z-index:5;" onclick="event.stopPropagation();">
+                <button style="background:none;border:none;padding:4px;cursor:pointer;color:var(--text-muted);" onclick="event.stopPropagation(); this.nextElementSibling.style.display = this.nextElementSibling.style.display === 'block' ? 'none' : 'block';">
+                    <svg class="svg-icon" style="width:20px;height:20px;" viewBox="0 0 24 24"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg>
+                </button>
+                <div style="display:none;position:absolute;right:0;top:28px;background:var(--card-bg);border-radius:12px;box-shadow:4px 4px 10px var(--shadow-dark),-4px -4px 10px var(--shadow-light);padding:8px 0;min-width:160px;z-index:10;">
+                    <button style="background:none;border:none;width:100%;padding:10px 16px;text-align:left;color:var(--text-color);font-size:14px;cursor:pointer;display:flex;align-items:center;gap:8px;" onclick="hideAccountCard(${acc.id}, event)">
+                        <svg class="svg-icon" style="width:16px;height:16px;" viewBox="0 0 24 24"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                        Скрыть карточку
+                    </button>
+                </div>
+            </div>` : '';
+
             if (!displayAccountsAsList) {
                 buttonsHtml = `
                     <div class="card-buttons">
@@ -1780,7 +1909,7 @@
                             <div class="status-text" style="color: var(--status-${acc.color === 'yellow' ? 'orange' : acc.color});">${acc.status}</div>
                             <div class="balance-subtext">${acc.days}</div>
                         </div>
-                        ${displayAccountsAsList ? '<svg class="svg-icon" style="width:24px;height:24px;color:var(--brand-purple-light);opacity:0.5;margin-top:10px;" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>' : ''}
+                        ${displayAccountsAsList ? '<svg class="svg-icon" style="width:24px;height:24px;color:var(--brand-purple-light);opacity:0.5;margin-top:10px;" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>' : dotsMenu}
                     </div>
                     ${buttonsHtml}
                 </div>
@@ -1797,9 +1926,9 @@
                 if (favAccounts.length > 3) {
                     listToggleContainer.style.display = 'flex';
                     if (displayAccountsAsList) {
-                        listToggleContainer.innerHTML = `<button class="btn btn-secondary neumorphic" style="padding: 6px 12px; font-size: 12px; display: flex; align-items: center; gap: 5px;" onclick="document.getElementById('listModeToggle').click()"><svg class="svg-icon" style="width:14px;height:14px;" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg> Показать карточками</button>`;
+                        listToggleContainer.innerHTML = `<button class="btn btn-secondary neumorphic" style="width:32px;height:32px;padding:0;display:flex;align-items:center;justify-content:center;border-radius:10px;" onclick="document.getElementById('listModeToggle').click()" title="Показать карточками"><svg class="svg-icon" style="width:16px;height:16px;" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></button>`;
                     } else {
-                        listToggleContainer.innerHTML = `<button class="btn btn-secondary neumorphic" style="padding: 6px 12px; font-size: 12px; display: flex; align-items: center; gap: 5px;" onclick="document.getElementById('listModeToggle').click()"><svg class="svg-icon" style="width:14px;height:14px;" viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg> Показать списком</button>`;
+                        listToggleContainer.innerHTML = `<button class="btn btn-secondary neumorphic" style="width:32px;height:32px;padding:0;display:flex;align-items:center;justify-content:center;border-radius:10px;" onclick="document.getElementById('listModeToggle').click()" title="Показать списком"><svg class="svg-icon" style="width:16px;height:16px;" viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg></button>`;
                     }
                 } else {
                     listToggleContainer.style.display = 'none';
