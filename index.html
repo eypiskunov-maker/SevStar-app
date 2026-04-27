@@ -713,11 +713,9 @@
                 </div>
             </div>
 
-            <!-- КНОПКА ПОКАЗАТЬ СПИСКОМ (появляется динамически) -->
-            <div id="mainListToggleContainer" style="display: none; justify-content: flex-end; padding: 0 20px 5px; margin-top: -5px;"></div>
-
             <!-- СВАЙПАБЕЛЬНЫЕ КАРТОЧКИ АККАУНТОВ -->
-            <div class="accounts-slider-wrapper" id="accountsWrapper">
+            <div class="accounts-slider-wrapper" id="accountsWrapper" style="position:relative;">
+                <div id="mainListToggleContainer" style="display:none; position:absolute; top:8px; right:8px; z-index:5;"></div>
                 <div class="accounts-slider" id="accountsSlider">
                     <!-- Карточки будут добавлены через JS -->
                 </div>
@@ -1855,8 +1853,8 @@
             closeAllSheets();
         }
 
-        function hideAccountCard(accId, event) {
-            event.stopPropagation();
+        function hideAccountCard(accId, ev) {
+            if(ev) ev.stopPropagation();
             tryHaptic(20);
             const acc = accountsData.find(a => a.id === accId);
             if (acc) {
@@ -1866,54 +1864,51 @@
             }
         }
 
-        function getAccountHTML(acc) {
-            let buttonsHtml = '';
-            const favAccounts = accountsData.filter(a => a.isFavorite);
-            const canHide = favAccounts.length > 2;
-            const dotsMenu = canHide ? `<div style="position:relative;z-index:5;" onclick="event.stopPropagation();">
-                <button style="background:none;border:none;padding:4px;cursor:pointer;color:var(--text-muted);" onclick="event.stopPropagation(); this.nextElementSibling.style.display = this.nextElementSibling.style.display === 'block' ? 'none' : 'block';">
-                    <svg class="svg-icon" style="width:20px;height:20px;" viewBox="0 0 24 24"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg>
-                </button>
-                <div style="display:none;position:absolute;right:0;top:28px;background:var(--card-bg);border-radius:12px;box-shadow:4px 4px 10px var(--shadow-dark),-4px -4px 10px var(--shadow-light);padding:8px 0;min-width:160px;z-index:10;">
-                    <button style="background:none;border:none;width:100%;padding:10px 16px;text-align:left;color:var(--text-color);font-size:14px;cursor:pointer;display:flex;align-items:center;gap:8px;" onclick="hideAccountCard(${acc.id}, event)">
-                        <svg class="svg-icon" style="width:16px;height:16px;" viewBox="0 0 24 24"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
-                        Скрыть карточку
-                    </button>
-                </div>
-            </div>` : '';
+        function toggleDotsMenu(btn, ev) {
+            ev.stopPropagation();
+            const menu = btn.nextElementSibling;
+            menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+        }
 
-            if (!displayAccountsAsList) {
-                buttonsHtml = `
-                    <div class="card-buttons">
-                        <button class="btn btn-primary" onclick="event.stopPropagation(); openSheet('paymentSheet')">Пополнить</button>
-                        <div class="secondary-buttons">
-                            <button class="btn btn-secondary neumorphic" onclick="event.stopPropagation(); runDiagnosticsSheet()">
-                                <svg class="svg-icon" style="width:16px;height:16px;" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-                                Диагностика
-                            </button>
-                            <button class="btn btn-secondary neumorphic" onclick="event.stopPropagation(); openChat()">
-                                <svg class="svg-icon" style="width:16px;height:16px;" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-                                Чат
-                            </button>
-                        </div>
-                    </div>
-                `;
+        function getAccountHTML(acc) {
+            var favAccounts = accountsData.filter(function(a){ return a.isFavorite; });
+            var canHide = favAccounts.length > 2;
+            var dotsMenu = '';
+            if (canHide && !displayAccountsAsList) {
+                dotsMenu = '<div style="position:relative;z-index:5;" onclick="event.stopPropagation();">' +
+                    '<button style="background:none;border:none;padding:4px;cursor:pointer;color:var(--text-muted);" onclick="toggleDotsMenu(this, event)">' +
+                    '<svg class="svg-icon" style="width:20px;height:20px;" viewBox="0 0 24 24"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg>' +
+                    '</button>' +
+                    '<div style="display:none;position:absolute;right:0;top:28px;background:var(--card-bg);border-radius:12px;box-shadow:4px 4px 10px var(--shadow-dark),-4px -4px 10px var(--shadow-light);padding:8px 0;min-width:160px;z-index:10;">' +
+                    '<button style="background:none;border:none;width:100%;padding:10px 16px;text-align:left;color:var(--text-color);font-size:14px;cursor:pointer;display:flex;align-items:center;gap:8px;" onclick="hideAccountCard(' + acc.id + ', event)">' +
+                    '<svg class="svg-icon" style="width:16px;height:16px;" viewBox="0 0 24 24"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>' +
+                    'Скрыть карточку</button></div></div>';
             }
 
-            return `
-                <div class="main-card glow-${acc.color}" onclick="showAccountDetails(${acc.id})" style="cursor:pointer;">
-                    <div style="display:flex; justify-content:space-between; align-items:flex-start;">
-                        <div>
-                            <p class="balance-title">${acc.address}</p>
-                            <h2 class="balance-amount" style="${acc.id === 2 ? 'color:var(--brand-purple-light);' : ''}">${acc.balance}</h2>
-                            <div class="status-text" style="color: var(--status-${acc.color === 'yellow' ? 'orange' : acc.color});">${acc.status}</div>
-                            <div class="balance-subtext">${acc.days}</div>
-                        </div>
-                        ${displayAccountsAsList ? '<svg class="svg-icon" style="width:24px;height:24px;color:var(--brand-purple-light);opacity:0.5;margin-top:10px;" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>' : dotsMenu}
-                    </div>
-                    ${buttonsHtml}
-                </div>
-            `;
+            var buttonsHtml = '';
+            if (!displayAccountsAsList) {
+                buttonsHtml = '<div class="card-buttons">' +
+                    '<button class="btn btn-primary" onclick="event.stopPropagation(); openSheet(\'paymentSheet\')">Пополнить</button>' +
+                    '<div class="secondary-buttons">' +
+                    '<button class="btn btn-secondary neumorphic" onclick="event.stopPropagation(); runDiagnosticsSheet()">' +
+                    '<svg class="svg-icon" style="width:16px;height:16px;" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Диагностика</button>' +
+                    '<button class="btn btn-secondary neumorphic" onclick="event.stopPropagation(); openChat()">' +
+                    '<svg class="svg-icon" style="width:16px;height:16px;" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> Чат</button>' +
+                    '</div></div>';
+            }
+
+            var rightEl = displayAccountsAsList
+                ? '<svg class="svg-icon" style="width:24px;height:24px;color:var(--brand-purple-light);opacity:0.5;margin-top:10px;" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>'
+                : dotsMenu;
+
+            return '<div class="main-card glow-' + acc.color + '" onclick="showAccountDetails(' + acc.id + ')" style="cursor:pointer;">' +
+                '<div style="display:flex; justify-content:space-between; align-items:flex-start;">' +
+                '<div>' +
+                '<p class="balance-title">' + acc.address + '</p>' +
+                '<h2 class="balance-amount" style="' + (acc.id === 2 ? 'color:var(--brand-purple-light);' : '') + '">' + acc.balance + '</h2>' +
+                '<div class="status-text" style="color: var(--status-' + (acc.color === 'yellow' ? 'orange' : acc.color) + ');">' + acc.status + '</div>' +
+                '<div class="balance-subtext">' + acc.days + '</div>' +
+                '</div>' + rightEl + '</div>' + buttonsHtml + '</div>';
         }
 
         function renderMainAccounts() {
@@ -1924,11 +1919,11 @@
             const listToggleContainer = document.getElementById('mainListToggleContainer');
             if (listToggleContainer) {
                 if (favAccounts.length > 3) {
-                    listToggleContainer.style.display = 'flex';
+                    listToggleContainer.style.display = 'block';
                     if (displayAccountsAsList) {
-                        listToggleContainer.innerHTML = `<button class="btn btn-secondary neumorphic" style="width:32px;height:32px;padding:0;display:flex;align-items:center;justify-content:center;border-radius:10px;" onclick="document.getElementById('listModeToggle').click()" title="Показать карточками"><svg class="svg-icon" style="width:16px;height:16px;" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></button>`;
+                        listToggleContainer.innerHTML = '<div style="cursor:pointer;padding:6px;color:var(--text-muted);" onclick="document.getElementById(\'listModeToggle\').click()"><svg class="svg-icon" style="width:22px;height:22px;" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></div>';
                     } else {
-                        listToggleContainer.innerHTML = `<button class="btn btn-secondary neumorphic" style="width:32px;height:32px;padding:0;display:flex;align-items:center;justify-content:center;border-radius:10px;" onclick="document.getElementById('listModeToggle').click()" title="Показать списком"><svg class="svg-icon" style="width:16px;height:16px;" viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg></button>`;
+                        listToggleContainer.innerHTML = '<div style="cursor:pointer;padding:6px;color:var(--text-muted);" onclick="document.getElementById(\'listModeToggle\').click()"><svg class="svg-icon" style="width:22px;height:22px;" viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg></div>';
                     }
                 } else {
                     listToggleContainer.style.display = 'none';
