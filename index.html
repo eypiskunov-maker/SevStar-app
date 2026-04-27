@@ -2877,7 +2877,7 @@
         <div id="tab-city" class="tab-content">
             <div class="inner-tabs-wrapper">
                 <div class="inner-tabs">
-                    <div class="inner-tab-btn active" id="cbtn-cams" onclick="switchInnerTab('cams','city')">Камеры
+                    <div class="inner-tab-btn active" id="cbtn-cams" onclick="switchInnerTab('cams','city')">Севстар. Wi-Fi
                     </div>
                     <div class="inner-tab-btn" id="cbtn-weather" onclick="switchInnerTab('weather','city')">Погода</div>
                     <div class="inner-tab-btn" id="cbtn-tourism" onclick="switchInnerTab('tourism','city')">Туризм</div>
@@ -2885,26 +2885,22 @@
                 </div>
             </div>
             <div id="csec-cams" class="inner-section active">
-                <div class="camera-card neumorphic">
-                    <div class="camera-preview"><svg class="svg-icon" style="opacity:0.3;width:40px;height:40px;"
-                            viewBox="0 0 24 24">
-                            <polygon points="23 7 16 12 23 17 23 7" />
-                            <rect x="1" y="5" width="15" height="14" rx="2" ry="2" />
-                        </svg></div>
-                    <div class="camera-info">
-                        <h4>Пл. Нахимова</h4>
-                        <p>Севстар Око • Центр</p>
-                    </div>
+                <div class="neumorphic-inset" style="padding: 20px; border-radius: 20px; margin-bottom: 20px;">
+                    <h3 style="margin-top:0; font-size: 18px; color: var(--brand-purple-light);">Севстар. Wi-Fi</h3>
+                    <p style="font-size: 14px; color: var(--text-color); line-height: 1.5;">Бесплатный интернет в самых популярных местах города! Более 100 точек доступа в парках, на пляжах и площадях.</p>
+                    <ul style="font-size: 13px; color: var(--text-muted); padding-left: 20px; margin: 10px 0;">
+                        <li>Скорость до 100 Мбит/с</li>
+                        <li>Безлимитный трафик для абонентов</li>
+                        <li>Простая авторизация</li>
+                    </ul>
+                    <button class="btn btn-primary" style="width:100%; margin-top:10px;" onclick="alert('Подключение услуги Севстар. Wi-Fi...')">Подключить бесплатно</button>
                 </div>
-                <div class="camera-card neumorphic">
-                    <div class="camera-preview"><svg class="svg-icon" style="opacity:0.3;width:40px;height:40px;"
-                            viewBox="0 0 24 24">
-                            <polygon points="23 7 16 12 23 17 23 7" />
-                            <rect x="1" y="5" width="15" height="14" rx="2" ry="2" />
-                        </svg></div>
-                    <div class="camera-info">
-                        <h4>Парк Победы (Фонтаны)</h4>
-                        <p>Севстар Око • Гагаринский р-н</p>
+                
+                <h3 class="section-title">Карта точек доступа</h3>
+                <div class="map-wrapper neumorphic-inset" style="height:250px; margin-bottom: 20px;">
+                    <div id="map-wifi" style="width:100%;height:100%; display:flex; align-items:center; justify-content:center; background:#f0f0f0; color:var(--text-muted); font-size:14px;">
+                        <svg class="svg-icon" style="width:40px;height:40px;margin-bottom:10px;display:block;" viewBox="0 0 24 24"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><circle cx="12" cy="20" r="1"/></svg>
+                        Загрузка карты точек...
                     </div>
                 </div>
             </div>
@@ -3178,6 +3174,11 @@
                     <option value="alert">Авария</option>
                 </select>
             </div>
+            
+            <button class="btn btn-secondary neumorphic" style="width:100%; margin-top:20px; display:flex; align-items:center; justify-content:center; gap:8px;" onclick="openSheet('feedbackSheet')" ontouchstart="">
+                <svg class="svg-icon" style="width:18px;height:18px;" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                Обратная связь
+            </button>
             <br><br>
         </div>
 
@@ -4207,7 +4208,7 @@
                 <div class="p-card-val" style="color:var(--brand-purple-light);" id="det-tariffPrice">845 ₽/мес</div>
             </div>
             <button class="btn btn-secondary neumorphic" style="padding:8px 14px;font-size:12px;white-space:nowrap;"
-                onclick="closeAllSheets(); setTimeout(()=>openSheet('tariffSheet'), 400)">Сменить тариф</button>
+                onclick="openSheet('tariffSheet')" ontouchstart="">Сменить тариф</button>
         </div>
 
         <!-- Подключенные услуги -->
@@ -4216,7 +4217,7 @@
         <div style="padding: 0 20px; margin-top:10px;">
             <button class="btn btn-secondary neumorphic"
                 style="width:100%;display:flex;align-items:center;justify-content:center;gap:8px;"
-                onclick="closeAllSheets(); setTimeout(()=>openSheet('servicesSheet'), 400)">
+                onclick="openSheet('servicesSheet')" ontouchstart="">
                 <svg class="svg-icon" style="width:16px;height:16px;" viewBox="0 0 24 24">
                     <line x1="12" y1="5" x2="12" y2="19" />
                     <line x1="5" y1="12" x2="19" y2="12" />
@@ -4229,11 +4230,12 @@
         <div style="padding: 0 20px; margin-top:15px;">
             <button class="btn btn-primary"
                 style="width:100%;display:flex;align-items:center;justify-content:center;gap:8px;"
-                onclick="closeAllSheets(); setTimeout(()=>openCostControl(), 400)">
-                <svg class="svg-icon" style="width:16px;height:16px;" viewBox="0 0 24 24">
-                    <path d="M7 16h3.5c1.93 0 3.5-1.57 3.5-3.5S12.43 9 10.5 9H7v7z"/>
-                    <path d="M7 21v-4h10"/>
-                    <path d="M7 13h10"/>
+                onclick="openCostControl()" ontouchstart="">
+                <svg class="svg-icon" style="width:16px;height:16px;" viewBox="0 0 24 24" fill="none">
+                    <path d="M11 8V17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M9 15H15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" stroke-width="2"/>
+                    <path d="M11 8H13.5C16.5 8 16.5 12 13.5 12H9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
                 Контроль расходов
             </button>
@@ -4262,6 +4264,52 @@
 
         <button class="btn btn-secondary neumorphic" style="width:100%; margin-top:15px; color:var(--status-red);"
             onclick="togglePauseAccount()">Поставить на паузу</button>
+    </div>
+
+    <!-- ШТОРКА ОБРАТНОЙ СВЯЗИ -->
+    <div class="bottom-sheet" id="feedbackSheet">
+        <div class="sheet-header">
+            <h3>Обратная связь</h3>
+            <button class="close-btn neumorphic" onclick="closeAllSheets()">
+                <svg class="svg-icon" style="width:16px;height:16px;" viewBox="0 0 24 24">
+                    <line x1="18" y1="6" x2="6" y2="18" />
+                    <line x1="6" y1="6" x2="18" y2="18" />
+                </svg>
+            </button>
+        </div>
+        <div style="padding: 20px;">
+            <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 20px; text-align: center;">Выберите удобный способ связи с нами</p>
+            
+            <button class="btn btn-secondary neumorphic" style="width:100%; margin-bottom:15px; display:flex; align-items:center; gap:15px; padding: 18px;" onclick="location.href='tel:+78007377777'" ontouchstart="">
+                <div style="background: rgba(var(--brand-purple-rgb), 0.1); color: var(--brand-purple-light); width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                    <svg class="svg-icon" style="width: 20px; height: 20px;" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                </div>
+                <div style="text-align: left;">
+                    <div style="font-size: 16px; font-weight: 700; color: var(--text-color);">Позвонить нам</div>
+                    <div style="font-size: 13px; color: var(--text-muted);">8 (800) 737-77-77</div>
+                </div>
+            </button>
+            
+            <button class="btn btn-secondary neumorphic" style="width:100%; margin-bottom:15px; display:flex; align-items:center; gap:15px; padding: 18px;" onclick="openChat()" ontouchstart="">
+                <div style="background: rgba(var(--brand-purple-rgb), 0.1); color: var(--brand-purple-light); width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                    <svg class="svg-icon" style="width: 20px; height: 20px;" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                </div>
+                <div style="text-align: left;">
+                    <div style="font-size: 16px; font-weight: 700; color: var(--text-color);">Написать в Чат</div>
+                    <div style="font-size: 13px; color: var(--text-muted);">Специалисты онлайн 24/7</div>
+                </div>
+            </button>
+            
+            <button class="btn btn-secondary neumorphic" style="width:100%; display:flex; align-items:center; gap:15px; padding: 18px;" onclick="alert('Открытие MAX...')" ontouchstart="">
+                <div style="background: rgba(var(--brand-purple-rgb), 0.1); color: var(--brand-purple-light); width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                    <svg class="svg-icon" style="width: 20px; height: 20px;" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8l4 4-4 4M8 12h8"/></svg>
+                </div>
+                <div style="text-align: left;">
+                    <div style="font-size: 16px; font-weight: 700; color: var(--text-color);">Написать в MAX</div>
+                    <div style="font-size: 13px; color: var(--text-muted);">Голосовой помощник</div>
+                </div>
+            </button>
+        </div>
     </div>
 
     <script>
@@ -4864,17 +4912,25 @@
         function openSheet(sheetId) {
             tryHaptic(20);
             
+            // Закрываем другие шторки кроме той которую открываем, 
+            // но без анимации оверлея чтобы избежать мерцания
+            document.querySelectorAll('.bottom-sheet.active').forEach(s => {
+                if (s.id !== sheetId) s.classList.remove('active');
+            });
+
             // Если открываем сервисы, инициализируем адрес если он пуст
             if (sheetId === 'servicesSheet') {
                 const display = document.getElementById('services-selected-account');
                 if (display && (display.innerText === 'Выберите адрес...' || display.innerText === 'Все аккаунты')) {
-                    const firstAcc = accountsData.find(a => a.isFavorite) || accountsData[0];
+                    const currentAcc = accountsData.find(a => a.id === window._currentDetailAccId);
+                    const firstAcc = currentAcc || accountsData.find(a => a.isFavorite) || accountsData[0];
                     if (firstAcc) display.innerText = firstAcc.address;
                 }
             }
 
             const overlay = document.getElementById('sheetOverlay');
             const sheet = document.getElementById(sheetId);
+            if (!sheet) return;
             overlay.style.display = 'block';
             setTimeout(() => { overlay.classList.add('active'); sheet.classList.add('active'); }, 10);
         }
