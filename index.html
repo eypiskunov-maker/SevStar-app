@@ -4433,9 +4433,17 @@
         }
 
         function toggleDotsMenu(btn, ev) {
-            ev.stopPropagation();
+            if (ev) {
+                ev.stopPropagation();
+                if (ev.cancelable) ev.preventDefault();
+            }
             const menu = btn.nextElementSibling;
-            menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+            const isVisible = menu.style.display === 'block';
+            
+            // Закрываем все остальные меню перед открытием этого
+            document.querySelectorAll('.dots-dropdown').forEach(m => m.style.display = 'none');
+            
+            menu.style.display = isVisible ? 'none' : 'block';
         }
 
         function getAccountHTML(acc) {
@@ -4443,12 +4451,12 @@
             var canHide = favAccounts.length > 2;
             var dotsMenu = '';
             if (canHide && !displayAccountsAsList) {
-                dotsMenu = '<div style="position:relative;z-index:5;" onclick="event.stopPropagation();">' +
-                    '<button class="dots-btn" onclick="toggleDotsMenu(this, event)">' +
+                dotsMenu = '<div style="position:relative;z-index:5;" onclick="event.stopPropagation();" ontouchstart="">' +
+                    '<button class="dots-btn" onclick="toggleDotsMenu(this, event)" ontouchstart="">' +
                     '<svg class="svg-icon" style="width:20px;height:20px;" viewBox="0 0 24 24"><circle cx="12" cy="12" r="1"/><circle cx="12" cy="5" r="1"/><circle cx="12" cy="19" r="1"/></svg>' +
                     '</button>' +
                     '<div class="dots-dropdown neumorphic">' +
-                    '<button class="dropdown-item" onclick="hideAccountCard(' + acc.id + ', event)">' +
+                    '<button class="dropdown-item" onclick="hideAccountCard(' + acc.id + ', event)" ontouchstart="">' +
                     '<svg class="svg-icon" style="width:16px;height:16px;" viewBox="0 0 24 24"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>' +
                     'Скрыть карточку</button></div></div>';
             }
@@ -4456,11 +4464,11 @@
             var buttonsHtml = '';
             if (!displayAccountsAsList) {
                 buttonsHtml = '<div class="card-buttons">' +
-                    '<button class="btn btn-primary" onclick="event.stopPropagation(); openSheet(\'paymentSheet\')">Пополнить</button>' +
+                    '<button class="btn btn-primary" onclick="event.stopPropagation(); openSheet(\'paymentSheet\')" ontouchstart="">Пополнить</button>' +
                     '<div class="secondary-buttons">' +
-                    '<button class="btn btn-secondary neumorphic" onclick="event.stopPropagation(); runDiagnosticsSheet()">' +
+                    '<button class="btn btn-secondary neumorphic" onclick="event.stopPropagation(); runDiagnosticsSheet()" ontouchstart="">' +
                     '<svg class="svg-icon" style="width:16px;height:16px;" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Диагностика</button>' +
-                    '<button class="btn btn-secondary neumorphic" onclick="event.stopPropagation(); openChat()">' +
+                    '<button class="btn btn-secondary neumorphic" onclick="event.stopPropagation(); openChat()" ontouchstart="">' +
                     '<svg class="svg-icon" style="width:16px;height:16px;" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> Чат</button>' +
                     '</div></div>';
             }
@@ -4469,7 +4477,7 @@
                 ? '<svg class="svg-icon" style="width:24px;height:24px;color:var(--brand-purple-light);opacity:0.5;margin-top:10px;" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>'
                 : dotsMenu;
 
-            return '<div class="main-card glow-' + acc.color + '" onclick="showAccountDetails(' + acc.id + ')" style="cursor:pointer;">' +
+            return '<div class="main-card glow-' + acc.color + '" onclick="showAccountDetails(' + acc.id + ')" style="cursor:pointer;" ontouchstart="">' +
                 '<div style="display:flex; justify-content:space-between; align-items:flex-start;">' +
                 '<div>' +
                 '<p class="balance-title">' + acc.address + '</p>' +
@@ -4569,10 +4577,15 @@
             listContainer.innerHTML = html;
         }
 
+        let dragStartX = 0;
+        let dragActive = false;
+
         wrapper.addEventListener('touchstart', e => {
             if (displayAccountsAsList || totalSlides <= 1) return;
             touchStartX = e.touches[0].clientX;
             touchStartY = e.touches[0].clientY;
+            dragStartX = touchStartX;
+            dragActive = false; // Еще не начали перетаскивание
             isDragging = true;
         }, { passive: true });
 
@@ -4580,8 +4593,18 @@
             if (!isDragging || displayAccountsAsList || totalSlides <= 1) return;
             const dx = e.touches[0].clientX - touchStartX;
             const dy = e.touches[0].clientY - touchStartY;
-            if (Math.abs(dx) > Math.abs(dy)) {
-                e.preventDefault();
+            
+            // Если мы еще не активировали драг, проверяем порог
+            if (!dragActive) {
+                if (Math.abs(dx) > 10 && Math.abs(dx) > Math.abs(dy)) {
+                    dragActive = true; // Активируем горизонтальный свайп
+                } else if (Math.abs(dy) > 10) {
+                    isDragging = false; // Это вертикальный скролл, отключаем свайп
+                }
+            }
+
+            if (dragActive) {
+                if (e.cancelable) e.preventDefault();
                 const offset = -currentSlide * 100 + (dx / wrapper.offsetWidth) * 100;
                 slider.style.transition = 'none';
                 slider.style.transform = `translateX(${offset}%)`;
@@ -4589,12 +4612,26 @@
         }, { passive: false });
 
         wrapper.addEventListener('touchend', e => {
-            if (!isDragging || displayAccountsAsList || totalSlides <= 1) return;
-            isDragging = false;
+            if (!isDragging || displayAccountsAsList || totalSlides <= 1) {
+                isDragging = false;
+                dragActive = false;
+                return;
+            }
+            
             const dx = e.changedTouches[0].clientX - touchStartX;
-            if (dx < -40 && currentSlide < totalSlides - 1) goToSlide(currentSlide + 1);
-            else if (dx > 40 && currentSlide > 0) goToSlide(currentSlide - 1);
-            else goToSlide(currentSlide);
+            
+            // Только если мы реально свайпали
+            if (dragActive) {
+                isDragging = false;
+                dragActive = false;
+                if (dx < -40 && currentSlide < totalSlides - 1) goToSlide(currentSlide + 1);
+                else if (dx > 40 && currentSlide > 0) goToSlide(currentSlide - 1);
+                else goToSlide(currentSlide);
+            } else {
+                // Если не свайпали, просто сбрасываем флаги
+                isDragging = false;
+                dragActive = false;
+            }
         });
 
         function goToSlide(index) {
