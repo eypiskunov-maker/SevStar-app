@@ -70,6 +70,7 @@
             stroke-linejoin: round;
             fill: none;
             display: inline-block;
+            pointer-events: none; /* Исправляет проблему с нажатием на кнопки на iOS */
         }
 
         .app-container {
@@ -4207,7 +4208,7 @@
                 <div class="p-card-title" id="det-tariffName">Оптимум 100 Мбит/с</div>
                 <div class="p-card-val" style="color:var(--brand-purple-light);" id="det-tariffPrice">845 ₽/мес</div>
             </div>
-            <button class="btn btn-secondary neumorphic" style="padding:8px 14px;font-size:12px;white-space:nowrap; pointer-events:auto; touch-action:manipulation;"
+            <button class="btn btn-secondary neumorphic" style="padding:8px 14px;font-size:12px;white-space:nowrap; pointer-events:auto; touch-action:manipulation; position:relative; z-index:5;"
                 onclick="openSheet('tariffSheet')">Сменить тариф</button>
         </div>
 
@@ -4216,7 +4217,7 @@
         <div id="det-services-list" style="padding: 0 20px;"></div>
         <div style="padding: 0 20px; margin-top:10px;">
             <button class="btn btn-secondary neumorphic"
-                style="width:100%;display:flex;align-items:center;justify-content:center;gap:8px; pointer-events:auto; touch-action:manipulation;"
+                style="width:100%;display:flex;align-items:center;justify-content:center;gap:8px; pointer-events:auto; touch-action:manipulation; position:relative; z-index:5;"
                 onclick="openSheet('servicesSheet')">
                 <svg class="svg-icon" style="width:16px;height:16px;" viewBox="0 0 24 24">
                     <line x1="12" y1="5" x2="12" y2="19" />
@@ -4229,7 +4230,7 @@
         <!-- Контроль расходов -->
         <div style="padding: 0 20px; margin-top:15px;">
             <button class="btn btn-primary"
-                style="width:100%;display:flex;align-items:center;justify-content:center;gap:8px; pointer-events:auto; touch-action:manipulation;"
+                style="width:100%;display:flex;align-items:center;justify-content:center;gap:8px; pointer-events:auto; touch-action:manipulation; position:relative; z-index:5;"
                 onclick="openCostControl()">
                 <svg class="svg-icon" style="width:16px;height:16px;" viewBox="0 0 24 24" fill="none">
                     <path d="M11 8V17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -4537,12 +4538,12 @@
 
             var buttonsHtml = '';
             if (!displayAccountsAsList) {
-                buttonsHtml = '<div class="card-buttons" style="position:relative; z-index:10;">' +
-                    '<button class="btn btn-primary" onclick="event.stopPropagation(); openSheet(\'paymentSheet\')" style="pointer-events:auto; touch-action:manipulation;">Пополнить</button>' +
+                buttonsHtml = '<div class="card-buttons" style="position:relative; z-index:100;">' +
+                    '<button class="btn btn-primary" onclick="event.stopPropagation(); openSheet(\'paymentSheet\')" style="pointer-events:auto; touch-action:manipulation; position:relative; z-index:101;">Пополнить</button>' +
                     '<div class="secondary-buttons">' +
-                    '<button class="btn btn-secondary neumorphic" onclick="event.stopPropagation(); runDiagnosticsSheet()" style="pointer-events:auto; touch-action:manipulation;">' +
+                    '<button class="btn btn-secondary neumorphic" onclick="event.stopPropagation(); runDiagnosticsSheet()" style="pointer-events:auto; touch-action:manipulation; position:relative; z-index:101;">' +
                     '<svg class="svg-icon" style="width:16px;height:16px;" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Диагностика</button>' +
-                    '<button class="btn btn-secondary neumorphic" onclick="event.stopPropagation(); openChat()" style="pointer-events:auto; touch-action:manipulation;">' +
+                    '<button class="btn btn-secondary neumorphic" onclick="event.stopPropagation(); openChat()" style="pointer-events:auto; touch-action:manipulation; position:relative; z-index:101;">' +
                     '<svg class="svg-icon" style="width:16px;height:16px;" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> Чат</button>' +
                     '</div></div>';
             }
