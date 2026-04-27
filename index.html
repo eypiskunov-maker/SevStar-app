@@ -4207,8 +4207,8 @@
                 <div class="p-card-title" id="det-tariffName">Оптимум 100 Мбит/с</div>
                 <div class="p-card-val" style="color:var(--brand-purple-light);" id="det-tariffPrice">845 ₽/мес</div>
             </div>
-            <button class="btn btn-secondary neumorphic" style="padding:8px 14px;font-size:12px;white-space:nowrap; pointer-events:auto;"
-                onclick="openSheet('tariffSheet')" ontouchstart="event.stopPropagation();">Сменить тариф</button>
+            <button class="btn btn-secondary neumorphic" style="padding:8px 14px;font-size:12px;white-space:nowrap; pointer-events:auto; touch-action:manipulation;"
+                onclick="openSheet('tariffSheet')">Сменить тариф</button>
         </div>
 
         <!-- Подключенные услуги -->
@@ -4216,8 +4216,8 @@
         <div id="det-services-list" style="padding: 0 20px;"></div>
         <div style="padding: 0 20px; margin-top:10px;">
             <button class="btn btn-secondary neumorphic"
-                style="width:100%;display:flex;align-items:center;justify-content:center;gap:8px; pointer-events:auto;"
-                onclick="openSheet('servicesSheet')" ontouchstart="event.stopPropagation();">
+                style="width:100%;display:flex;align-items:center;justify-content:center;gap:8px; pointer-events:auto; touch-action:manipulation;"
+                onclick="openSheet('servicesSheet')">
                 <svg class="svg-icon" style="width:16px;height:16px;" viewBox="0 0 24 24">
                     <line x1="12" y1="5" x2="12" y2="19" />
                     <line x1="5" y1="12" x2="19" y2="12" />
@@ -4229,8 +4229,8 @@
         <!-- Контроль расходов -->
         <div style="padding: 0 20px; margin-top:15px;">
             <button class="btn btn-primary"
-                style="width:100%;display:flex;align-items:center;justify-content:center;gap:8px; pointer-events:auto;"
-                onclick="openCostControl()" ontouchstart="event.stopPropagation();">
+                style="width:100%;display:flex;align-items:center;justify-content:center;gap:8px; pointer-events:auto; touch-action:manipulation;"
+                onclick="openCostControl()">
                 <svg class="svg-icon" style="width:16px;height:16px;" viewBox="0 0 24 24" fill="none">
                     <path d="M11 8V17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                     <path d="M9 15H15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -4538,11 +4538,11 @@
             var buttonsHtml = '';
             if (!displayAccountsAsList) {
                 buttonsHtml = '<div class="card-buttons" style="position:relative; z-index:10;">' +
-                    '<button class="btn btn-primary" onclick="event.stopPropagation(); openSheet(\'paymentSheet\')" style="pointer-events:auto;" ontouchstart="event.stopPropagation();">Пополнить</button>' +
+                    '<button class="btn btn-primary" onclick="event.stopPropagation(); openSheet(\'paymentSheet\')" style="pointer-events:auto; touch-action:manipulation;">Пополнить</button>' +
                     '<div class="secondary-buttons">' +
-                    '<button class="btn btn-secondary neumorphic" onclick="event.stopPropagation(); runDiagnosticsSheet()" style="pointer-events:auto;" ontouchstart="event.stopPropagation();">' +
+                    '<button class="btn btn-secondary neumorphic" onclick="event.stopPropagation(); runDiagnosticsSheet()" style="pointer-events:auto; touch-action:manipulation;">' +
                     '<svg class="svg-icon" style="width:16px;height:16px;" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Диагностика</button>' +
-                    '<button class="btn btn-secondary neumorphic" onclick="event.stopPropagation(); openChat()" style="pointer-events:auto;" ontouchstart="event.stopPropagation();">' +
+                    '<button class="btn btn-secondary neumorphic" onclick="event.stopPropagation(); openChat()" style="pointer-events:auto; touch-action:manipulation;">' +
                     '<svg class="svg-icon" style="width:16px;height:16px;" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> Чат</button>' +
                     '</div></div>';
             }
@@ -4670,10 +4670,11 @@
             
             // Если мы еще не активировали драг, проверяем порог
             if (!dragActive) {
-                if (Math.abs(dx) > 10 && Math.abs(dx) > Math.abs(dy)) {
-                    dragActive = true; // Активируем горизонтальный свайп
-                } else if (Math.abs(dy) > 10) {
-                    isDragging = false; // Это вертикальный скролл, отключаем свайп
+                // Увеличиваем порог до 15px для более четкого разделения тапа и свайпа
+                if (Math.abs(dx) > 15 && Math.abs(dx) > Math.abs(dy)) {
+                    dragActive = true; 
+                } else if (Math.abs(dy) > 15) {
+                    isDragging = false; 
                 }
             }
 
