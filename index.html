@@ -3500,6 +3500,19 @@
                 </svg>
             </button>
         </div>
+        
+        <!-- Селектор аккаунта для сервисов -->
+        <div class="neumorphic-inset" style="margin: 15px 20px 5px; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; border-radius: 15px; cursor: pointer;" onclick="openSheet('accountsSheet')">
+            <div>
+                <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 2px;">Подключить для:</div>
+                <div id="services-selected-account" style="font-size: 14px; font-weight: 700; color: var(--brand-purple-light);">Все аккаунты</div>
+            </div>
+            <div style="display:flex; align-items:center; gap:8px;">
+                <span style="font-size:11px; color:var(--text-muted);">Сменить</span>
+                <svg class="svg-icon" style="width: 14px; height: 14px; color: var(--text-muted);" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </div>
+        </div>
+
         <div style="margin-top:10px;">
             <!-- 2. ЦИФРОВЫЕ РАЗВЛЕЧЕНИЯ -->
             <div class="srv-section">
@@ -4218,8 +4231,9 @@
                 style="width:100%;display:flex;align-items:center;justify-content:center;gap:8px;"
                 onclick="closeAllSheets(); setTimeout(()=>openCostControl(), 400)">
                 <svg class="svg-icon" style="width:16px;height:16px;" viewBox="0 0 24 24">
-                    <line x1="12" y1="1" x2="12" y2="23" />
-                    <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+                    <path d="M7 16h3.5c1.93 0 3.5-1.57 3.5-3.5S12.43 9 10.5 9H7v7z"/>
+                    <path d="M7 21v-4h10"/>
+                    <path d="M7 13h10"/>
                 </svg>
                 Контроль расходов
             </button>
@@ -4299,6 +4313,18 @@
 
         function showAccountDetails(id) {
             tryHaptic(20);
+            window._currentDetailAccId = id;
+            
+            // Если открыты сервисы, просто обновляем там адрес и закрываем список
+            if (document.getElementById('servicesSheet').classList.contains('active')) {
+                const acc = accountsData.find(a => a.id === id);
+                if (acc) {
+                    document.getElementById('services-selected-account').innerText = acc.address;
+                    document.getElementById('accountsSheet').classList.remove('active');
+                    return;
+                }
+            }
+
             const acc = accountsData.find(a => a.id === id);
             if (acc) {
                 document.getElementById('det-header-title').innerText = acc.address;
@@ -4837,6 +4863,16 @@
         // ЛИСТЫ
         function openSheet(sheetId) {
             tryHaptic(20);
+            
+            // Если открываем сервисы, инициализируем адрес если он пуст
+            if (sheetId === 'servicesSheet') {
+                const display = document.getElementById('services-selected-account');
+                if (display && (display.innerText === 'Выберите адрес...' || display.innerText === 'Все аккаунты')) {
+                    const firstAcc = accountsData.find(a => a.isFavorite) || accountsData[0];
+                    if (firstAcc) display.innerText = firstAcc.address;
+                }
+            }
+
             const overlay = document.getElementById('sheetOverlay');
             const sheet = document.getElementById(sheetId);
             overlay.style.display = 'block';
